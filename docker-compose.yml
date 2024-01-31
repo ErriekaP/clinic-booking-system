@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  supabase:
+    image: supabase/postgres:latest
+    environment:
+      POSTGRES_PASSWORD: AdDU6200300024880X
+      POSTGRES_USER: postgres.xracnagexqlzofliddpa
+    ports:
+      - "6543:6543"
