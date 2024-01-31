@@ -7,4 +7,4 @@ services:
       POSTGRES_PASSWORD: AdDU6200300024880X
       POSTGRES_USER: postgres.xracnagexqlzofliddpa
     ports:
-      - "6543:6543"
+      - "5432:5432"

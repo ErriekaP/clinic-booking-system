@@ -8,10 +8,10 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
 }
 
 model Patient {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id Int @id @default(autoincrement())
+  name String
 }
