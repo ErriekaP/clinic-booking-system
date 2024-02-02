@@ -1,5 +1,12 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+// contactNumber Int
+//  dateOfBirth DateTime
+//  gender Gender
+//  status Status
+// firstName String
+// middleName String
+// lastName String
 
 generator client {
   provider = "prisma-client-js"
@@ -11,7 +18,185 @@ datasource db {
   directUrl = env("DIRECT_DATABASE_URL")
 }
 
+enum Role {
+  ADMIN
+  DOCTOR
+  NURSE
+}
+
+enum Type {
+  STUDENT
+  TEACHER
+  STAFF
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CANCELLED
+}
+
+enum QueueStatus {
+  JOINED
+  CANCELLED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  NON_BINARY
+  AGENDER
+  GENDERFLUID
+  BIGENDER
+  ANDROGYNOUS
+  PREFER_NOT_TO_SAY
+  OTHER
+}
+
+enum BloodType {
+  O
+  A
+  B
+  AB
+}
+
+model ClinicPersonnel {
+  id Int @id @default(autoincrement())
+  supabaseUserID String
+  role Role
+  firstName String
+  middleName String
+  lastName String
+  email String @unique
+  password String
+  phoneNumber String
+  dateofBirth DateTime
+  gender Gender
+  appointment Appointments[]
+  status Status
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Patient {
   id Int @id @default(autoincrement())
-  name String
+  schoolID String
+  firstName String
+  middleName String
+  lastName String
+  address Address?
+  patientType Type
+  course String
+  section String
+  cluster String
+  department String
+  occupation String
+  facultyDepartment String
+  contactNumber String
+  dateOfBirth DateTime
+  gender Gender
+  bloodType BloodType
+  emergencyContact EmergencyContact?
+  familyPhysician FamilyPhysician?
+  medicalHistory MedicalHistory?
+  appointment Appointments[]
+  queue Queue[]
+  status Status
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Address{
+id Int @id @default(autoincrement())
+patientID Int @unique
+city String
+province String
+zipCode String
+houseNo String
+street String
+barangay String
+subdivision String
+patient Patient @relation(fields: [patientID], references: [id])
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+}
+
+model EmergencyContact{
+id Int @id @default(autoincrement())
+patientID Int @unique
+firstName String
+lastName String
+contactNumber String
+relation String
+healthInsuranceCompany String
+emergencyHospital String
+patient Patient @relation(fields: [patientID], references: [id])
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+}
+
+model FamilyPhysician{
+id Int @id @default(autoincrement())
+patientID Int @unique
+firstName String
+lastName String
+contactNumber String
+patient Patient @relation(fields: [patientID], references: [id])
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+}
+
+model MedicalHistory{
+id Int @id @default(autoincrement())
+patientID Int @unique
+famHistory String
+childhoodDiseases String
+medicalCondition String
+hospitalization String
+medication String
+allergies String
+vaccines String
+psychosocialHistory String
+sexualHistory String
+patient Patient @relation(fields: [patientID], references: [id])
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+}
+
+model Service{
+id Int @id @default(autoincrement())
+serviceName String
+description String
+appointment Appointments[]
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+}
+
+model Appointments{
+id Int @id @default(autoincrement())
+patientID Int @unique
+personnelID Int @unique
+serviceID Int @unique
+appointmentSched DateTime
+status AppointmentStatus
+patient Patient @relation(fields: [patientID], references: [id])
+personnel ClinicPersonnel @relation(fields: [personnelID], references: [id])
+service Service @relation(fields: [serviceID], references: [id])
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+}
+
+model Queue{
+id Int @id @default(autoincrement())
+patientID Int @unique
+purpose String
+queueSched DateTime
+status QueueStatus
+patient Patient @relation(fields: [patientID], references: [id])
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
 }
