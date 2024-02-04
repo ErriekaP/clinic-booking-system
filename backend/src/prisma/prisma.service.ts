@@ -56,7 +56,7 @@ export class PrismaService {
       subdivision: string;
     };
     patientType: string; 
-    course: string; 
+    course: string;
     section: string;
     cluster: string;
     department: string;
