@@ -5,7 +5,7 @@ import { PrismaClient} from '@prisma/client';
 
 @Global()
 @Module({
-  providers: [PrismaService, PrismaClient],
+  providers: [PrismaService],
   exports: [PrismaService],
 })
 export class PrismaModule {}

@@ -9,7 +9,7 @@ import { RegisterDto } from './auth.dto';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly prismaService: PrismaService,
+    private readonly prisma: PrismaService, 
     private readonly supabaseService: SupabaseService,
   ) {}
 
@@ -22,7 +22,7 @@ export class AuthService {
 
 
    // Create user in Prisma
-  const prismaUser = await this.prismaService.createClinicPersonnel({
+  const prismaUser = await this.createClinicPersonnel({
       supabaseUserID: UUID,
       email,
       password,
@@ -37,4 +37,35 @@ export class AuthService {
   });
     return prismaUser;
   }
+
+  async createClinicPersonnel(data: {
+    supabaseUserID: string;
+    role: string;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    phoneNumber: string;
+    dateofBirth: Date;
+    gender: string;
+    status: string; 
+  }): Promise<any> {
+    return this.prisma.clinicPersonnel.create({
+      data:{
+        supabaseUserID: data.supabaseUserID,
+        role: data.role as "ADMIN" | "DOCTOR"| "NURSE" ,
+        firstName: data.firstName,
+        middleName: data.middleName,
+        lastName: data.lastName,
+        email: data.email,
+        password: data.password,
+        phoneNumber: data.phoneNumber,
+        dateofBirth: data.dateofBirth,
+        gender: data.gender as "MALE" | "FEMALE" | "NON_BINARY" | "AGENDER" | "NON_BINARY"| "GENDERFLUID" | "BIGENDER" | "ANDROGYNOUS"| "PREFER_NOT_TO_SAY" | "OTHER",
+        status: data.status as  "ACTIVE" | "INACTIVE",
+      }
+    });
+  }
+
 }
