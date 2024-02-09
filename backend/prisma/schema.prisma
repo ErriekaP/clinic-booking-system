@@ -74,7 +74,7 @@ model ClinicPersonnel {
   email String @unique
   password String
   phoneNumber String
-  dateofBirth DateTime
+  dateOfBirth DateTime
   gender Gender
   appointment Appointments[]
   status Status

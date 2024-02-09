@@ -14,7 +14,7 @@ export class AuthService {
   ) {}
 
   async signUp(dto: RegisterDto): Promise<any> {
-  const { email, password, role, firstName, middleName,lastName,phoneNumber,dateofBirth, gender,status} = dto;
+  const { email, password, role, firstName, middleName,lastName,phoneNumber,dateOfBirth, gender,status} = dto;
    // Sign up user in Supabase
   const supabaseUser = await this.supabaseService.signUp(email, password);
   console.log("this is the id:",supabaseUser.user.id)
@@ -31,7 +31,7 @@ export class AuthService {
       middleName,
       lastName,
       phoneNumber,
-      dateofBirth,
+      dateOfBirth,
       gender,
       status
   });
@@ -47,7 +47,7 @@ export class AuthService {
     email: string;
     password: string;
     phoneNumber: string;
-    dateofBirth: Date;
+    dateOfBirth: Date;
     gender: string;
     status: string; 
   }): Promise<any> {
@@ -61,7 +61,7 @@ export class AuthService {
         email: data.email,
         password: data.password,
         phoneNumber: data.phoneNumber,
-        dateofBirth: data.dateofBirth,
+        dateOfBirth: data.dateOfBirth,
         gender: data.gender as "MALE" | "FEMALE" | "NON_BINARY" | "AGENDER" | "NON_BINARY"| "GENDERFLUID" | "BIGENDER" | "ANDROGYNOUS"| "PREFER_NOT_TO_SAY" | "OTHER",
         status: data.status as  "ACTIVE" | "INACTIVE",
       }

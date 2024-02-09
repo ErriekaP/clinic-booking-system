@@ -11,7 +11,7 @@ import { PatientModule } from './patient/patient.module';
     PrismaModule,
     SupabaseModule,
     AuthModule,
-    PatientModule
+    PatientModule,
   ],
   controllers: [AppController],
   providers: [AppService],

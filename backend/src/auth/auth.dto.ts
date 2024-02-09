@@ -13,7 +13,7 @@ export class LoginDto {
     email: string;
     password: string;
     phoneNumber: string;
-    dateofBirth: Date;  
+    dateOfBirth: Date;  
     gender: string;
     status: string;
   }
