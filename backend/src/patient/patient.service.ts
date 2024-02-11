@@ -1,7 +1,7 @@
 // patient.service.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { PrismaClient } from '@prisma/client';
+import { Patient, PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PatientService {
@@ -28,6 +28,15 @@ export class PatientService {
     } catch (error) {
       throw new Error(`Unable to fetch patients: ${error.message}`);
     }
+  }
+
+  async findPatient(id: string) {
+    const parsedId = parseInt(id, 10);
+    return this.prisma.patient.findUnique({
+      where: {
+        id: parsedId,
+      },
+    });
   }
 
   async createPatient(data: {
