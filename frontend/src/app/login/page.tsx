@@ -1,19 +1,61 @@
 "use client";
-import {
-  Button,
-  Card,
-  Container,
-  Flex,
-  Heading,
-  Select,
-  Tabs,
-  Text,
-  TextArea,
-  TextField,
-} from "@radix-ui/themes";
+import { Flex, Select, Tabs, Text } from "@radix-ui/themes";
 import "./styles.css";
+import { useState } from "react";
 
 export default function Page() {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...formData,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        console.log("Login successfully");
+        const personnels = await response.json();
+        console.log(personnels);
+        if (personnels.role === "ADMIN") {
+          window.location.href = `/admin/${personnels.id}`;
+        } else if (personnels.role === "DOCTOR") {
+          window.location.href = "/doctor";
+        } else if (personnels.role === "NURSE") {
+          window.location.href = "/nurse";
+        } else {
+          window.location.href = "/default";
+        }
+      } else {
+        console.error("Failed to submit form");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+  };
+
+  const handleInputChange = (e: { target: { name: any; value: any } }) => {
+    const { name, value } = e.target;
+
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
   return (
     <main className="flex flex-col items-center justify-between p-4 ">
       <Flex direction="column" align="center" justify="center">
@@ -28,30 +70,47 @@ export default function Page() {
                 Register
               </Tabs.Trigger>
             </Tabs.List>
-            <Tabs.Content className="TabsContent" value="tab1">
-              <p className="Text">Login your account here!</p>
-              <fieldset className="Fieldset">
-                <label className="Label" htmlFor="email">
-                  Email
-                </label>
-                <input className="Input" id="email" />
-              </fieldset>
-              <fieldset className="Fieldset">
-                <label className="Label" htmlFor="password">
-                  Password
-                </label>
-                <input className="Input" id="password" type="password" />
-              </fieldset>
-              <div
-                style={{
-                  display: "flex",
-                  marginTop: 20,
-                  justifyContent: "flex-end",
-                }}
-              >
-                <button className="Button brown">Login</button>
-              </div>
-            </Tabs.Content>
+            <form onSubmit={handleSubmit}>
+              <Tabs.Content className="TabsContent" value="tab1">
+                <p className="Text">Login your account here!</p>
+                <fieldset className="Fieldset">
+                  <label className="Label" htmlFor="email">
+                    Email
+                  </label>
+                  <input
+                    className="Input"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                  />
+                </fieldset>
+                <fieldset className="Fieldset">
+                  <label className="Label" htmlFor="password">
+                    Password
+                  </label>
+                  <input
+                    className="Input"
+                    id="password"
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                  />
+                </fieldset>
+                <div
+                  style={{
+                    display: "flex",
+                    marginTop: 20,
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <button className="Button brown" type="submit">
+                    Login
+                  </button>
+                </div>
+              </Tabs.Content>
+            </form>
             <Tabs.Content className="TabsContent" value="tab2">
               <p className="Text">Register your account here!</p>
               <fieldset className="Fieldset">

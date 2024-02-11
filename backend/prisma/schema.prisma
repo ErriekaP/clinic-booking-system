@@ -66,7 +66,7 @@ enum BloodType {
 
 model ClinicPersonnel {
   id Int @id @default(autoincrement())
-  supabaseUserID String
+  supabaseUserID String @unique
   role Role
   firstName String
   middleName String
