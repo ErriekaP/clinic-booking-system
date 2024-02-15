@@ -36,14 +36,20 @@ export default function Page() {
 
       if (response.ok) {
         console.log("Login successfully");
-        const personnels = await response.json();
-        console.log(personnels);
-        if (personnels.role === "ADMIN") {
-          window.location.href = `/admin/${personnels.id}`;
-        } else if (personnels.role === "DOCTOR") {
+        const user = await response.json();
+        console.log(user.id);
+        if (user.role === "ADMIN") {
+          window.location.href = `/admin/${user.id}`;
+        } else if (user.role === "DOCTOR") {
           window.location.href = "/doctor";
-        } else if (personnels.role === "NURSE") {
+        } else if (user.role === "NURSE") {
           window.location.href = "/nurse";
+        } else if (user.patientType === "STUDENT") {
+          window.location.href = `/patient/${user.id}`;
+        } else if (user.patientType === "TEACHER") {
+          window.location.href = `/patient/${user.id}`;
+        } else if (user.patientType === "STAFF") {
+          window.location.href = `/patient/${user.id}`;
         } else {
           window.location.href = "/default";
         }
