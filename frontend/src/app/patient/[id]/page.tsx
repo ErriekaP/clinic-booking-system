@@ -25,6 +25,7 @@ const getPatientData = async (id: string) => {
 
 const Page = async ({ params }: { params: { id: string } }) => {
   const patientData = await getPatientData(params.id);
+  console.log(patientData);
 
   return (
     <main>

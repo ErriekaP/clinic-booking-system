@@ -1,5 +1,5 @@
 "use client";
-import "./styles.css";
+import "/Users/erriekapalanca/JS/clinic-booking-system/frontend/src/app/student/styles.css";
 import { Card, Container, Flex, Heading, Select, Text } from "@radix-ui/themes";
 import { useState } from "react";
 
@@ -8,6 +8,7 @@ export default function Page() {
 
   const [formData, setFormData] = useState({
     schoolID: "",
+    supabaseUserID: "",
     firstName: "",
     middleName: "",
     lastName: "",
@@ -59,11 +60,12 @@ export default function Page() {
   });
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
+    const url = window.location.href;
+    const id = url.substring(url.lastIndexOf("/") + 1);
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/patients`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/patients/addpatients/${id}`,
         {
           method: "POST",
           headers: {
@@ -80,6 +82,7 @@ export default function Page() {
         console.log("Form submitted successfully");
         const patients = await response.json();
         console.log(patients);
+        window.location.href = `/patient/${patients.data.id}`;
       } else {
         console.error("Failed to submit form");
       }

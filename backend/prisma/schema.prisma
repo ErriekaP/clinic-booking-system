@@ -84,11 +84,14 @@ model ClinicPersonnel {
 
 model Patient {
   id Int @id @default(autoincrement())
+  supabaseUserID String @unique
   schoolID String
   firstName String
   middleName String
   lastName String
   address Address?
+  email String @unique
+  password String
   patientType Type
   course String
   section String
