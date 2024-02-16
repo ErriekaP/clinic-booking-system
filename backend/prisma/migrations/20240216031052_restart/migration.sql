@@ -1,11 +1,88 @@
 -- CreateEnum
+CREATE TYPE "Role" AS ENUM ('ADMIN', 'DOCTOR', 'NURSE');
+
+-- CreateEnum
+CREATE TYPE "Type" AS ENUM ('STUDENT', 'TEACHER', 'STAFF');
+
+-- CreateEnum
+CREATE TYPE "Status" AS ENUM ('ACTIVE', 'INACTIVE');
+
+-- CreateEnum
 CREATE TYPE "AppointmentStatus" AS ENUM ('SCHEDULED', 'CANCELLED');
 
 -- CreateEnum
 CREATE TYPE "QueueStatus" AS ENUM ('JOINED', 'CANCELLED');
 
--- DropIndex
-DROP INDEX "ClinicPersonnel_supabaseUserID_key";
+-- CreateEnum
+CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE', 'NON_BINARY', 'AGENDER', 'GENDERFLUID', 'BIGENDER', 'ANDROGYNOUS', 'PREFER_NOT_TO_SAY', 'OTHER');
+
+-- CreateEnum
+CREATE TYPE "BloodType" AS ENUM ('O', 'A', 'B', 'AB');
+
+-- CreateTable
+CREATE TABLE "ClinicPersonnel" (
+    "id" SERIAL NOT NULL,
+    "supabaseUserID" TEXT NOT NULL,
+    "role" "Role" NOT NULL,
+    "firstName" TEXT NOT NULL,
+    "middleName" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "phoneNumber" TEXT NOT NULL,
+    "dateOfBirth" TIMESTAMP(3) NOT NULL,
+    "gender" "Gender" NOT NULL,
+    "status" "Status" NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "ClinicPersonnel_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Patient" (
+    "id" SERIAL NOT NULL,
+    "supabaseUserID" TEXT NOT NULL,
+    "schoolID" TEXT NOT NULL,
+    "firstName" TEXT NOT NULL,
+    "middleName" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "patientType" "Type" NOT NULL,
+    "course" TEXT NOT NULL,
+    "section" TEXT NOT NULL,
+    "cluster" TEXT NOT NULL,
+    "department" TEXT NOT NULL,
+    "occupation" TEXT NOT NULL,
+    "facultyDepartment" TEXT NOT NULL,
+    "contactNumber" TEXT NOT NULL,
+    "dateOfBirth" TIMESTAMP(3) NOT NULL,
+    "gender" "Gender" NOT NULL,
+    "bloodType" "BloodType" NOT NULL,
+    "status" "Status" NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Patient_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Address" (
+    "id" SERIAL NOT NULL,
+    "patientID" INTEGER NOT NULL,
+    "city" TEXT NOT NULL,
+    "province" TEXT NOT NULL,
+    "zipCode" TEXT NOT NULL,
+    "houseNo" TEXT NOT NULL,
+    "street" TEXT NOT NULL,
+    "barangay" TEXT NOT NULL,
+    "subdivision" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Address_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "EmergencyContact" (
@@ -13,7 +90,7 @@ CREATE TABLE "EmergencyContact" (
     "patientID" INTEGER NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
-    "contactNumber" INTEGER NOT NULL,
+    "contactNumber" TEXT NOT NULL,
     "relation" TEXT NOT NULL,
     "healthInsuranceCompany" TEXT NOT NULL,
     "emergencyHospital" TEXT NOT NULL,
@@ -29,7 +106,7 @@ CREATE TABLE "FamilyPhysician" (
     "patientID" INTEGER NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
-    "contactNumber" INTEGER NOT NULL,
+    "contactNumber" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -94,6 +171,21 @@ CREATE TABLE "Queue" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "ClinicPersonnel_supabaseUserID_key" ON "ClinicPersonnel"("supabaseUserID");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ClinicPersonnel_email_key" ON "ClinicPersonnel"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Patient_supabaseUserID_key" ON "Patient"("supabaseUserID");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Patient_email_key" ON "Patient"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Address_patientID_key" ON "Address"("patientID");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "EmergencyContact_patientID_key" ON "EmergencyContact"("patientID");
 
 -- CreateIndex
@@ -113,6 +205,9 @@ CREATE UNIQUE INDEX "Appointments_serviceID_key" ON "Appointments"("serviceID");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Queue_patientID_key" ON "Queue"("patientID");
+
+-- AddForeignKey
+ALTER TABLE "Address" ADD CONSTRAINT "Address_patientID_fkey" FOREIGN KEY ("patientID") REFERENCES "Patient"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "EmergencyContact" ADD CONSTRAINT "EmergencyContact_patientID_fkey" FOREIGN KEY ("patientID") REFERENCES "Patient"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

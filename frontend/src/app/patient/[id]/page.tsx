@@ -15,6 +15,7 @@ const getPatientData = async (id: string) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/patients/${id}`
   );
+  console.log(id);
 
   if (!response.ok) {
     console.error("Error submitting form:");

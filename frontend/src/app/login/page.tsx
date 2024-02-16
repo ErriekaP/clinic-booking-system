@@ -82,8 +82,14 @@ export default function Page() {
         console.log("Register successfully");
         const patient = await response.json();
         console.log(patient);
-        console.log(patient.data.id);
-        window.location.href = `/student/${patient.data.id}`;
+        console.log(patient.data.patientType);
+        if (patient.data.patientType === "STUDENT") {
+          window.location.href = `/student/${patient.data.id}`;
+        } else if (patient.data.patientType === "TEACHER") {
+          window.location.href = `/employees/${patient.data.id}`;
+        } else if (patient.data.patientType === "STAFF") {
+          window.location.href = `/employees/${patient.data.id}`;
+        }
       } else {
         console.error("Failed to submit form");
       }
