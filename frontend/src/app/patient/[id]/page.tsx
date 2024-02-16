@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   Container,
@@ -11,22 +12,31 @@ import {
 import Navbar from "@/app/navbar/page";
 import "./styles.css";
 
-const getPatientData = async (id: string) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/patients/${id}`
-  );
-  console.log(id);
+const Page = ({ params }: { params: { id: string } }) => {
+  const [patientData, setPatientData] = useState<any>(null);
 
-  if (!response.ok) {
-    console.error("Error submitting form:");
+  useEffect(() => {
+    const getPatientData = async (id: string) => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/patients/${id}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch patient data");
+        }
+        const data = await response.json();
+        setPatientData(data);
+      } catch (error) {
+        console.error("Error fetching patient data:", error);
+      }
+    };
+
+    getPatientData(params.id);
+  }, [params.id]);
+
+  if (!patientData) {
+    return null;
   }
-
-  return response.json();
-};
-
-const Page = async ({ params }: { params: { id: string } }) => {
-  const patientData = await getPatientData(params.id);
-  console.log(patientData);
 
   return (
     <main>

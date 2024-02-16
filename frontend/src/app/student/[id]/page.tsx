@@ -392,6 +392,7 @@ export default function Page() {
           </Flex>
           <Flex>
             <Card className="CardsContent">
+              <p className="Text">Address</p>
               <Flex direction="row" gap="3">
                 <fieldset className="Fieldset">
                   <label className="Label" htmlFor="houseNo">

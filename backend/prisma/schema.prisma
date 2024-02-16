@@ -22,12 +22,12 @@ enum Role {
   ADMIN
   DOCTOR
   NURSE
+  STAFF
 }
 
 enum Type {
   STUDENT
-  TEACHER
-  STAFF
+  EMPLOYEE
 }
 
 enum Status {

@@ -46,9 +46,7 @@ export default function Page() {
           window.location.href = "/nurse";
         } else if (user.patientType === "STUDENT") {
           window.location.href = `/patient/${user.id}`;
-        } else if (user.patientType === "TEACHER") {
-          window.location.href = `/patient/${user.id}`;
-        } else if (user.patientType === "STAFF") {
+        } else if (user.patientType === "EMPLOYEE") {
           window.location.href = `/patient/${user.id}`;
         } else {
           window.location.href = "/default";
@@ -85,9 +83,7 @@ export default function Page() {
         console.log(patient.data.patientType);
         if (patient.data.patientType === "STUDENT") {
           window.location.href = `/student/${patient.data.id}`;
-        } else if (patient.data.patientType === "TEACHER") {
-          window.location.href = `/employees/${patient.data.id}`;
-        } else if (patient.data.patientType === "STAFF") {
+        } else if (patient.data.patientType === "EMPLOYEE") {
           window.location.href = `/employees/${patient.data.id}`;
         }
       } else {
@@ -231,11 +227,8 @@ export default function Page() {
                         <Select.Item className="SelectItem" value="STUDENT">
                           Student
                         </Select.Item>
-                        <Select.Item className="SelectItem" value="TEACHER">
-                          Teacher
-                        </Select.Item>
-                        <Select.Item className="SelectItem" value="STAFF">
-                          Staff
+                        <Select.Item className="SelectItem" value="EMPLOYEE">
+                          Employee
                         </Select.Item>
                       </Select.Group>
                     </Select.Content>

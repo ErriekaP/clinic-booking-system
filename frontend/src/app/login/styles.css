@@ -37,7 +37,7 @@ input {
 
 .TabsTrigger {
   font-family: inherit;
-  background-color: #d9dcd6;
+  background-color: #3e5c76;
   padding: 0 20px;
   height: 45px;
   flex: 1;
@@ -46,7 +46,7 @@ input {
   justify-content: center;
   font-size: 15px;
   line-height: 1;
-  color: #0d1321;
+  color: #d9dcd6;
   user-select: none;
 }
 .TabsTrigger:first-child {
@@ -58,16 +58,16 @@ input {
 .TabsTrigger:hover {
   color: #d9dcd6;
   background-color: #3e5c76;
+  border: 1px solid #1d2d44;
 }
 .TabsTrigger[data-state="active"] {
-  color: #d9dcd6;
-  background-color: #3e5c76;
+  color: #0d1321;
+  background-color: #d9dcd6;
   box-shadow: inset 0 -1px 0 0 currentColor, 0 1px 0 0 currentColor;
 }
 .TabsTrigger:focus {
   position: relative;
   box-shadow: 0 0 0 1px #1d2d44;
-  border: 1px solid #1d2d44;
 }
 
 .TabsContent {

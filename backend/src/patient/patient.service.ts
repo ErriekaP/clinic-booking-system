@@ -304,7 +304,7 @@ export class PatientService {
           : undefined,
         email: data.email,
         password: data.password,
-        patientType: data.patientType as 'STUDENT' | 'TEACHER' | 'STAFF',
+        patientType: data.patientType as 'STUDENT' | 'EMPLOYEE',
         course: 'data.course',
         section: 'data.section',
         cluster: 'data.cluster',
