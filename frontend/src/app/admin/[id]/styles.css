@@ -1,0 +1,54 @@
+@import "@radix-ui/colors/black-alpha.css";
+@import "@radix-ui/colors/indigo.css";
+@import "@radix-ui/colors/mauve.css";
+@import "@radix-ui/colors/purple.css";
+@import "@radix-ui/colors/violet.css";
+
+/* reset */
+button,
+p {
+  all: unset;
+}
+
+.CardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.Card {
+  background-color: white;
+  justify-content: center;
+  padding: 20px;
+  width: 200px;
+  height: 300px;
+  margin: 0 10px 0 10px;
+  margin-top: 20px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.Card:hover {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.Info {
+  flex-grow: 1;
+  background-color: #d9dcd6;
+  margin-bottom: 20px;
+}
+
+.Text {
+  font-weight: bold;
+  font-size: 20px;
+  padding: 10px;
+  text-align: center;
+}
+
+.Image {
+  display: block;
+  object-fit: cover;
+  width: 100%;
+  height: 150px;
+  background-color: #d9dcd6;
+}
