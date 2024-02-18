@@ -8,6 +8,6 @@ export class RegisterController {
 
   @Post('register')
   async register(@Body() registerDto: RegisterDto): Promise<void> {
-    await this.registerService.signUp(registerDto);
+    return this.registerService.signUp(registerDto);
   }
 }

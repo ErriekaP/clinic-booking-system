@@ -1,9 +1,12 @@
 "use client";
-import "/Users/erriekapalanca/JS/clinic-booking-system/frontend/src/app/student/styles.css";
+import "./styles.css";
 import { Card, Container, Flex, Heading, Select, Text } from "@radix-ui/themes";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
+  const router = useRouter();
+
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
@@ -60,6 +63,7 @@ export default function Page() {
   });
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
     const url = window.location.href;
     const id = url.substring(url.lastIndexOf("/") + 1);
 
@@ -82,7 +86,7 @@ export default function Page() {
         console.log("Form submitted successfully");
         const patients = await response.json();
         console.log(patients);
-        window.location.href = `/patient/${patients.data.id}`;
+        router.push(`/patient/${patients.data.id}`);
       } else {
         console.error("Failed to submit form");
       }

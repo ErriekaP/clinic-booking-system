@@ -26,13 +26,13 @@ export class PatientController {
     return this.patientService.findPatient(id);
   }
 
-  // @Get()
-  // async findAll(){
-  //   try {
-  //     const patients = await this.patientService.getAllPatients();
-  //     return patients;
-  //   } catch (error) {
-  //     throw new Error(`Unable to fetch patients: ${error.message}`);
-  //   }
-  // }
+  @Get()
+  async findAll() {
+    try {
+      const patients = await this.patientService.getAllPatients();
+      return patients;
+    } catch (error) {
+      throw new Error(`Unable to fetch patients: ${error.message}`);
+    }
+  }
 }

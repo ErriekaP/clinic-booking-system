@@ -2,8 +2,10 @@
 import { Flex, Select, Tabs, Text } from "@radix-ui/themes";
 import "./styles.css";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -39,17 +41,17 @@ export default function Page() {
         const user = await response.json();
         console.log(user.id);
         if (user.role === "ADMIN") {
-          window.location.href = `/admin/${user.id}`;
+          router.push(`/admin/${user.id}`);
         } else if (user.role === "DOCTOR") {
-          window.location.href = "/doctor";
+          router.push(`/doctor/${user.id}`);
         } else if (user.role === "NURSE") {
-          window.location.href = "/nurse";
+          router.push(`/nurse/${user.id}`);
         } else if (user.patientType === "STUDENT") {
-          window.location.href = `/patient/${user.id}`;
+          router.push(`/patient/${user.id}`);
         } else if (user.patientType === "EMPLOYEE") {
-          window.location.href = `/patient/${user.id}`;
+          router.push(`/patient/${user.id}`);
         } else {
-          window.location.href = "/default";
+          router.push("/default");
         }
       } else {
         console.error("Failed to submit form");
@@ -82,9 +84,9 @@ export default function Page() {
         console.log(patient);
         console.log(patient.data.patientType);
         if (patient.data.patientType === "STUDENT") {
-          window.location.href = `/student/${patient.data.id}`;
+          router.push(`/student/${patient.data.id}`);
         } else if (patient.data.patientType === "EMPLOYEE") {
-          window.location.href = `/employees/${patient.data.id}`;
+          router.push(`/employees/${patient.data.id}`);
         }
       } else {
         console.error("Failed to submit form");

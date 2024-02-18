@@ -1,7 +1,7 @@
 "use client";
 import "./styles.css";
 import Navbar from "@/app/navbar/page";
-import NavigationMenuDemo from "@/app/navigationmenu/page";
+import NavMenu from "@/app/navigationmenu/page";
 import { NavigationMenu } from "@radix-ui/react-navigation-menu";
 
 import { Card, Container, Flex, Inset, Strong, Text } from "@radix-ui/themes";
@@ -9,7 +9,7 @@ import { Card, Container, Flex, Inset, Strong, Text } from "@radix-ui/themes";
 export default function Page() {
   return (
     <main>
-      <NavigationMenuDemo></NavigationMenuDemo>
+      <NavMenu />
       <Container>
         <Flex className="CardContainer">
           <Card className="Card">

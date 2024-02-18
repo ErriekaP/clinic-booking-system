@@ -42,7 +42,9 @@ export class RegisterService {
       gender,
       status,
     });
-    return prismaUser;
+
+    console.log(prismaUser);
+    return { success: true, data: prismaUser };
   }
 
   async createClinicPersonnel(data: {
@@ -61,7 +63,7 @@ export class RegisterService {
     return this.prisma.clinicPersonnel.create({
       data: {
         supabaseUserID: data.supabaseUserID,
-        role: data.role as 'ADMIN' | 'DOCTOR' | 'NURSE',
+        role: data.role as 'ADMIN' | 'DOCTOR' | 'NURSE' | 'STAFF',
         firstName: data.firstName,
         middleName: data.middleName,
         lastName: data.lastName,

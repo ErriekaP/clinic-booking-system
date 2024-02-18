@@ -1,5 +1,5 @@
 "use client";
-import "/Users/erriekapalanca/JS/clinic-booking-system/frontend/src/app/employees/styles.css";
+import "./styles.css";
 import { Card, Container, Flex, Heading, Select, Text } from "@radix-ui/themes";
 import { useState } from "react";
 
@@ -228,7 +228,7 @@ export default function Page() {
                   <input
                     className="Input"
                     id="occupation"
-                    name="ooccupation"
+                    name="occupation"
                     value={formData.occupation}
                     onChange={handleInputChange}
                   />

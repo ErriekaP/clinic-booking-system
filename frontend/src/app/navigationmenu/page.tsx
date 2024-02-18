@@ -5,22 +5,12 @@ import "./styles.css";
 import * as Avatar from "@radix-ui/react-avatar";
 import * as Separator from "@radix-ui/react-separator";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import {
-  PersonIcon,
-  HamburgerMenuIcon,
-  DotFilledIcon,
-  CheckIcon,
-  ChevronRightIcon,
-} from "@radix-ui/react-icons";
+import { PersonIcon } from "@radix-ui/react-icons";
 
-const NavigationMenuDemo = () => {
+const NavMenu = () => {
   const handleLogout = () => {
     window.location.href = "/login";
   };
-
-  const [bookmarksChecked, setBookmarksChecked] = React.useState(true);
-  const [urlsChecked, setUrlsChecked] = React.useState(false);
-  const [person, setPerson] = React.useState("pedro");
 
   return (
     <div className="CenteredContainer">
@@ -46,7 +36,7 @@ const NavigationMenuDemo = () => {
               <ul className="List one">
                 <li style={{ gridRow: "span 2" }}>
                   <NavigationMenu.Link asChild>
-                    <a className="Callout" href="/">
+                    <a className="Callout" href="/patients">
                       <svg
                         width="25"
                         height="25"
@@ -100,7 +90,7 @@ const NavigationMenuDemo = () => {
             </NavigationMenu.Trigger>
             <NavigationMenu.Content className="NavigationMenuContent">
               <ul className="List two">
-                <a href="" className="ListItemLink">
+                <a href="/register" className="ListItemLink">
                   <p className="ListItemHeading">Add a Personnel</p>
                 </a>
                 <a href="" className="ListItemLink">
@@ -160,15 +150,6 @@ const NavigationMenuDemo = () => {
             </NavigationMenu.Link>
           </NavigationMenu.Item>
 
-          {/* <NavigationMenu.Item className="NavigationMenuItem">
-            <NavigationMenu.Link
-              className="NavigationMenuButton"
-              onClick={handleLogout}
-            >
-              Logout
-            </NavigationMenu.Link>
-          </NavigationMenu.Item> */}
-
           <NavigationMenu.Item className="NavigationMenuItem">
             <Separator.Root
               className="SeparatorRoot"
@@ -201,7 +182,10 @@ const NavigationMenuDemo = () => {
 
                   <DropdownMenu.Separator className="DropdownMenuSeparator" />
 
-                  <DropdownMenu.Item className="DropdownMenuItem">
+                  <DropdownMenu.Item
+                    className="DropdownMenuItem"
+                    onClick={handleLogout}
+                  >
                     Logout
                   </DropdownMenu.Item>
                 </DropdownMenu.Content>
@@ -222,4 +206,4 @@ const NavigationMenuDemo = () => {
   );
 };
 
-export default NavigationMenuDemo;
+export default NavMenu;
