@@ -1,11 +1,27 @@
 import React from "react";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
-import classNames from "classnames";
 import { CaretDownIcon } from "@radix-ui/react-icons";
 import "./styles.css";
 import * as Avatar from "@radix-ui/react-avatar";
+import * as Separator from "@radix-ui/react-separator";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import {
+  PersonIcon,
+  HamburgerMenuIcon,
+  DotFilledIcon,
+  CheckIcon,
+  ChevronRightIcon,
+} from "@radix-ui/react-icons";
 
 const NavigationMenuDemo = () => {
+  const handleLogout = () => {
+    window.location.href = "/login";
+  };
+
+  const [bookmarksChecked, setBookmarksChecked] = React.useState(true);
+  const [urlsChecked, setUrlsChecked] = React.useState(false);
+  const [person, setPerson] = React.useState("pedro");
+
   return (
     <div className="CenteredContainer">
       <NavigationMenu.Root className="NavigationMenuRoot">
@@ -28,7 +44,7 @@ const NavigationMenuDemo = () => {
             </NavigationMenu.Trigger>
             <NavigationMenu.Content className="NavigationMenuContent">
               <ul className="List one">
-                <li style={{ gridRow: "span 3" }}>
+                <li style={{ gridRow: "span 2" }}>
                   <NavigationMenu.Link asChild>
                     <a className="Callout" href="/">
                       <svg
@@ -46,10 +62,7 @@ const NavigationMenuDemo = () => {
                         ></path>
                       </svg>
 
-                      <div className="CalloutHeading">
-                        View Patient <br />
-                        Profile
-                      </div>
+                      <div className="CalloutHeading">View Patient Profile</div>
                     </a>
                   </NavigationMenu.Link>
                 </li>
@@ -145,6 +158,55 @@ const NavigationMenuDemo = () => {
             >
               Queue
             </NavigationMenu.Link>
+          </NavigationMenu.Item>
+
+          {/* <NavigationMenu.Item className="NavigationMenuItem">
+            <NavigationMenu.Link
+              className="NavigationMenuButton"
+              onClick={handleLogout}
+            >
+              Logout
+            </NavigationMenu.Link>
+          </NavigationMenu.Item> */}
+
+          <NavigationMenu.Item className="NavigationMenuItem">
+            <Separator.Root
+              className="SeparatorRoot"
+              decorative
+              orientation="vertical"
+              style={{ margin: "0 15px" }}
+            />
+          </NavigationMenu.Item>
+
+          <NavigationMenu.Item className="NavigationMenuItem">
+            <p>Hi, Admin</p>
+          </NavigationMenu.Item>
+
+          <NavigationMenu.Item className="NavigationMenuItem">
+            <DropdownMenu.Root>
+              <DropdownMenu.Trigger asChild>
+                <button className="IconButton" aria-label="Customise options">
+                  <PersonIcon />
+                </button>
+              </DropdownMenu.Trigger>
+
+              <DropdownMenu.Portal>
+                <DropdownMenu.Content
+                  className="DropdownMenuContent"
+                  sideOffset={5}
+                >
+                  <DropdownMenu.Item className="DropdownMenuItem">
+                    Profile
+                  </DropdownMenu.Item>
+
+                  <DropdownMenu.Separator className="DropdownMenuSeparator" />
+
+                  <DropdownMenu.Item className="DropdownMenuItem">
+                    Logout
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Portal>
+            </DropdownMenu.Root>
           </NavigationMenu.Item>
 
           <NavigationMenu.Indicator className="NavigationMenuIndicator">
