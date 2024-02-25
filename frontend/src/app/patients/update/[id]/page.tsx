@@ -4,10 +4,10 @@ import { Card, Container, Flex, Heading, Select, Text } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function Page() {
+export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const url = window.location.href;
-  const id = url.substring(url.lastIndexOf("/") + 1);
+  // const url = window.location.href;
+  // const id = url.substring(url.lastIndexOf("/") + 1);
 
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
@@ -68,13 +68,14 @@ export default function Page() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/patients/${id}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/patients/${params.id}`
         );
         if (!response.ok) {
-          console.log("id", id);
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
+        const dob = new Date(data.dateOfBirth);
+        const formattedDateOfBirth = dob.toISOString().split("T")[0];
         // Update the formData state with the fetched data
         setFormData((prevData) => ({
           ...prevData,
@@ -87,7 +88,7 @@ export default function Page() {
           cluster: data.cluster,
           department: data.department,
           contactNumber: data.contactNumber,
-          dateOfBirth: data.dateOfBirth,
+          dateOfBirth: formattedDateOfBirth,
           gender: data.gender,
           bloodType: data.bloodType,
           occupation: data.occupation,
@@ -142,7 +143,7 @@ export default function Page() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/patients/addpatients/${id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/patients/addpatients/${params.id}`,
         {
           method: "POST",
           headers: {
