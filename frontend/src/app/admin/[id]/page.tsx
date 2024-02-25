@@ -1,7 +1,7 @@
 "use client";
 import "./styles.css";
-import Navbar from "@/app/navbar/page";
-import NavMenu from "@/app/navigationmenu/page";
+import Navbar from "@/components/navbar/page";
+import NavMenu from "@/components/navigationmenu/page";
 import { NavigationMenu } from "@radix-ui/react-navigation-menu";
 
 import { Card, Container, Flex, Inset, Strong, Text } from "@radix-ui/themes";

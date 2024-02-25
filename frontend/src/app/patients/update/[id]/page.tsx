@@ -1,9 +1,14 @@
 "use client";
 import "./styles.css";
 import { Card, Container, Flex, Heading, Select, Text } from "@radix-ui/themes";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Page() {
+  const router = useRouter();
+  const url = window.location.href;
+  const id = url.substring(url.lastIndexOf("/") + 1);
+
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
@@ -21,7 +26,7 @@ export default function Page() {
       barangay: "",
       subdivision: "",
     },
-    patientType: "EMPLOYEE",
+    patientType: "STUDENT",
     course: "",
     section: "",
     cluster: "",
@@ -59,9 +64,81 @@ export default function Page() {
     status: "ACTIVE",
   });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/patients/${id}`
+        );
+        if (!response.ok) {
+          console.log("id", id);
+          throw new Error("Failed to fetch data");
+        }
+        const data = await response.json();
+        // Update the formData state with the fetched data
+        setFormData((prevData) => ({
+          ...prevData,
+          schoolID: data.schoolID,
+          firstName: data.firstName,
+          middleName: data.middleName,
+          lastName: data.lastName,
+          course: data.course,
+          section: data.section,
+          cluster: data.cluster,
+          department: data.department,
+          contactNumber: data.contactNumber,
+          dateOfBirth: data.dateOfBirth,
+          gender: data.gender,
+          bloodType: data.bloodType,
+          occupation: data.occupation,
+          facultyDepartment: data.facultyDepartment,
+          patientType: data.patientType,
+          address: {
+            city: data.address?.city,
+            province: data.address?.province,
+            zipCode: data.address?.zipCode,
+            houseNo: data.address?.houseNo,
+            street: data.address?.street,
+            barangay: data.address?.barangay,
+            subdivision: data.address?.subdivision,
+          },
+          emergencyContact: {
+            firstName: data.emergencyContact?.firstName,
+            lastName: data.emergencyContact?.lastName,
+            contactNumber: data.emergencyContact?.contactNumber,
+            relation: data.emergencyContact?.relation,
+            healthInsuranceCompany:
+              data.emergencyContact?.healthInsuranceCompany,
+            emergencyHospital: data.emergencyContact?.emergencyHospital,
+          },
+          familyPhysician: {
+            firstName: data.familyPhysician?.firstName,
+            lastName: data.familyPhysician?.lastName,
+            contactNumber: data.familyPhysician?.contactNumber,
+          },
+          medicalHistory: {
+            famHistory: data.medicalHistory?.famHistory,
+            childhoodDiseases: data.medicalHistory?.childhoodDiseases,
+            medicalCondition: data.medicalHistory?.medicalCondition,
+            hospitalization: data.medicalHistory?.hospitalization,
+            medication: data.medicalHistory?.medication,
+            allergies: data.medicalHistory?.allergies,
+            vaccines: data.medicalHistory?.vaccines,
+            psychosocialHistory: data.medicalHistory?.psychosocialHistory,
+            sexualHistory: data.medicalHistory?.sexualHistory,
+          },
+          status: data.status,
+        }));
+        console.log("address", data.address.city);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const handleSubmit = async (e: { preventDefault: () => void }) => {
-    const url = window.location.href;
-    const id = url.substring(url.lastIndexOf("/") + 1);
+    e.preventDefault();
 
     try {
       const response = await fetch(
@@ -80,9 +157,7 @@ export default function Page() {
 
       if (response.ok) {
         console.log("Form submitted successfully");
-        const patients = await response.json();
-        console.log(patients);
-        window.location.href = `/patient/${patients.data.id}`;
+        router.back;
       } else {
         console.error("Failed to submit form");
       }
@@ -168,7 +243,7 @@ export default function Page() {
 
               <fieldset className="Fieldset">
                 <label className="Label" htmlFor="schoolID">
-                  Faculty ID
+                  School ID
                 </label>
                 <input
                   className="Input"
@@ -222,31 +297,59 @@ export default function Page() {
 
               <Flex direction="row" gap="3">
                 <fieldset className="Fieldset">
-                  <label className="Label" htmlFor="occupation">
-                    Occupation
+                  <label className="Label" htmlFor="course">
+                    Course
                   </label>
                   <input
                     className="Input"
-                    id="occupation"
-                    name="occupation"
-                    value={formData.occupation}
+                    id="course"
+                    name="course"
+                    value={formData.course}
                     onChange={handleInputChange}
                   />
                 </fieldset>
 
                 <fieldset className="Fieldset">
-                  <label className="Label" htmlFor="facultyDepartment">
-                    Faculty Department
+                  <label className="Label" htmlFor="section">
+                    Section
                   </label>
                   <input
                     className="Input"
-                    id="facultyDepartment"
-                    name="facultyDepartment"
-                    value={formData.facultyDepartment}
+                    id="section"
+                    name="section"
+                    value={formData.section}
                     onChange={handleInputChange}
                   />
                 </fieldset>
 
+                <fieldset className="Fieldset">
+                  <label className="Label" htmlFor="cluster">
+                    Cluster
+                  </label>
+                  <input
+                    className="Input"
+                    id="cluster"
+                    name="cluster"
+                    value={formData.cluster}
+                    onChange={handleInputChange}
+                  />
+                </fieldset>
+
+                <fieldset className="Fieldset">
+                  <label className="Label" htmlFor="department">
+                    Department
+                  </label>
+                  <input
+                    className="Input"
+                    id="department"
+                    name="department"
+                    value={formData.department}
+                    onChange={handleInputChange}
+                  />
+                </fieldset>
+              </Flex>
+
+              <Flex direction="row" gap="3">
                 <fieldset className="Fieldset">
                   <label className="Label" htmlFor="contactNumber">
                     Contact Number
@@ -259,9 +362,7 @@ export default function Page() {
                     onChange={handleInputChange}
                   />
                 </fieldset>
-              </Flex>
 
-              <Flex direction="row" gap="3">
                 <fieldset className="Fieldset">
                   <label className="Label" htmlFor="dateOfbirth">
                     Date of Birth
@@ -283,6 +384,7 @@ export default function Page() {
 
                   <Select.Root
                     name="gender"
+                    value={formData.gender}
                     onValueChange={(newValue) =>
                       handleSelectChange(newValue, "gender")
                     }
@@ -335,6 +437,7 @@ export default function Page() {
 
                   <Select.Root
                     name="bloodType"
+                    value={formData.bloodType}
                     onValueChange={(newValue) =>
                       handleSelectChange(newValue, "bloodType")
                     }

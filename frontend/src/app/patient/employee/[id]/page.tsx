@@ -9,10 +9,10 @@ import {
   Table,
   Text,
 } from "@radix-ui/themes";
-import Navbar from "@/app/navbar/page";
+import Navbar from "@/components/navbar/page";
 import "./styles.css";
 
-const Page = ({ params }: { params: { id: string } }) => {
+const id = ({ params }: { params: { id: string } }) => {
   const [patientData, setPatientData] = useState<any>(null);
 
   useEffect(() => {
@@ -156,4 +156,4 @@ const Page = ({ params }: { params: { id: string } }) => {
     </main>
   );
 };
-export default Page;
+export default id;

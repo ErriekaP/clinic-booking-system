@@ -47,9 +47,9 @@ export default function Page() {
         } else if (user.role === "NURSE") {
           router.push(`/nurse/${user.id}`);
         } else if (user.patientType === "STUDENT") {
-          router.push(`/patient/${user.id}`);
+          router.push(`/patient/student/${user.id}`);
         } else if (user.patientType === "EMPLOYEE") {
-          router.push(`/patient/${user.id}`);
+          router.push(`/patient/employee/${user.id}`);
         } else {
           router.push("/default");
         }
@@ -84,9 +84,9 @@ export default function Page() {
         console.log(patient);
         console.log(patient.data.patientType);
         if (patient.data.patientType === "STUDENT") {
-          router.push(`/student/${patient.data.id}`);
+          router.push(`/register/patient/student/${patient.data.id}`);
         } else if (patient.data.patientType === "EMPLOYEE") {
-          router.push(`/employees/${patient.data.id}`);
+          router.push(`/register/patient/employees/${patient.data.id}`);
         }
       } else {
         console.error("Failed to submit form");

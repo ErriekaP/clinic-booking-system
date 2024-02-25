@@ -24,7 +24,7 @@ export default function Page() {
       barangay: "",
       subdivision: "",
     },
-    patientType: "STUDENT",
+    patientType: "EMPLOYEE",
     course: "",
     section: "",
     cluster: "",
@@ -84,11 +84,18 @@ export default function Page() {
 
       if (response.ok) {
         console.log("Form submitted successfully");
-        const patients = await response.json();
-        console.log(patients);
-        router.push(`/patient/${patients.data.id}`);
+        const patient = await response.json();
+        console.log(patient.data.id);
+        console.log("patientType:", patient.data.patientType);
+        if (patient.data.patientType === "STUDENT") {
+          router.push(`/patient/student/${patient.data.id}`);
+        } else if (patient.data.patientType === "EMPLOYEE") {
+          router.push(`/patient/employee/${patient.data.id}`);
+        } else {
+          router.push("/default");
+        }
       } else {
-        console.error("Failed to submit form");
+        console.error("Form submission failed");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -172,7 +179,7 @@ export default function Page() {
 
               <fieldset className="Fieldset">
                 <label className="Label" htmlFor="schoolID">
-                  School ID
+                  Faculty ID
                 </label>
                 <input
                   className="Input"
@@ -226,59 +233,31 @@ export default function Page() {
 
               <Flex direction="row" gap="3">
                 <fieldset className="Fieldset">
-                  <label className="Label" htmlFor="course">
-                    Course
+                  <label className="Label" htmlFor="occupation">
+                    Occupation
                   </label>
                   <input
                     className="Input"
-                    id="course"
-                    name="course"
-                    value={formData.course}
+                    id="occupation"
+                    name="occupation"
+                    value={formData.occupation}
                     onChange={handleInputChange}
                   />
                 </fieldset>
 
                 <fieldset className="Fieldset">
-                  <label className="Label" htmlFor="section">
-                    Section
+                  <label className="Label" htmlFor="facultyDepartment">
+                    Faculty Department
                   </label>
                   <input
                     className="Input"
-                    id="section"
-                    name="section"
-                    value={formData.section}
+                    id="facultyDepartment"
+                    name="facultyDepartment"
+                    value={formData.facultyDepartment}
                     onChange={handleInputChange}
                   />
                 </fieldset>
 
-                <fieldset className="Fieldset">
-                  <label className="Label" htmlFor="cluster">
-                    Cluster
-                  </label>
-                  <input
-                    className="Input"
-                    id="cluster"
-                    name="cluster"
-                    value={formData.cluster}
-                    onChange={handleInputChange}
-                  />
-                </fieldset>
-
-                <fieldset className="Fieldset">
-                  <label className="Label" htmlFor="department">
-                    Department
-                  </label>
-                  <input
-                    className="Input"
-                    id="department"
-                    name="department"
-                    value={formData.department}
-                    onChange={handleInputChange}
-                  />
-                </fieldset>
-              </Flex>
-
-              <Flex direction="row" gap="3">
                 <fieldset className="Fieldset">
                   <label className="Label" htmlFor="contactNumber">
                     Contact Number
@@ -291,7 +270,9 @@ export default function Page() {
                     onChange={handleInputChange}
                   />
                 </fieldset>
+              </Flex>
 
+              <Flex direction="row" gap="3">
                 <fieldset className="Fieldset">
                   <label className="Label" htmlFor="dateOfbirth">
                     Date of Birth

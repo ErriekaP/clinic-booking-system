@@ -58,7 +58,7 @@ const NavMenu = () => {
                 </li>
                 <li style={{ gridRow: "span 3" }}>
                   <NavigationMenu.Link asChild>
-                    <a className="Callout" href="/">
+                    <a className="Callout" href="/patients/update">
                       <svg
                         width="25"
                         height="25"

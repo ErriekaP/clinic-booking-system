@@ -212,6 +212,14 @@ export class PatientService {
       where: {
         id: parsedId,
       },
+      include: {
+        address: true,
+        emergencyContact: true,
+        familyPhysician: true,
+        medicalHistory: true,
+        appointment: true,
+        queue: true,
+      },
     });
   }
 
