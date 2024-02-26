@@ -6,6 +6,7 @@ import { SupabaseModule } from 'supabase/supabase.module';
 import { AuthModule } from './auth/auth.module';
 import { PatientModule } from './patient/patient.module';
 import { RegisterModule } from './register/register.module';
+import { PersonnelModule } from './personnel/personnel.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { RegisterModule } from './register/register.module';
     AuthModule,
     PatientModule,
     RegisterModule,
+    PersonnelModule,
   ],
   controllers: [AppController],
   providers: [AppService],

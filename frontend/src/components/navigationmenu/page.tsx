@@ -90,11 +90,11 @@ const NavMenu = () => {
             </NavigationMenu.Trigger>
             <NavigationMenu.Content className="NavigationMenuContent">
               <ul className="List two">
-                <a href="/register" className="ListItemLink">
+                <a href="/register/personnel" className="ListItemLink">
                   <p className="ListItemHeading">Add a Personnel</p>
                 </a>
-                <a href="" className="ListItemLink">
-                  <p className="ListItemHeading">Update a Personnel</p>
+                <a href="/personnels" className="ListItemLink">
+                  <p className="ListItemHeading">View a Personnel</p>
                 </a>
                 <a href="" className="ListItemLink">
                   <p className="ListItemHeading">Terminate a Personnel</p>

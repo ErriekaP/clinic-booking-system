@@ -247,7 +247,7 @@ export default function Page({ params }: { params: { id: string } }) {
                   School ID
                 </label>
                 <input
-                  className="Input"
+                  className="UpdateInput"
                   id="schoolID"
                   name="schoolID"
                   value={formData.schoolID}
@@ -261,7 +261,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     FirstName
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="firstName"
                     name="firstName"
                     value={formData.firstName}
@@ -274,7 +274,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     MiddleName
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="middleName"
                     name="middleName"
                     value={formData.middleName}
@@ -287,7 +287,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     LastName
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="lastName"
                     name="lastName"
                     value={formData.lastName}
@@ -302,7 +302,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Course
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="course"
                     name="course"
                     value={formData.course}
@@ -315,7 +315,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Section
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="section"
                     name="section"
                     value={formData.section}
@@ -328,7 +328,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Cluster
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="cluster"
                     name="cluster"
                     value={formData.cluster}
@@ -341,7 +341,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Department
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="department"
                     name="department"
                     value={formData.department}
@@ -356,7 +356,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Contact Number
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="contactNumber"
                     name="contactNumber"
                     value={formData.contactNumber}
@@ -369,7 +369,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Date of Birth
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="dateOfBirth"
                     type="date"
                     name="dateOfBirth"
@@ -477,7 +477,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     House No.
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="houseNo"
                     name="address.houseNo"
                     value={formData.address.houseNo}
@@ -490,7 +490,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Subdivision
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="subdivision"
                     name="address.subdivision"
                     value={formData.address.subdivision}
@@ -503,7 +503,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Street
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="street"
                     name="address.street"
                     value={formData.address.street}
@@ -518,7 +518,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Barangay
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="barangay"
                     name="address.barangay"
                     value={formData.address.barangay}
@@ -531,7 +531,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     City
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="city"
                     name="address.city"
                     value={formData.address.city}
@@ -544,7 +544,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Province
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="province"
                     name="address.province"
                     value={formData.address.province}
@@ -557,7 +557,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Zipcode
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="zipcode"
                     name="address.zipCode"
                     value={formData.address.zipCode}
@@ -578,7 +578,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     FirstName
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="ecFirstname"
                     name="emergencyContact.firstName"
                     value={formData.emergencyContact.firstName}
@@ -591,7 +591,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     LastName
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="ecLastname"
                     name="emergencyContact.lastName"
                     value={formData.emergencyContact.lastName}
@@ -604,7 +604,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Contact Number
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="ecContactno"
                     name="emergencyContact.contactNumber"
                     value={formData.emergencyContact.contactNumber}
@@ -619,7 +619,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Relation
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="relation"
                     name="emergencyContact.relation"
                     value={formData.emergencyContact.relation}
@@ -632,7 +632,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Health Insurance Company
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="healthinsurance"
                     name="emergencyContact.healthInsuranceCompany"
                     value={formData.emergencyContact.healthInsuranceCompany}
@@ -645,7 +645,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Emergency Hospital
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="emergencyhosp"
                     name="emergencyContact.emergencyHospital"
                     value={formData.emergencyContact.emergencyHospital}
@@ -666,7 +666,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     FirstName
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="fpFirstname"
                     name="familyPhysician.firstName"
                     value={formData.familyPhysician.firstName}
@@ -679,7 +679,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     LastName
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="fpLastname"
                     name="familyPhysician.lastName"
                     value={formData.familyPhysician.lastName}
@@ -692,7 +692,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Contact Number
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="fpContactno"
                     name="familyPhysician.contactNumber"
                     value={formData.familyPhysician.contactNumber}
@@ -713,7 +713,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Family History
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="famHistory"
                     name="medicalHistory.famHistory"
                     value={formData.medicalHistory.famHistory}
@@ -726,7 +726,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Childhood Diseases
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="childhoodDiseases"
                     name="medicalHistory.childhoodDiseases"
                     value={formData.medicalHistory.childhoodDiseases}
@@ -739,7 +739,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Medical Condition
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="medicalCondition"
                     name="medicalHistory.medicalCondition"
                     value={formData.medicalHistory.medicalCondition}
@@ -754,7 +754,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Hospitalization
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="hospitalization"
                     name="medicalHistory.hospitalization"
                     value={formData.medicalHistory.hospitalization}
@@ -767,7 +767,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Medication
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="medication"
                     name="medicalHistory.medication"
                     value={formData.medicalHistory.medication}
@@ -780,7 +780,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Allergies
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="allergies"
                     name="medicalHistory.allergies"
                     value={formData.medicalHistory.allergies}
@@ -795,7 +795,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Vaccines
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="vaccines"
                     name="medicalHistory.vaccines"
                     value={formData.medicalHistory.vaccines}
@@ -808,7 +808,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     Psychosocial History
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="psychosocialHistory"
                     name="medicalHistory.psychosocialHistory"
                     value={formData.medicalHistory.psychosocialHistory}
@@ -821,7 +821,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     SexualHistory
                   </label>
                   <input
-                    className="Input"
+                    className="UpdateInput"
                     id="sexualHistory"
                     name="medicalHistory.sexualHistory"
                     value={formData.medicalHistory.sexualHistory}

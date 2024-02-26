@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import "@radix-ui/themes/styles.css"
-import { Theme } from '@radix-ui/themes';
+import "@radix-ui/themes/styles.css";
+import { Theme } from "@radix-ui/themes";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 export const metadata: Metadata = {
   title: "Clinic Booking System",
@@ -18,10 +21,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} container mx-auto p-4 bg-[#16425b]`}>
-        <Theme>
-        {children}
-        </Theme>
-        </body>
+        <Theme>{children}</Theme>
+      </body>
     </html>
   );
 }

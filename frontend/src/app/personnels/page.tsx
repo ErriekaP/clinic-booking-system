@@ -19,55 +19,57 @@ import { useRouter } from "next/navigation";
 export default function Page() {
   const router = useRouter();
 
-  interface Patient {
+  interface Personnel {
     id: number;
     firstName: string;
     lastName: string;
   }
 
-  const [patients, setPatients] = useState<Patient[]>([]);
+  const [personnel, setPersonnel] = useState<Personnel[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [selectedPersonnel, setSelectedPersonnel] = useState<Personnel | null>(
+    null
+  );
 
   const handleClose = () => {
     setIsOpen(false);
   };
 
-  const handleCardClick = (patient: Patient) => {
-    setSelectedPatient(patient);
+  const handleCardClick = (personnel: Personnel) => {
+    setSelectedPersonnel(personnel);
     setIsOpen(true);
   };
 
-  const handleView = (patient: Patient) => {
-    router.push(`/patients/view/${patient.id}`);
-    console.log("Viewing patient:", patient);
+  const handleView = (personnel: Personnel) => {
+    router.push(`/patients/view/${personnel.id}`);
+    console.log("Viewing personnel:", personnel);
   };
 
-  const handleEdit = (patient: Patient) => {
-    router.push(`/patients/update/${patient.id}`);
-    console.log("Editing patient:", patient);
+  const handleEdit = (personnel: Personnel) => {
+    router.push(`/patients/update/${personnel.id}`);
+    console.log("Editing personnel:", personnel);
   };
 
   useEffect(() => {
-    const fetchPatients = async () => {
+    const fetchPersonnel = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/patients`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/personnel`,
           {
             method: "GET",
           }
         );
         if (!response.ok) {
-          throw new Error("Failed to fetch patients");
+          throw new Error("Failed to fetch Personnel");
         }
         const data = await response.json();
-        setPatients(data);
+        setPersonnel(data);
       } catch (error) {
-        console.error("Error fetching patients:", error);
+        console.error("Error fetching Personnel:", error);
       }
     };
-    fetchPatients();
+    fetchPersonnel();
   }, []); // Fetch patients on component mount
 
   // Function to handle search query change
@@ -78,11 +80,11 @@ export default function Page() {
   };
 
   // Filter patients based on search query
-  const filteredPatients = patients.filter(
-    (patient) =>
-      patient.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      patient.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      patient.id.toString().toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredPersonnel = personnel.filter(
+    (personnel) =>
+      personnel.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      personnel.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      personnel.id.toString().toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -101,7 +103,7 @@ export default function Page() {
                   <MagnifyingGlassIcon height="16" width="16" />
                 </TextField.Slot>
                 <TextField.Input
-                  placeholder="Search patients..."
+                  placeholder="Search personnel..."
                   value={searchQuery}
                   onChange={handleSearchChange}
                 />
@@ -117,11 +119,11 @@ export default function Page() {
             gap="3"
           >
             <Grid columns="5" gap="5" width="auto">
-              {filteredPatients.map((patient) => (
-                <div key={patient.id}>
+              {filteredPersonnel.map((personnel) => (
+                <div key={personnel.id}>
                   <Card
                     className="Card"
-                    onClick={() => handleCardClick(patient)}
+                    onClick={() => handleCardClick(personnel)}
                   >
                     {" "}
                     <Inset clip="padding-box" side="top" pb="current">
@@ -133,7 +135,8 @@ export default function Page() {
                     </Inset>
                     <Text as="p" align="center" className="Text">
                       <Strong>
-                        {patient.id} {patient.firstName} {patient.lastName}
+                        {personnel.id} {personnel.firstName}{" "}
+                        {personnel.lastName}
                       </Strong>
                     </Text>
                   </Card>
@@ -146,11 +149,11 @@ export default function Page() {
                   <Dialog.Overlay className="DialogOverlay" />
                   <Dialog.Content className="DialogContent">
                     <Dialog.Title className="DialogTitle">
-                      {`${selectedPatient?.firstName}'s`} profile
+                      {`${selectedPersonnel?.firstName}'s`} profile
                     </Dialog.Title>
                     <Dialog.Description className="DialogDescription">
                       Do you want to View or Make changes to{" "}
-                      {`${selectedPatient?.firstName}'s`} profile?
+                      {`${selectedPersonnel?.firstName}'s`} profile?
                     </Dialog.Description>
 
                     <div
@@ -164,7 +167,7 @@ export default function Page() {
                         <button
                           className="Button"
                           onClick={() =>
-                            selectedPatient && handleView(selectedPatient)
+                            selectedPersonnel && handleView(selectedPersonnel)
                           }
                         >
                           View
@@ -174,7 +177,7 @@ export default function Page() {
                         <button
                           className="Button"
                           onClick={() =>
-                            selectedPatient && handleEdit(selectedPatient)
+                            selectedPersonnel && handleEdit(selectedPersonnel)
                           }
                         >
                           Edit
