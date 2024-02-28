@@ -6,7 +6,7 @@ import { NavigationMenu } from "@radix-ui/react-navigation-menu";
 
 import { Card, Container, Flex, Inset, Strong, Text } from "@radix-ui/themes";
 
-export default function Page() {
+export default function AdminPage() {
   return (
     <main>
       <NavMenu />

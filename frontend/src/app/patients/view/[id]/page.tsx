@@ -40,8 +40,37 @@ const id = ({ params }: { params: { id: string } }) => {
   return (
     <main>
       <Container className="flex min-h-screen flex-col items-center justify-between p-4 ">
-        <Flex className="TableContainer">
-          <Table.Root className="TableRoot">
+        <table className="table-fixed">
+          <thead>
+            <tr>
+              <th>School ID</th>
+              <th>Name</th>
+              <th>Course</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{patientData.schoolID}</td>
+              <td>
+                {patientData.lastName}, {patientData.firstName}{" "}
+                {patientData.middleName}
+              </td>
+              <td>{patientData.course}</td>
+            </tr>
+            <tr>
+              <td>Witchy Woman</td>
+              <td>The Eagles</td>
+              <td>1972</td>
+            </tr>
+            <tr>
+              <td>Shining Star</td>
+              <td>Earth, Wind, and Fire</td>
+              <td>1975</td>
+            </tr>
+          </tbody>
+        </table>
+        {/* <Flex className="TableContainer">
+           <Table.Root className="TableRoot">
             <Table.Body className="TableBody">
               <Table.Row className="TableRow">
                 <Table.RowHeaderCell className="TableRowHeaderCell">
@@ -239,8 +268,8 @@ const id = ({ params }: { params: { id: string } }) => {
               </Table.Row>
             </Table.Body>
           </Table.Root>
-        </Flex>
-        <Flex className="CardContainer">
+        </Flex> */}
+        {/* <Flex className="CardContainer">
           <Card className="Card">
             <a href="/">
               <Inset clip="padding-box" side="top" pb="current">
@@ -283,7 +312,7 @@ const id = ({ params }: { params: { id: string } }) => {
               </Text>
             </a>
           </Card>
-        </Flex>
+        </Flex> */}
       </Container>
     </main>
   );

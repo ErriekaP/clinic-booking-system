@@ -1,23 +1,48 @@
-.CardContainer {
-  position: relative;
-  width: 2px;
-  height: 2px;
-}
-.Card {
-  background-color: white;
+.TableContainer {
+  display: flex;
   justify-content: center;
-  margin: 10px;
-  width: 200px;
-  height: 300px;
+  margin: 5px;
 }
-.Card:hover {
-  box-shadow: 0 0 0 5px #0d1321;
+.TableRoot {
+  background-color: #d9dcd6;
+  padding: 0 0 50px 0px;
+  margin: 0 10px 0 10px;
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.Info {
-  flex-grow: 1;
-  background-color: #d9dcd6;
-  margin-bottom: 50px;
+.TableBody {
+  border: 1px solid white;
+}
+
+.TableRow {
+  border-bottom: 1px solid #ccc;
+}
+.TableColumnHeaderCell {
+  padding: 8px;
+  color: #1d2d44;
+  text-align: center;
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+.TableCell {
+  border-right: 1px solid #ccc;
+  padding: 8px;
+  color: #1d2d44;
+  text-align: center;
+  vertical-align: middle;
+}
+.TableRowHeaderCell {
+  padding: 8px;
+  color: #d9dcd6;
+  text-align: center;
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+.TableRow :last-child {
+  border-right: none;
 }
 
 .Text {
@@ -33,50 +58,6 @@
   height: "50%";
   background-color: #d9dcd6;
 }
-
-.TableContainer {
-  display: flex;
-  justify-content: center;
-  margin: 5px;
-}
-.TableRoot {
-  background-color: #16425b;
-  padding: 0 0 50px 0px;
-  margin: 0 10px 0 10px;
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.TableBody {
-  border: 1px solid white;
-}
-
-.TableRow {
-  border-bottom: 1px solid #ccc;
-}
-
-.TableCell {
-  border-right: 1px solid #ccc;
-  padding: 8px;
-  color: #d9dcd6;
-  text-align: center;
-  vertical-align: middle;
-}
-.TableRowHeaderCell {
-  padding: 8px;
-  color: #d9dcd6;
-  text-align: center;
-  font-weight: bold;
-  vertical-align: middle;
-}
-
-.TableRow :last-child {
-  border-right: none;
-}
-@import "@radix-ui/colors/black-alpha.css";
-@import "@radix-ui/colors/green.css";
-@import "@radix-ui/colors/mauve.css";
-@import "@radix-ui/colors/violet.css";
 
 .DialogOverlay {
   background-color: var(--black-a9);

@@ -1,12 +1,18 @@
 "use client";
 import React from "react";
 import * as Toolbar from "@radix-ui/react-toolbar";
-import "./styles.css";
+import "../../components/styles.css";
 import * as Avatar from "@radix-ui/react-avatar";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
 
 const ToolbarDemo = () => {
-  const handleLogout = () => {
-    window.location.href = "/login";
+  const supabase = createClientComponentClient();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/login");
   };
 
   return (

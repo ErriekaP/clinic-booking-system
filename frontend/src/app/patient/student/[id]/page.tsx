@@ -12,7 +12,7 @@ import {
 import Navbar from "@/components/navbar/page";
 import "./styles.css";
 
-const id = ({ params }: { params: { id: string } }) => {
+const StudentPage = ({ params }: { params: { id: string } }) => {
   const [patientData, setPatientData] = useState<any>(null);
 
   useEffect(() => {
@@ -156,4 +156,5 @@ const id = ({ params }: { params: { id: string } }) => {
     </main>
   );
 };
-export default id;
+
+export default StudentPage;

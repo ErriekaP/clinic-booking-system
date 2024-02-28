@@ -69,4 +69,42 @@ export class AuthService {
 
     return patient;
   }
+  async fetchUserInfo(supabaseUserID: string) {
+    try {
+      const patient = await this.prismaService.patient.findUnique({
+        where: {
+          supabaseUserID: supabaseUserID,
+        },
+        select: {
+          id: true,
+          email: true,
+          patientType: true,
+        },
+      });
+
+      if (patient) {
+        return patient;
+      }
+
+      const personnel = await this.prismaService.clinicPersonnel.findUnique({
+        where: {
+          supabaseUserID: supabaseUserID,
+        },
+        select: {
+          id: true,
+          email: true,
+          role: true,
+        },
+      });
+
+      if (personnel) {
+        return personnel;
+      }
+
+      throw new Error('User not found');
+    } catch (error) {
+      console.error('Error fetching user information:', error);
+      throw new Error('Error fetching user information');
+    }
+  }
 }
