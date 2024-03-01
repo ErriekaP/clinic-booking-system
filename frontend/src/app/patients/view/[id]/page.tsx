@@ -1,18 +1,24 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  Card,
-  Container,
-  Flex,
-  Inset,
-  Strong,
-  Table,
-  Text,
-} from "@radix-ui/themes";
-import "./styles.css";
 
-const id = ({ params }: { params: { id: string } }) => {
-  const [patientData, setPatientData] = useState<any>(null);
+interface PatientData {
+  medicalHistory: any;
+  familyPhysician: any;
+  emergencyContact: any;
+  address: any;
+  schoolID: string;
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  course: string;
+  department: string;
+  section: string;
+  contactNumber: string;
+  dateOfBirth: string;
+}
+
+const PatientDetails = ({ params }: { params: { id: string } }) => {
+  const [patientData, setPatientData] = useState<PatientData | null>(null);
 
   useEffect(() => {
     const getPatientData = async (id: string) => {
@@ -23,7 +29,7 @@ const id = ({ params }: { params: { id: string } }) => {
         if (!response.ok) {
           throw new Error("Failed to fetch patient data");
         }
-        const data = await response.json();
+        const data: PatientData = await response.json();
         setPatientData(data);
       } catch (error) {
         console.error("Error fetching patient data:", error);
@@ -34,287 +40,213 @@ const id = ({ params }: { params: { id: string } }) => {
   }, [params.id]);
 
   if (!patientData) {
-    return null;
+    return <div>Loading...</div>;
   }
 
   return (
     <main>
-      <Container className="flex min-h-screen flex-col items-center justify-between p-4 ">
-        <table className="table-fixed">
-          <thead>
-            <tr>
-              <th>School ID</th>
-              <th>Name</th>
-              <th>Course</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{patientData.schoolID}</td>
-              <td>
-                {patientData.lastName}, {patientData.firstName}{" "}
-                {patientData.middleName}
-              </td>
-              <td>{patientData.course}</td>
-            </tr>
-            <tr>
-              <td>Witchy Woman</td>
-              <td>The Eagles</td>
-              <td>1972</td>
-            </tr>
-            <tr>
-              <td>Shining Star</td>
-              <td>Earth, Wind, and Fire</td>
-              <td>1975</td>
-            </tr>
-          </tbody>
-        </table>
-        {/* <Flex className="TableContainer">
-           <Table.Root className="TableRoot">
-            <Table.Body className="TableBody">
-              <Table.Row className="TableRow">
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  School ID:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.schoolID}
-                </Table.Cell>
+      <table className="table-fixed w-full border-collapse border border-gray-300 rounded-lg shadow-md">
+        <thead className="bg-gray-200">
+          <tr>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              School ID
+            </th>
+            <th className="w-1/4 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Name
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Course
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Department
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Section
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Contact No.
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase">
+              Date of Birth
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="border-b border-gray-200">
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.schoolID}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.lastName}, {patientData.firstName}{" "}
+              {patientData.middleName}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.course}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.department}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.section}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.contactNumber}
+            </td>
+            <td className="px-4 py-2">{patientData.dateOfBirth}</td>
+          </tr>
+        </tbody>
+      </table>
 
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Course:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.course}
-                </Table.Cell>
+      <table className="table-fixed w-full border-collapse border border-gray-300 rounded-lg shadow-md">
+        <thead className="bg-gray-200">
+          <tr>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Address
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="border-b border-gray-200">
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.address.houseNo}, {patientData.address.street},{" "}
+              {patientData.address.barangay}, {patientData.address.subdivision},{" "}
+              {patientData.address.province}, {patientData.address.zipCode},{" "}
+              {patientData.address.city}
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Department:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.department}
-                </Table.Cell>
-
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Section:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.section}
-                </Table.Cell>
-              </Table.Row>
-
-              <Table.Row>
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Name:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.lastName}, {patientData.firstName}{" "}
-                  {patientData.middleName}
-                </Table.Cell>
-
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Contact No.:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.contactNumber}
-                </Table.Cell>
-
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Date of Birth:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.dateOfBirth}
-                </Table.Cell>
-
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Gender:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.gender}
-                </Table.Cell>
-              </Table.Row>
-            </Table.Body>
-            <Table.Body className="TableBody">
-              <Table.Row className="TableRow">
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Address:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.address.houseNo},{patientData.address.street},{" "}
-                  {patientData.address.barangay},
-                  {patientData.address.subdivision},
-                  {patientData.address.province},{patientData.address.zipCode},
-                  {patientData.address.city}
-                </Table.Cell>
-              </Table.Row>
-
-              <Table.Row>
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Emergency Contact:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.emergencyContact.lastName},{" "}
-                  {patientData.emergencyContact.firstName}{" "}
-                  {patientData.emergencyContact.middleName}
-                </Table.Cell>
-
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Contact No.:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.emergencyContact.contactNumber}
-                </Table.Cell>
-
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Relation
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.emergencyContact.relation}
-                </Table.Cell>
-
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Health Insurance Company:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.emergencyContact.healthInsuranceCompany}
-                </Table.Cell>
-
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Emergency Hospital:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.emergencyContact.emergencyHospital}
-                </Table.Cell>
-              </Table.Row>
-            </Table.Body>
-            <Table.Body className="TableBody">
-              <Table.Row className="TableRow">
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Family Physician:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.familyPhysician.lastName},
-                  {patientData.familyPhysician.firstName}{" "}
-                </Table.Cell>
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Contact Number:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.familyPhysician.contactNumber},
-                </Table.Cell>
-                <Table.Cell className="TableCell"></Table.Cell>
-              </Table.Row>
-
-              <Table.Row>
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Medical History:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.medicalHistory.famHistory},{" "}
-                </Table.Cell>
-
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Childhood Diseases:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.medicalHistory.childhoodDiseases},{" "}
-                </Table.Cell>
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Medical Condition:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.medicalHistory.medicalCondition},{" "}
-                </Table.Cell>
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Hospitalixation
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.medicalHistory.hospitalization},{" "}
-                </Table.Cell>
-
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Medication:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.medicalHistory.medication},{" "}
-                </Table.Cell>
-              </Table.Row>
-              <Table.Row>
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Allergies:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.medicalHistory.allergies},{" "}
-                </Table.Cell>
-
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Vaccines:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.medicalHistory.vaccines},{" "}
-                </Table.Cell>
-
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Psychosocial History:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.medicalHistory.psychosocialHistory},{" "}
-                </Table.Cell>
-                <Table.RowHeaderCell className="TableRowHeaderCell">
-                  Sexual History:
-                </Table.RowHeaderCell>
-                <Table.Cell className="TableCell">
-                  {patientData.medicalHistory.sexualHistory},{" "}
-                </Table.Cell>
-              </Table.Row>
-            </Table.Body>
-          </Table.Root>
-        </Flex> */}
-        {/* <Flex className="CardContainer">
-          <Card className="Card">
-            <a href="/">
-              <Inset clip="padding-box" side="top" pb="current">
-                <img
-                  src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-                  alt="Bold typography"
-                  className="Image"
-                />
-              </Inset>
-              <Text as="p" align="center" className="Text">
-                <Strong>Services</Strong>
-              </Text>
-            </a>
-          </Card>
-          <Card className="Card">
-            <a href="/">
-              <Inset clip="padding-box" side="top" pb="current">
-                <img
-                  src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-                  alt="Bold typography"
-                  className="Image"
-                />
-              </Inset>
-              <Text as="p" align="center" className="Text">
-                <Strong>Appointments</Strong>
-              </Text>
-            </a>
-          </Card>
-          <Card className="Card">
-            <a href="/">
-              <Inset clip="padding-box" side="top" pb="current">
-                <img
-                  src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-                  alt="Bold typography"
-                  className="Image"
-                />
-              </Inset>
-              <Text as="p" align="center" className="Text">
-                Queue
-              </Text>
-            </a>
-          </Card>
-        </Flex> */}
-      </Container>
+      <table className="table-fixed w-full border-collapse border border-gray-300 rounded-lg shadow-md">
+        <thead className="bg-gray-200">
+          <tr>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Name
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Contact Number
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Relation
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Health Insurance Company
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Emergency Hospital
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="border-b border-gray-200">
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.emergencyContact.lastName},{" "}
+              {patientData.emergencyContact.firstName}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.emergencyContact.contactNumber}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.emergencyContact.relation}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.emergencyContact.healthInsuranceCompany}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.emergencyContact.emergencyHospital}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table className="table-fixed w-full border-collapse border border-gray-300 rounded-lg shadow-md">
+        <thead className="bg-gray-200">
+          <tr>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Name
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Contact Number
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="border-b border-gray-200">
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.familyPhysician.lastName},{" "}
+              {patientData.familyPhysician.firstName}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.familyPhysician.contactNumber}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table className="table-fixed w-full border-collapse border border-gray-300 rounded-lg shadow-md">
+        <thead className="bg-gray-200">
+          <tr>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Family History
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Childhood Diseases
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Medical Condition
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Hospitalization String
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Medication
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Allergies
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Vaccines
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Psychosocial History
+            </th>
+            <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+              Sexual History
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="border-b border-gray-200">
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.medicalHistory.famHistory}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.medicalHistory.childhoodDiseases}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.medicalHistory.medicalCondition}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.medicalHistory.hospitalization}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.medicalHistory.medication}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.medicalHistory.allergies}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.medicalHistory.vaccines}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.medicalHistory.psychosocialHistory}
+            </td>
+            <td className="px-4 py-2 border-r border-gray-300">
+              {patientData.medicalHistory.sexualHistory}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </main>
   );
 };
-export default id;
+
+export default PatientDetails;

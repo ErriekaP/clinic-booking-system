@@ -10,7 +10,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
-    schoolID: "",
+    id: "",
     supabaseUserID: "",
     firstName: "",
     middleName: "",
@@ -18,7 +18,7 @@ export default function Page({ params }: { params: { id: string } }) {
     email: "",
     password: "",
     role: "",
-    contactNumber: "",
+    phoneNumber: "",
     dateOfBirth: "2020-03-20",
     gender: "MALE",
     status: "ACTIVE",
@@ -39,21 +39,16 @@ export default function Page({ params }: { params: { id: string } }) {
         // Update the formData state with the fetched data
         setFormData((prevData) => ({
           ...prevData,
-          schoolID: data.schoolID,
+          id: data.id,
           firstName: data.firstName,
           middleName: data.middleName,
           lastName: data.lastName,
-          course: data.course,
-          section: data.section,
-          cluster: data.cluster,
-          department: data.department,
-          contactNumber: data.contactNumber,
+          role: data.role,
+          phoneNumber: data.phoneNumber,
           dateOfBirth: formattedDateOfBirth,
           gender: data.gender,
-          bloodType: data.bloodType,
-          occupation: data.occupation,
-          facultyDepartment: data.facultyDepartment,
-          patientType: data.patientType,
+          email: data.email,
+          password: data.password,
 
           status: data.status,
         }));
@@ -131,19 +126,20 @@ export default function Page({ params }: { params: { id: string } }) {
               <Text>Info</Text>
             </Heading>
           </Flex>
+
           <Flex>
             <Card className="CardsContent">
               <p className="Text">Basic Details</p>
 
               <fieldset className="Fieldset">
-                <label className="Label" htmlFor="schoolID">
+                <label className="Label" htmlFor="id">
                   School ID
                 </label>
                 <input
                   className="UpdateInput"
-                  id="schoolID"
-                  name="schoolID"
-                  value={formData.schoolID}
+                  id="id"
+                  name="id"
+                  value={formData.id}
                   onChange={handleInputChange}
                 />
               </fieldset>
@@ -191,14 +187,14 @@ export default function Page({ params }: { params: { id: string } }) {
 
               <Flex direction="row" gap="3">
                 <fieldset className="Fieldset">
-                  <label className="Label" htmlFor="contactNumber">
+                  <label className="Label" htmlFor="phoneNumber">
                     Contact Number
                   </label>
                   <input
                     className="UpdateInput"
-                    id="contactNumber"
-                    name="contactNumber"
-                    value={formData.contactNumber}
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    value={formData.phoneNumber}
                     onChange={handleInputChange}
                   />
                 </fieldset>
@@ -270,6 +266,37 @@ export default function Page({ params }: { params: { id: string } }) {
                   </Select.Root>
                 </fieldset>
               </Flex>
+            </Card>
+          </Flex>
+          <Flex>
+            <Card className="CardsContent">
+              <p className="Text">Logins</p>
+
+              <fieldset className="Fieldset">
+                <label className="Label" htmlFor="email">
+                  Email
+                </label>
+                <input
+                  className="UpdateInput"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                />
+              </fieldset>
+
+              <fieldset className="Fieldset">
+                <label className="Label" htmlFor="password">
+                  Password
+                </label>
+                <input
+                  className="UpdateInput"
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                />
+              </fieldset>
             </Card>
           </Flex>
 

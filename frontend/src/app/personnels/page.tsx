@@ -1,19 +1,5 @@
 "use client";
-import { Cross2Icon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import "./styles.css";
-import {
-  Card,
-  Container,
-  Flex,
-  Grid,
-  Heading,
-  Inset,
-  Strong,
-  Text,
-  TextField,
-} from "@radix-ui/themes";
 import { SetStateAction, useEffect, useState } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
@@ -23,36 +9,26 @@ export default function Page() {
     id: number;
     firstName: string;
     lastName: string;
+    middleName: string;
+    role: string;
+    email: string;
+    createdAt: string;
+    updatedAt: string;
   }
 
-  const [personnel, setPersonnel] = useState<Personnel[]>([]);
+  const [patients, setPatients] = useState<Personnel[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
   const [selectedPersonnel, setSelectedPersonnel] = useState<Personnel | null>(
     null
   );
 
-  const handleClose = () => {
-    setIsOpen(false);
-  };
-
-  const handleCardClick = (personnel: Personnel) => {
+  const handleClick = (personnel: Personnel) => {
     setSelectedPersonnel(personnel);
-    setIsOpen(true);
-  };
-
-  const handleView = (personnel: Personnel) => {
-    router.push(`/patients/view/${personnel.id}`);
-    console.log("Viewing personnel:", personnel);
-  };
-
-  const handleEdit = (personnel: Personnel) => {
-    router.push(`/patients/update/${personnel.id}`);
-    console.log("Editing personnel:", personnel);
+    router.push(`/personnels/view/${personnel.id}`);
   };
 
   useEffect(() => {
-    const fetchPersonnel = async () => {
+    const fetchPatients = async () => {
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/personnel`,
@@ -61,15 +37,15 @@ export default function Page() {
           }
         );
         if (!response.ok) {
-          throw new Error("Failed to fetch Personnel");
+          throw new Error("Failed to fetch patients");
         }
         const data = await response.json();
-        setPersonnel(data);
+        setPatients(data);
       } catch (error) {
-        console.error("Error fetching Personnel:", error);
+        console.error("Error fetching patients:", error);
       }
     };
-    fetchPersonnel();
+    fetchPatients();
   }, []); // Fetch patients on component mount
 
   // Function to handle search query change
@@ -80,126 +56,113 @@ export default function Page() {
   };
 
   // Filter patients based on search query
-  const filteredPersonnel = personnel.filter(
+  const filteredPatients = patients.filter(
     (personnel) =>
       personnel.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       personnel.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      personnel.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
       personnel.id.toString().toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const formatDate = (isoDate: string | number | Date) => {
+    const date = new Date(isoDate);
+    return date.toLocaleDateString(); // Adjust the format as needed
+  };
+
   return (
-    <>
-      <main className="flex min-h-screen flex-col items-center justify-between p-4">
-        <Container>
-          <div className="mb-10">
-            <Flex
-              display="flex"
-              direction="row"
-              align="center"
-              justify="center"
-            >
-              <TextField.Root>
-                <TextField.Slot>
-                  <MagnifyingGlassIcon height="16" width="16" />
-                </TextField.Slot>
-                <TextField.Input
-                  placeholder="Search personnel..."
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                />
-              </TextField.Root>
-            </Flex>
-          </div>
-
-          <Flex
-            display="flex"
-            direction="row"
-            align="center"
-            justify="center"
-            gap="3"
+    <div className="flex flex-col h-screen items-center">
+      <div className="block relative max-w-sm">
+        <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">
+          <svg
+            viewBox="0 0 24 24"
+            className="h-4 w-4 fill-current text-gray-500"
           >
-            <Grid columns="5" gap="5" width="auto">
-              {filteredPersonnel.map((personnel) => (
-                <div key={personnel.id}>
-                  <Card
-                    className="Card"
-                    onClick={() => handleCardClick(personnel)}
+            <path d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z"></path>
+          </svg>
+        </span>
+        <input
+          placeholder="Search"
+          className="appearance-none rounded-md border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+      </div>
+      <div className="flex flex-col flex-grow">
+        <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto flex-grow">
+          <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+            <table className="table-fixed bg-white min-w-full leading-normal">
+              <thead>
+                <tr>
+                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-s font-bold uppercase ">
+                    ID
+                  </th>
+                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-s font-bold uppercase ">
+                    Name
+                  </th>
+                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-s font-bold uppercase">
+                    Role
+                  </th>
+                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-s font-bold uppercase">
+                    Created At
+                  </th>
+                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-s font-bold uppercase ">
+                    Updated At
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredPatients.map((personnel) => (
+                  <tr
+                    key={personnel.id}
+                    onClick={() => handleClick(personnel)}
+                    className="hover:border-4"
                   >
-                    {" "}
-                    <Inset clip="padding-box" side="top" pb="current">
-                      <img
-                        src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-                        alt="Bold typography"
-                        className="Image"
-                      />
-                    </Inset>
-                    <Text as="p" align="center" className="Text">
-                      <Strong>
-                        {personnel.id} {personnel.firstName}{" "}
-                        {personnel.lastName}
-                      </Strong>
-                    </Text>
-                  </Card>
-                </div>
-              ))}
-              {/* DialogBox */}
-              <div className="CardContainer">
-                <Dialog.Root open={isOpen}>
-                  {" "}
-                  <Dialog.Overlay className="DialogOverlay" />
-                  <Dialog.Content className="DialogContent">
-                    <Dialog.Title className="DialogTitle">
-                      {`${selectedPersonnel?.firstName}'s`} profile
-                    </Dialog.Title>
-                    <Dialog.Description className="DialogDescription">
-                      Do you want to View or Make changes to{" "}
-                      {`${selectedPersonnel?.firstName}'s`} profile?
-                    </Dialog.Description>
-
-                    <div
-                      style={{
-                        display: "flex",
-                        marginTop: 25,
-                        justifyContent: "flex-end",
-                      }}
-                    >
-                      <Dialog.Close asChild>
-                        <button
-                          className="Button"
-                          onClick={() =>
-                            selectedPersonnel && handleView(selectedPersonnel)
-                          }
-                        >
-                          View
-                        </button>
-                      </Dialog.Close>
-                      <Dialog.Close asChild>
-                        <button
-                          className="Button"
-                          onClick={() =>
-                            selectedPersonnel && handleEdit(selectedPersonnel)
-                          }
-                        >
-                          Edit
-                        </button>
-                      </Dialog.Close>
-                    </div>
-                    <Dialog.Close asChild>
-                      <button
-                        className="IconButton"
-                        aria-label="Close"
-                        onClick={handleClose}
-                      >
-                        <Cross2Icon />
-                      </button>
-                    </Dialog.Close>
-                  </Dialog.Content>
-                </Dialog.Root>
-              </div>
-            </Grid>
-          </Flex>
-        </Container>
-      </main>
-    </>
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 w-10 h-10">
+                          <img
+                            className="w-full h-full rounded-full"
+                            src="https://www.addu.edu.ph/wp-content/uploads/2020/08/UniversitySeal480px.png"
+                            alt=""
+                          />
+                        </div>
+                        <div className="ml-3">
+                          <p className="text-gray-900 whitespace-no-wrap">
+                            {personnel.id}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <p className="text-gray-900 whitespace-no-wrap">
+                        {" "}
+                        {personnel.lastName}, {personnel.firstName}{" "}
+                        {personnel.middleName}
+                      </p>
+                    </td>
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <p className="text-gray-900 whitespace-no-wrap">
+                        {" "}
+                        {personnel.role}
+                      </p>
+                    </td>
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <p className="text-gray-900 whitespace-no-wrap">
+                        {formatDate(personnel.createdAt)}
+                      </p>
+                    </td>
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <p className="text-gray-900 whitespace-no-wrap">
+                        {formatDate(personnel.updatedAt)}
+                      </p>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
