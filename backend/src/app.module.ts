@@ -7,7 +7,6 @@ import { AuthModule } from './auth/auth.module';
 import { PatientModule } from './patient/patient.module';
 import { RegisterModule } from './register/register.module';
 import { PersonnelModule } from './personnel/personnel.module';
-
 @Module({
   imports: [
     PrismaModule,
