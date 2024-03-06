@@ -8,6 +8,7 @@ interface Personnel {
   lastName: string;
   middleName: string;
   role: string;
+  specialty: string;
   email: string;
   phoneNumber: string;
   dateOfBirth: string;
@@ -59,7 +60,7 @@ const PersonnelDetails = ({ params }: { params: { id: string } }) => {
         <thead className="bg-gray-200">
           <tr>
             <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
-              School ID
+              ID
             </th>
             <th className="w-1/4 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
               Name
@@ -67,6 +68,11 @@ const PersonnelDetails = ({ params }: { params: { id: string } }) => {
             <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
               Role
             </th>
+            {personnelData.role === "DOCTOR" && (
+              <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
+                Specialty
+              </th>
+            )}
             <th className="w-1/7 px-4 py-2 text-lg font-semibold text-gray-800 uppercase border-r border-gray-300">
               Email
             </th>
@@ -93,6 +99,11 @@ const PersonnelDetails = ({ params }: { params: { id: string } }) => {
             <td className="px-4 py-2 border-r border-gray-300">
               {personnelData.role}
             </td>
+            {personnelData.role === "DOCTOR" && (
+              <td className="px-4 py-2 border-r border-gray-300">
+                {personnelData.specialty}
+              </td>
+            )}
             <td className="px-4 py-2 border-r border-gray-300">
               {personnelData.email}
             </td>

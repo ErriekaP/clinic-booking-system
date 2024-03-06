@@ -2,6 +2,7 @@
 
 import { SetStateAction, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import PatientDetails from "./view/[id]/page";
 
 export default function Page() {
   const router = useRouter();

@@ -32,7 +32,7 @@ input {
 .TabsTrigger {
   font-family: inherit;
   background-color: #3e5c76;
-  padding: 0 20px;
+  padding: 0px;
   height: 45px;
   flex: 1;
   display: flex;

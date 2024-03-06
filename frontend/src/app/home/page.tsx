@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router"; // Import useRouter from 'next/router'
 import { fetchUserInfo } from "@/utilities/fetch/patient";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
@@ -23,6 +23,12 @@ const Home = () => {
           router.push(`/admin/${userInfo.id}`);
         } else if (userInfo.patientType === "STUDENT") {
           router.push(`/patient/student/${userInfo.id}`);
+        } else if (
+          !router.pathname.includes("/register") &&
+          !router.pathname.includes("/register/patient/student")
+        ) {
+          // If the user is already logged in and is not on the registration page, redirect them accordingly
+          router.push("/home");
         }
       } catch (error) {
         console.error("Error fetching user info:", error);
@@ -32,6 +38,8 @@ const Home = () => {
 
     getUserInfo();
   }, [router]);
+
+  return null; // Since this component handles redirection, it doesn't render anything
 };
 
 export default Home;

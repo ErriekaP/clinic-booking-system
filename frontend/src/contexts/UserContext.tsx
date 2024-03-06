@@ -70,6 +70,11 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
           ) {
             setIsAllowed(true);
           } else if (
+            newUserType === "STUDENT" &&
+            pathname.startsWith(`/register/patient/student/${userInfo.id}`)
+          ) {
+            setIsAllowed(true);
+          } else if (
             newUserType === "EMPLOYEE" &&
             pathname.startsWith(`/patient/employee/${userInfo.id}`)
           ) {

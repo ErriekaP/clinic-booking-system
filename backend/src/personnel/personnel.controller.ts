@@ -7,11 +7,6 @@ import { ClinicPersonnel } from '@prisma/client';
 export class PersonnelController {
   constructor(private readonly personnelService: PersonnelService) {}
 
-  //   @Post('registerpersonnel')
-  //   async addPatient(@Body() patientData: any): Promise<any> {
-  //     return this.personnelService.addPatient(patientData);
-  //   }
-
   @Post('addpersonnel/:id')
   async addPersonnelInfo(
     @Param('id') id: string,

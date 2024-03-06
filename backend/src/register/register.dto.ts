@@ -11,6 +11,7 @@ export class RegisterDto {
   email: string;
   password: string;
   phoneNumber: string;
+  specialty: string;
   dateOfBirth: Date;
   gender: string;
   status: string;

@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 
 export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter();
-  // const url = window.location.href;
-  // const id = url.substring(url.lastIndexOf("/") + 1);
 
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
 

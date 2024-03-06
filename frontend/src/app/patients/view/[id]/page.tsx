@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 interface PatientData {
@@ -18,6 +19,7 @@ interface PatientData {
 }
 
 const PatientDetails = ({ params }: { params: { id: string } }) => {
+  const router = useRouter();
   const [patientData, setPatientData] = useState<PatientData | null>(null);
 
   useEffect(() => {
@@ -43,8 +45,18 @@ const PatientDetails = ({ params }: { params: { id: string } }) => {
     return <div>Loading...</div>;
   }
 
+  const handleEditClick = () => {
+    router.push(`/patients/update/${params.id}`);
+  };
+
   return (
-    <main>
+    <main className="relative pt-16">
+      <button
+        className="absolute top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded shadow"
+        onClick={() => handleEditClick()}
+      >
+        Update
+      </button>
       <table className="table-fixed w-full border-collapse border border-gray-300 rounded-lg shadow-md">
         <thead className="bg-gray-200">
           <tr>

@@ -21,6 +21,7 @@ export class RegisterService {
       phoneNumber,
       dateOfBirth,
       gender,
+      specialty,
       status,
     } = dto;
     // Sign up user in Supabase
@@ -40,6 +41,7 @@ export class RegisterService {
       phoneNumber,
       dateOfBirth,
       gender,
+      specialty,
       status,
     });
 
@@ -58,6 +60,7 @@ export class RegisterService {
     phoneNumber: string;
     dateOfBirth: Date;
     gender: string;
+    specialty: string;
     status: string;
   }): Promise<any> {
     return this.prisma.clinicPersonnel.create({
@@ -82,6 +85,7 @@ export class RegisterService {
           | 'ANDROGYNOUS'
           | 'PREFER_NOT_TO_SAY'
           | 'OTHER',
+        specialty: data.specialty,
         status: data.status as 'ACTIVE' | 'INACTIVE',
       },
     });

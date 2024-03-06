@@ -11,15 +11,25 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (!session && req.nextUrl.pathname !== "/login") {
+  // If there is no session and the requested URL is not "/login" or "/register", redirect to "/login"
+  if (
+    !session &&
+    req.nextUrl.pathname !== "/login" &&
+    req.nextUrl.pathname !== "/register"
+  ) {
     req.nextUrl.pathname = "/login";
     return NextResponse.redirect(req.nextUrl);
   }
 
-  if (session && req.nextUrl.pathname === "/login") {
+  // If there is a session and the requested URL is "/login" or "/register", redirect to "/home"
+  if (
+    session &&
+    (req.nextUrl.pathname === "/login" || req.nextUrl.pathname === "/register")
+  ) {
     req.nextUrl.pathname = "/home";
     return NextResponse.redirect(req.nextUrl);
   }
+
   return res;
 }
 

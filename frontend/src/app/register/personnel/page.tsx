@@ -14,10 +14,11 @@ export default function Page() {
     lastName: "",
     email: "",
     password: "",
-    role: "DOCTOR",
+    role: "STAFF",
     phoneNumber: "",
     dateOfBirth: "2020-03-20",
     gender: "MALE",
+    specialty: "",
     status: "ACTIVE",
   });
 
@@ -68,6 +69,13 @@ export default function Page() {
       ...prevState,
       [fieldName]: newValue || "",
     }));
+
+    if (fieldName === "role" && newValue !== "DOCTOR") {
+      setFormData((prevState) => ({
+        ...prevState,
+        specialty: "",
+      }));
+    }
   };
 
   console.log(formData);
@@ -219,7 +227,7 @@ export default function Page() {
           <Flex>
             <Card className="CardsContent">
               <p className="Text">Login Details</p>
-              <Flex direction="row" gap="3">
+              <Flex direction="row" gap="4">
                 <fieldset className="Fieldset">
                   <label className="Label" htmlFor="email">
                     Email
@@ -278,6 +286,30 @@ export default function Page() {
                 </fieldset>
               </Flex>
             </Card>
+          </Flex>
+
+          <Flex>
+            {formData.role === "DOCTOR" && (
+              <Card className="CardsContent">
+                <p className="Text">Specialty</p>
+                <Flex direction="row" gap="4">
+                  <fieldset className="Fieldset">
+                    <label className="Label" htmlFor="specialty">
+                      Specialty
+                    </label>
+
+                    <input
+                      className="Input"
+                      id="specialty"
+                      name="specialty"
+                      type="specialty"
+                      value={formData.specialty}
+                      onChange={handleInputChange}
+                    />
+                  </fieldset>
+                </Flex>
+              </Card>
+            )}
           </Flex>
           <div className="flex mt-20 justify-end">
             <button className="Button blue" type="submit">
