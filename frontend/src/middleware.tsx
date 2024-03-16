@@ -11,6 +11,8 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
+  console.log(session);
+
   // If there is no session and the requested URL is not "/login" or "/register", redirect to "/login"
   if (
     !session &&

@@ -24,11 +24,9 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         if (error) {
           throw new Error("Failed to fetch session");
         }
-        console.log("sess", session);
 
         if (session && session.user) {
           const userInfo = await fetchUserInfo(session.user.id);
-          console.log(userInfo);
           let newUserType;
 
           if (userInfo.role != null) {
@@ -40,48 +38,34 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
           setUserType(newUserType);
           setUserId(userInfo.id);
 
-          if (newUserType === "ADMIN") {
-            if (
-              !pathname.startsWith(`/admin`) ||
-              pathname === `/admin/${userInfo.id}`
-            ) {
-              setIsAllowed(true);
-            } else {
-              setIsAllowed(false);
-            }
-          } else if (
-            newUserType === "DOCTOR" &&
-            pathname.startsWith(`/personnel/doctor/${userInfo.id}`)
-          ) {
-            setIsAllowed(true);
-          } else if (
-            newUserType === "NURSE" &&
-            pathname.startsWith(`/personnel/nurse/${userInfo.id}`)
-          ) {
-            setIsAllowed(true);
-          } else if (
-            newUserType === "STAFF" &&
-            pathname.startsWith(`/personnel/staff/${userInfo.id}`)
-          ) {
-            setIsAllowed(true);
-          } else if (
-            newUserType === "STUDENT" &&
-            pathname.startsWith(`/patient/student/${userInfo.id}`)
-          ) {
-            setIsAllowed(true);
-          } else if (
-            newUserType === "STUDENT" &&
-            pathname.startsWith(`/register/patient/student/${userInfo.id}`)
-          ) {
-            setIsAllowed(true);
-          } else if (
-            newUserType === "EMPLOYEE" &&
-            pathname.startsWith(`/patient/employee/${userInfo.id}`)
-          ) {
-            setIsAllowed(true);
-          } else {
-            setIsAllowed(false);
+          // Define routes and permissions
+          const routesPermissions = {
+            ADMIN: [
+              `/admin/${userInfo.id}`,
+              `/patients`,
+              `/personnels`,
+              `/register`,
+            ],
+            DOCTOR: [`/personnel/doctor/${userInfo.id}`],
+            NURSE: [`/personnel/nurse/${userInfo.id}`],
+            STAFF: [`/personnel/staff/${userInfo.id}`],
+            STUDENT: [
+              `/patient/student/${userInfo.id}`,
+              `/register/patient/student/${userInfo.id}`,
+              `/appointments`,
+              `/services`,
+            ],
+            EMPLOYEE: [`/patient/employee/${userInfo.id}`],
+          };
+
+          let allowed = false;
+          const allowedRoutes = routesPermissions[newUserType];
+
+          if (allowedRoutes) {
+            allowed = allowedRoutes.some((route) => pathname.startsWith(route));
           }
+
+          setIsAllowed(allowed);
         } else {
           throw new Error("Session or user not found");
         }
@@ -99,9 +83,10 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     return <div>Loading...</div>;
   }
 
-  //Return unauthorized page if not allowed
+  // Return unauthorized page if not allowed
   if (!isAllowed) {
     router.push("/unauthorized");
+    return null;
   }
 
   return (
