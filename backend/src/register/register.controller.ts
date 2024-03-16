@@ -6,8 +6,12 @@ import { RegisterDto } from './register.dto';
 export class RegisterController {
   constructor(private readonly registerService: RegisterService) {}
 
+  // @Post('register')
+  // async register(@Body() registerDto: RegisterDto): Promise<void> {
+  //   return this.registerService.signUp(registerDto);
+  // }
   @Post('register')
-  async register(@Body() registerDto: RegisterDto): Promise<void> {
+  create(@Body() registerDto: RegisterDto) {
     return this.registerService.signUp(registerDto);
   }
 }

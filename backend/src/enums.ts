@@ -1,0 +1,25 @@
+// enums.ts
+
+export enum Role {
+  ADMIN = 'ADMIN',
+  DOCTOR = 'DOCTOR',
+  NURSE = 'NURSE',
+  STAFF = 'STAFF',
+}
+
+export enum Gender {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+  NON_BINARY = 'NON_BINARY',
+  AGENDER = 'AGENDER',
+  GENDERFLUID = 'GENDERFLUID',
+  BIGENDER = 'BIGENDER',
+  ANDROGYNOUS = 'ANDROGYNOUS',
+  PREFER_NOT_TO_SAY = 'PREFER_NOT_TO_SAY',
+  OTHER = 'OTHER',
+}
+
+export enum Status {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}

@@ -78,6 +78,7 @@ model ClinicPersonnel {
   dateOfBirth DateTime
   gender Gender
   appointment Appointments[]
+  services        Service[]    @relation("ClinicPersonnelServices")
   status Status
   specialty String
   createdAt DateTime @default(now())
@@ -177,6 +178,7 @@ id Int @id @default(autoincrement())
 serviceName String
 description String
 appointment Appointments[]
+personnel       ClinicPersonnel[]  @relation("ClinicPersonnelServices")
 createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt
 }

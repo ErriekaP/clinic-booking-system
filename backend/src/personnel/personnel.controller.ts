@@ -7,19 +7,19 @@ import { ClinicPersonnel } from '@prisma/client';
 export class PersonnelController {
   constructor(private readonly personnelService: PersonnelService) {}
 
-  @Post('addpersonnel/:id')
+  @Post('update/:id')
   async addPersonnelInfo(
     @Param('id') id: string,
-    @Body() patientData: any,
+    @Body() personnelData: any,
   ): Promise<any> {
-    const patientId = parseInt(id, 10); // Parse the string ID to a number
-    return this.personnelService.updatePersonnel(patientId, patientData);
+    const personnelId = parseInt(id, 10); // Parse the string ID to a number
+    return this.personnelService.updatePersonnel(personnelId, personnelData);
   }
 
-  @Get(':id')
-  async getPersonnel(@Param('id') id: string): Promise<ClinicPersonnel> {
-    return this.personnelService.findPersonnel(id);
-  }
+  // @Get(':id')
+  // async getPersonnel(@Param('id') id: string): Promise<ClinicPersonnel> {
+  //   return this.personnelService.findPersonnel(id);
+  // }
 
   @Get()
   async findAll() {
@@ -28,6 +28,17 @@ export class PersonnelController {
       return personnel;
     } catch (error) {
       throw new Error(`Unable to fetch patients: ${error.message}`);
+    }
+  }
+
+  @Get(':id')
+  async getPersonnelServices(@Param('id') personnelId: string) {
+    try {
+      const personnelWithServices =
+        await this.personnelService.getPersonnelWithServices(personnelId);
+      return { success: true, data: personnelWithServices };
+    } catch (error) {
+      return { success: false, message: 'Failed to fetch personnel services' };
     }
   }
 }

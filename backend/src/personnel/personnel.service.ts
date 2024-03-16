@@ -13,10 +13,13 @@ export class PersonnelService {
 
   async updatePersonnel(id: number, updatedData: any): Promise<any> {
     try {
-      // Retrieve the patient record by ID
+      // Retrieve the personnel record by ID
       const existingPersonnel = await this.prisma.clinicPersonnel.findUnique({
         where: {
           id: id,
+        },
+        include: {
+          services: true, // Include associated services
         },
       });
 
@@ -24,7 +27,10 @@ export class PersonnelService {
         throw new Error(`Personnel with ID ${id} not found.`);
       }
 
-      // Update the patient record with the provided data
+      // Extract the updated service IDs from updatedData
+      const updatedServiceIds = updatedData.serviceIds ?? [];
+
+      // Update the personnel record with the provided data
       const updatedPersonnel = await this.prisma.clinicPersonnel.update({
         where: {
           id: id,
@@ -42,6 +48,12 @@ export class PersonnelService {
           gender: updatedData.gender ?? existingPersonnel.gender,
           specialty: updatedData.specialty ?? existingPersonnel.specialty,
           status: updatedData.status ?? existingPersonnel.status,
+          // Update services to only include the provided IDs
+          services: {
+            set: updatedServiceIds.map((serviceId: number) => ({
+              id: serviceId,
+            })),
+          },
         },
       });
 
@@ -62,12 +74,19 @@ export class PersonnelService {
     }
   }
 
-  async findPersonnel(id: string) {
-    const parsedId = parseInt(id, 10);
+  // async findPersonnel(id: string) {
+  //   const parsedId = parseInt(id, 10);
+  //   return this.prisma.clinicPersonnel.findUnique({
+  //     where: {
+  //       id: parsedId,
+  //     },
+  //   });
+  // }
+
+  async getPersonnelWithServices(personnelId: string) {
     return this.prisma.clinicPersonnel.findUnique({
-      where: {
-        id: parsedId,
-      },
+      where: { id: parseInt(personnelId) },
+      include: { services: true },
     });
   }
 }

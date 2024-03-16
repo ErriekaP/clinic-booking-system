@@ -2,7 +2,8 @@
 import "./styles.css";
 import { Card, Container, Flex, Heading, Select, Text } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import MultipleSelect from "@/components/multipleselect/MultipleSelect";
 
 export default function Page() {
   const router = useRouter();
@@ -16,11 +17,52 @@ export default function Page() {
     password: "",
     role: "STAFF",
     phoneNumber: "",
-    dateOfBirth: "2020-03-20",
+    dateOfBirth: "2022-02-02T12:34:56Z",
     gender: "MALE",
     specialty: "",
     status: "ACTIVE",
+    services: [] as number[],
   });
+
+  const [services, setServices] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (formData.role === "DOCTOR") {
+      // Fetch services for doctors from backend
+      fetchServices();
+    }
+  }, [formData.role]);
+
+  const fetchServices = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/services`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setServices(data);
+      } else {
+        console.error("Failed to fetch services");
+      }
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    }
+  };
+
+  const handleServiceChange = (e: { target: { checked: any; value: any } }) => {
+    const { checked, value } = e.target;
+    if (checked) {
+      setFormData((prevData) => ({
+        ...prevData,
+        services: [...prevData.services, value],
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        services: prevData.services.filter((service) => service !== value),
+      }));
+    }
+  };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -38,7 +80,6 @@ export default function Page() {
           }),
         }
       );
-
       if (response.ok) {
         console.log("Form submitted successfully");
         const user = await response.json();
@@ -288,27 +329,42 @@ export default function Page() {
             </Card>
           </Flex>
 
-          <Flex>
+          <Flex direction="column">
             {formData.role === "DOCTOR" && (
-              <Card className="CardsContent">
-                <p className="Text">Specialty</p>
-                <Flex direction="row" gap="4">
-                  <fieldset className="Fieldset">
-                    <label className="Label" htmlFor="specialty">
-                      Specialty
-                    </label>
+              <>
+                <Card className="CardsContent">
+                  <p className="Text">Specialty</p>
+                  <Flex direction="row" gap="4">
+                    <fieldset className="Fieldset">
+                      <label className="Label" htmlFor="specialty">
+                        Specialty
+                      </label>
 
-                    <input
-                      className="Input"
-                      id="specialty"
-                      name="specialty"
-                      type="specialty"
-                      value={formData.specialty}
-                      onChange={handleInputChange}
-                    />
-                  </fieldset>
+                      <input
+                        className="Input"
+                        id="specialty"
+                        name="specialty"
+                        type="specialty"
+                        value={formData.specialty}
+                        onChange={handleInputChange}
+                      />
+                    </fieldset>
+                  </Flex>
+                </Card>
+
+                <Flex>
+                  <MultipleSelect
+                    options={services}
+                    selectedOptions={formData.services}
+                    onChange={(selectedOptions: any) =>
+                      setFormData((prevData) => ({
+                        ...prevData,
+                        services: selectedOptions,
+                      }))
+                    }
+                  />
                 </Flex>
-              </Card>
+              </>
             )}
           </Flex>
           <div className="flex mt-20 justify-end">
