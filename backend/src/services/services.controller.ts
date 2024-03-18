@@ -1,5 +1,12 @@
 // patient.controller.ts
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  NotFoundException,
+} from '@nestjs/common';
 import { ServicesService } from './services.service';
 import { Service } from '@prisma/client';
 
@@ -34,5 +41,19 @@ export class ServicesController {
     } catch (error) {
       throw new Error(`Unable to fetch services: ${error.message}`);
     }
+  }
+
+  @Get(':id/personnel')
+  async getServiceWithPersonnel(@Param('id') id: string): Promise<Service> {
+    const serviceId = parseInt(id, 10); // Parse the string ID to a number
+
+    const service =
+      await this.servicesService.getServiceWithPersonnelAndSchedules(serviceId);
+
+    if (!service) {
+      throw new NotFoundException(`Service with id ${id} not found`);
+    }
+
+    return service;
   }
 }

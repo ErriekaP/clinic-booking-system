@@ -74,15 +74,6 @@ export class PersonnelService {
     }
   }
 
-  // async findPersonnel(id: string) {
-  //   const parsedId = parseInt(id, 10);
-  //   return this.prisma.clinicPersonnel.findUnique({
-  //     where: {
-  //       id: parsedId,
-  //     },
-  //   });
-  // }
-
   async getPersonnelWithServices(personnelId: string) {
     return this.prisma.clinicPersonnel.findUnique({
       where: { id: parseInt(personnelId) },

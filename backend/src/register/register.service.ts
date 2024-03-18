@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { SupabaseService } from 'supabase/supabase.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { RegisterDto } from './register.dto';
-
 @Injectable()
 export class RegisterService {
   constructor(
@@ -23,7 +22,8 @@ export class RegisterService {
       gender,
       specialty,
       status,
-      services, // Array of service IDs
+      services,
+      workSchedule,
     } = dto;
 
     // Sign up user in Supabase
@@ -45,7 +45,8 @@ export class RegisterService {
       gender,
       specialty,
       status,
-      services, // Pass service IDs to the function
+      services,
+      workSchedule,
     });
 
     console.log(prismaUser);
@@ -75,15 +76,21 @@ export class RegisterService {
       | 'OTHER';
     specialty: string;
     status: 'ACTIVE' | 'INACTIVE';
-    services: number[]; // Ensure serviceIds is an array of numbers
+    services: number[];
+    workSchedule: number[];
   }): Promise<any> {
-    const { services, ...userData } = data;
+    const { services, workSchedule, ...userData } = data;
 
     const createdPersonnel = await this.prisma.clinicPersonnel.create({
       data: {
         ...userData,
         services: {
           connect: services.map((serviceId) => ({ id: serviceId })),
+        },
+        workSchedule: {
+          connect: workSchedule.map((workScheduleId) => ({
+            id: workScheduleId,
+          })),
         },
       },
     });

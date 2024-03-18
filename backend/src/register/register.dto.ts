@@ -10,6 +10,7 @@ import {
   ArrayMinSize,
 } from 'class-validator';
 import { Role, Gender, Status } from '../enums'; // Import the Role enum
+import { WorkScheduleDto } from 'src/schedule/schedule.dto';
 
 export class LoginDto {
   supabaseUserId: string;
@@ -56,4 +57,9 @@ export class RegisterDto {
   @ArrayMinSize(1) // Ensure the array is not empty
   @IsNumber({}, { each: true }) // Validate each element of the array as a number
   services: number[];
+
+  @IsArray()
+  @ArrayMinSize(1) // Ensure the array is not empty
+  @IsNumber({}, { each: true }) // Validate each element of the array as a number
+  workSchedule: number[];
 }

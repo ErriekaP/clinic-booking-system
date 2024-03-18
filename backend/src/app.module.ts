@@ -9,6 +9,8 @@ import { RegisterModule } from './register/register.module';
 import { PersonnelModule } from './personnel/personnel.module';
 import { ServicesModule } from './services/services.module';
 import { AppointmentModule } from './appointment/appointment.module';
+import { ScheduleModule } from './schedule/schedule.module';
+
 @Module({
   imports: [
     PrismaModule,
@@ -19,6 +21,7 @@ import { AppointmentModule } from './appointment/appointment.module';
     PersonnelModule,
     ServicesModule,
     AppointmentModule,
+    ScheduleModule,
   ],
   controllers: [AppController],
   providers: [AppService],

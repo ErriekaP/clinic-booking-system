@@ -16,11 +16,6 @@ export class PersonnelController {
     return this.personnelService.updatePersonnel(personnelId, personnelData);
   }
 
-  // @Get(':id')
-  // async getPersonnel(@Param('id') id: string): Promise<ClinicPersonnel> {
-  //   return this.personnelService.findPersonnel(id);
-  // }
-
   @Get()
   async findAll() {
     try {

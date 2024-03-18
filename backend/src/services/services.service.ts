@@ -85,6 +85,31 @@ export class ServicesService {
     });
   }
 
+  async getServiceWithPersonnelAndSchedules(serviceId: number) {
+    try {
+      const service = await this.prisma.service.findUnique({
+        where: { id: serviceId },
+        include: {
+          personnel: {
+            include: {
+              workSchedule: true,
+            },
+          },
+        },
+      });
+
+      if (!service) {
+        throw new Error('Service not found');
+      }
+
+      return service;
+    } catch (error) {
+      throw new Error(
+        `Unable to fetch service with personnel and schedules: ${error.message}`,
+      );
+    }
+  }
+
   getHello(): string {
     return 'Hello World!';
   }

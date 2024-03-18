@@ -79,12 +79,19 @@ model ClinicPersonnel {
   gender Gender
   appointment Appointments[]
   services        Service[]    @relation("ClinicPersonnelServices")
+  workSchedule    WorkSchedule[]    @relation("ClinicPersonnelWorkSchedule")
   status Status
   specialty String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+model WorkSchedule{
+  id Int @id @default(autoincrement())
+  timeFrom DateTime
+  timeTo DateTime
+  personnel ClinicPersonnel[] @relation("ClinicPersonnelWorkSchedule")
+}
 model Patient {
   id Int @id @default(autoincrement())
   supabaseUserID String @unique
