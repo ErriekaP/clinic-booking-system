@@ -68,13 +68,14 @@ const Page = ({ params }: { params: { id: string } }) => {
   }, []);
 
   const handleSetAppointment = () => {
-    if (selectedDate && selectedDoctor) {
-      // Ensure selectedDoctor is not null
-      const url = `/appointments/schedule/confirmation?date=${
-        selectedDate.toISOString().split("T")[0]
-      }&time=${selectedDate.toISOString().split("T")[1]}&doctorId=${
-        selectedDoctor.id
-      }`;
+    if (selectedDate && selectedDoctor && clickedInterval) {
+      const { id } = selectedDoctor;
+
+      const date = new Date(selectedDate);
+
+      const [startTime, endTime] = clickedInterval.split(" - ");
+
+      const url = `/appointments/schedule/confirmation/date=${date}&startTime=${startTime}&endTime=${endTime}&doctorId=${id}`;
       router.push(url);
     }
   };
@@ -156,7 +157,8 @@ const Page = ({ params }: { params: { id: string } }) => {
     return intervalTimes;
   };
 
-  const handleDateChange = (date: Date | null) => {
+  const handleDateChange = (date: Date) => {
+    console.log(selectedDate);
     setSelectedDate(date);
   };
 
@@ -166,6 +168,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   ) => {
     setClickedInterval(interval);
     setClickedDoctors(doctors);
+    console.log(interval);
   };
   const handleDoctorClick = (doctor: Personnel) => {
     console.log(doctor);
@@ -223,18 +226,17 @@ const Page = ({ params }: { params: { id: string } }) => {
           <DateCalendar value={selectedDate} onChange={handleDateChange} />
         </div>
       </LocalizationProvider>
-
-      {selectedDate && (
+      {selectedDate != null && (
         <div className="flex ml-8">
           <div className="schedules-list w-25 mx-10">
-            <h2 className="text-lg font-semibold text-white ">
+            <h2 className="text-lg font-semibold text-white">
               Schedules for selected date:
             </h2>
             {services.map(
               (service) =>
                 service.id === selectedServiceId && (
                   <div key={service.id}>
-                    <h3 className="text-lg font-semibold  text-white">
+                    <h3 className="text-lg font-semibold text-white">
                       {service.serviceName}
                     </h3>
                     {/* Calculate unique intervals once for each service */}
