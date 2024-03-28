@@ -37,10 +37,17 @@ const Page = ({ params }: { params: { id: string } }) => {
   }
 
   const [services, setServices] = useState<Service[]>([]);
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedServiceId, setSelectedServiceId] = useState<number | null>(
     id ? Number(id) : null
   );
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDoctor, setSelectedDoctor] = useState<Personnel | null>(null);
+
+  const [clickedInterval, setClickedInterval] = useState<string | null>(null);
+  const [clickedDoctors, setClickedDoctors] = useState<Personnel[] | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -60,15 +67,14 @@ const Page = ({ params }: { params: { id: string } }) => {
     fetchServices();
   }, []);
 
-  const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
-  };
-
-  const handleScheduleClick = (schedule: workSchedule, doctor: Personnel) => {
-    if (selectedDate) {
-      const selectedTime = schedule.timeFrom.split("T")[1];
-      const formattedDate = selectedDate.toISOString().split("T")[0];
-      const url = `/appointments/schedule/date?date=${formattedDate}&time=${selectedTime}&doctorId=${doctor.id}`;
+  const handleSetAppointment = () => {
+    if (selectedDate && selectedDoctor) {
+      // Ensure selectedDoctor is not null
+      const url = `/appointments/schedule/confirmation?date=${
+        selectedDate.toISOString().split("T")[0]
+      }&time=${selectedDate.toISOString().split("T")[1]}&doctorId=${
+        selectedDoctor.id
+      }`;
       router.push(url);
     }
   };
@@ -150,62 +156,131 @@ const Page = ({ params }: { params: { id: string } }) => {
     return intervalTimes;
   };
 
+  const handleDateChange = (date: Date | null) => {
+    setSelectedDate(date);
+  };
+
+  const handleIntervalClick = (
+    interval: string,
+    doctors: Personnel[] | null
+  ) => {
+    setClickedInterval(interval);
+    setClickedDoctors(doctors);
+  };
+  const handleDoctorClick = (doctor: Personnel) => {
+    console.log(doctor);
+    setSelectedDoctor(doctor);
+  };
+
+  const displayUniqueIntervals = (service: Service) => {
+    const uniqueIntervals: string[] = [];
+
+    // Generate unique intervals for each doctor
+    service.personnel.forEach(({ workSchedule }) => {
+      workSchedule.forEach(({ timeFrom, timeTo }) => {
+        const intervals = generateIntervalTimesFormatted(timeFrom, timeTo);
+        intervals.forEach((interval) => {
+          if (!uniqueIntervals.includes(interval)) {
+            uniqueIntervals.push(interval);
+          }
+        });
+      });
+    });
+
+    return (
+      <ul>
+        {uniqueIntervals.map((interval, index) => (
+          <li
+            key={index}
+            className={` ${
+              clickedInterval === interval ? "bg-gray-500" : ""
+            }  bg-gray-200 rounded-md my-2 py-2 px-4 hover:bg-gray-400 cursor-pointer  text-black`}
+            onClick={() =>
+              handleIntervalClick(
+                interval,
+                service.personnel.filter(({ workSchedule }) =>
+                  workSchedule.some((schedule) =>
+                    generateIntervalTimesFormatted(
+                      schedule.timeFrom,
+                      schedule.timeTo
+                    ).includes(interval)
+                  )
+                ) || null
+              )
+            }
+          >
+            {interval}
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row justify-center items-start">
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <div className="flex-grow">
+        <div className="bg-white p-4">
           <DateCalendar value={selectedDate} onChange={handleDateChange} />
         </div>
       </LocalizationProvider>
 
       {selectedDate && (
-        <div className="flex-grow">
-          <div className="schedules-list">
-            <h2>Schedules for selected date:</h2>
+        <div className="flex ml-8">
+          <div className="schedules-list w-25 mx-10">
+            <h2 className="text-lg font-semibold text-white ">
+              Schedules for selected date:
+            </h2>
             {services.map(
               (service) =>
                 service.id === selectedServiceId && (
                   <div key={service.id}>
-                    <h3>{service.serviceName}</h3>
-                    {service.personnel &&
-                      service.personnel.map((doctor) => (
-                        <div key={doctor.id}>
-                          {/* <h4>Schedules for {doctor.firstName}</h4> */}
-                          <ul>
-                            {doctor.workSchedule.map((schedule) => (
-                              <li
-                                key={schedule.id}
-                                onClick={() =>
-                                  handleScheduleClick(schedule, doctor)
-                                }
-                                className="cursor-pointer text-blue-500"
-                              >
-                                {/* {convertTo12HourFormat(schedule.timeFrom)} -{" "}
-                                            {convertTo12HourFormat(schedule.timeTo)} */}
-                                {/* Generate and display formatted interval times */}
-                                <br />
-                                {generateIntervalTimesFormatted(
-                                  schedule.timeFrom,
-                                  schedule.timeTo
-                                ).map((interval, index) => (
-                                  <React.Fragment key={index}>
-                                    {interval}
-                                    <br />
-                                  </React.Fragment>
-                                ))}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
+                    <h3 className="text-lg font-semibold  text-white">
+                      {service.serviceName}
+                    </h3>
+                    {/* Calculate unique intervals once for each service */}
+                    {displayUniqueIntervals(service)}
                   </div>
                 )
             )}
           </div>
         </div>
       )}
+
+      {/* Display clicked doctors on the side */}
+
+      {clickedInterval && clickedDoctors && (
+        <div className="w-1/4 px-4">
+          <h3 className="text-lg font-semibold text-white">
+            Doctors Available:
+          </h3>
+          <ul>
+            {clickedDoctors.map((doctor) => (
+              <div
+                className={`bg-gray-200 rounded-md my-2 py-2 px-4 hover:bg-gray-400 cursor-pointer text-black ${
+                  selectedDoctor === doctor ? "bg-gray-500" : ""
+                }`}
+                key={doctor.id}
+                onClick={() => handleDoctorClick(doctor)}
+              >
+                <li>
+                  {doctor.firstName} {doctor.lastName}
+                </li>
+              </div>
+            ))}
+          </ul>
+
+          <div>
+            <button
+              className="my-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 cursor-pointer"
+              onClick={handleSetAppointment}
+              disabled={!selectedDoctor}
+            >
+              Set Appointment
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
-
 export default Page;
