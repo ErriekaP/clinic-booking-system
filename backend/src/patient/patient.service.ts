@@ -11,6 +11,20 @@ export class PatientService {
     private readonly supabaseService: SupabaseService,
   ) {}
 
+  async getPatientIdFromSupabaseId(supabaseId: string) {
+    // Query your database to find the patient's ID using their Supabase ID
+    const patient = await this.prisma.patient.findFirst({
+      where: {
+        supabaseUserID: supabaseId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    return patient?.id;
+  }
+
   async updatePatient(id: number, updatedData: any): Promise<any> {
     try {
       // Retrieve the patient record by ID

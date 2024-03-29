@@ -7,6 +7,7 @@ import React from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const Page = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
@@ -49,6 +50,46 @@ const Page = ({ params }: { params: { id: string } }) => {
     null
   );
 
+  const [userId, setUserId] = useState<string | null>(null);
+
+  const supabase = createClientComponentClient();
+
+  useEffect(() => {
+    const fetchPatientId = async () => {
+      try {
+        const { data: session, error } = await supabase.auth.getUser();
+        if (error) {
+          throw error;
+        }
+        const supabaseUserId = session.user.id;
+        const patientId = await getPatientIdFromSupabaseId(supabaseUserId);
+        setUserId(patientId);
+      } catch (error) {
+        console.error("Error fetching user information:", error);
+      }
+    };
+
+    fetchPatientId();
+  }, []);
+  const getPatientIdFromSupabaseId = async (supabaseId: string) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/patients/supabaseUserID/${supabaseId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching patient ID:", error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -66,19 +107,6 @@ const Page = ({ params }: { params: { id: string } }) => {
     };
     fetchServices();
   }, []);
-
-  const handleSetAppointment = () => {
-    if (selectedDate && selectedDoctor && clickedInterval) {
-      const { id } = selectedDoctor;
-
-      const date = new Date(selectedDate);
-
-      const [startTime, endTime] = clickedInterval.split(" - ");
-
-      const url = `/appointments/schedule/confirmation/date=${date}&startTime=${startTime}&endTime=${endTime}&doctorId=${id}`;
-      router.push(url);
-    }
-  };
 
   useEffect(() => {
     const fetchServiceData = async () => {
@@ -109,6 +137,19 @@ const Page = ({ params }: { params: { id: string } }) => {
 
     fetchServiceData();
   }, [selectedServiceId]);
+
+  const handleSetAppointment = () => {
+    if (selectedDate && selectedDoctor && clickedInterval && userId) {
+      const { id: doctorId } = selectedDoctor;
+
+      const formattedDate = new Date(selectedDate).toDateString();
+      const [startTime, endTime] = clickedInterval.split(" - ");
+      console.log("id", userId);
+
+      const url = `/appointments/schedule/confirmation/date=${formattedDate}&startTime=${startTime}&endTime=${endTime}&doctorId=${doctorId}&serviceId=${params.id}&patientId=${userId}`;
+      router.push(url);
+    }
+  };
 
   const convertTo12HourFormat = (time: string) => {
     // Create a Date object from the input time string

@@ -36,6 +36,7 @@ enum Status {
 }
 
 enum AppointmentStatus {
+  PENDING
   SCHEDULED
   CANCELLEDBYSTUDENT
   CANCELLEDBYDOCTOR
@@ -195,7 +196,8 @@ id Int @id @default(autoincrement())
 patientID Int 
 personnelID Int 
 serviceID Int 
-appointmentSched DateTime
+startTime DateTime
+endTime DateTime
 details String
 status AppointmentStatus
 reasonforCancellation String

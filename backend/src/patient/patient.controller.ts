@@ -35,4 +35,13 @@ export class PatientController {
       throw new Error(`Unable to fetch patients: ${error.message}`);
     }
   }
+
+  @Get('supabaseUserID/:supabaseId')
+  async getPatientIdFromSupabaseId(
+    @Param('supabaseId') supabaseId: string,
+  ): Promise<number | null> {
+    const patientId =
+      await this.patientService.getPatientIdFromSupabaseId(supabaseId);
+    return patientId;
+  }
 }

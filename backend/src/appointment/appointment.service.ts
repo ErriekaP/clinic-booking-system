@@ -65,7 +65,8 @@ export class AppointmentService {
     });
   }
   async createAppointment(data: {
-    appointmentSched: Date;
+    startTime: Date;
+    endTime: Date;
     details: string;
     status: AppointmentStatus;
     reasonforCancellation: string;
@@ -75,7 +76,8 @@ export class AppointmentService {
   }): Promise<any> {
     return this.prisma.appointments.create({
       data: {
-        appointmentSched: data.appointmentSched,
+        startTime: data.startTime,
+        endTime: data.endTime,
         details: data.details,
         status: data.status,
         reasonforCancellation: data.reasonforCancellation,
