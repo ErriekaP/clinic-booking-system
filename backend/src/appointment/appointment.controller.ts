@@ -28,4 +28,10 @@ export class AppointmentController {
       throw new Error(`Unable to fetch appointments: ${error.message}`);
     }
   }
+
+  @Get(':id')
+  async getPatientAppointments(@Param('id') id: string): Promise<any> {
+    const patientId = parseInt(id, 10);
+    return this.appointmentService.getPatientAppointments(patientId);
+  }
 }

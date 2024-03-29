@@ -38,6 +38,7 @@ enum Status {
 enum AppointmentStatus {
   PENDING
   SCHEDULED
+  COMPLETED
   CANCELLEDBYSTUDENT
   CANCELLEDBYDOCTOR
 }

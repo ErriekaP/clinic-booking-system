@@ -87,7 +87,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
       if (response.ok) {
         console.log("Form submitted successfully!");
-        router.push("/appointments");
+        router.push(`/patient/student/${patientId}`);
       } else {
         console.error("Form submission failed");
       }

@@ -31,6 +31,24 @@ export class AppointmentService {
       throw new Error(`Unable to fetch appointments: ${error.message}`);
     }
   }
+
+  async getPatientAppointments(patientId: number) {
+    try {
+      const appointments = await this.prisma.appointments.findMany({
+        where: {
+          patientID: patientId,
+          status: {
+            in: ['SCHEDULED', 'COMPLETED'],
+          },
+        },
+      });
+      console.log(appointments);
+      return appointments;
+    } catch (error) {
+      throw new Error(`Unable to fetch appointments: ${error.message}`);
+    }
+  }
+
   async updateAppointment(id: string, updatedData: any): Promise<any> {
     const parsedId = parseInt(id, 10);
     try {
