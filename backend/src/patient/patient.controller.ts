@@ -44,4 +44,10 @@ export class PatientController {
       await this.patientService.getPatientIdFromSupabaseId(supabaseId);
     return patientId;
   }
+
+  @Get('appointments/:id')
+  async getPatientAppointments(@Param('id') id: string): Promise<any> {
+    const patientId = parseInt(id, 10);
+    return this.patientService.getPatientAppointments(patientId);
+  }
 }

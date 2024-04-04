@@ -1,4 +1,14 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Query,
+  NotFoundException,
+  InternalServerErrorException,
+  BadRequestException,
+} from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
 import { Appointments } from '@prisma/client';
 
@@ -29,9 +39,8 @@ export class AppointmentController {
     }
   }
 
-  @Get(':id')
-  async getPatientAppointments(@Param('id') id: string): Promise<any> {
-    const patientId = parseInt(id, 10);
-    return this.appointmentService.getPatientAppointments(patientId);
+  @Get('check')
+  async findAppointmentsByDate(@Query('date') date: Date) {
+    return this.appointmentService.findAppointmentsByDate(date);
   }
 }

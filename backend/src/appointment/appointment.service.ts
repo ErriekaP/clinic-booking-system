@@ -2,6 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AppointmentStatus } from '@prisma/client';
 
+//need startTime and endTime ng doctor, return list of startTime and endTime. (Array with startTime and endTime).
+//kunin ang appointments with same day
+
 @Injectable()
 export class AppointmentService {
   constructor(private readonly prisma: PrismaService) {}
@@ -27,23 +30,6 @@ export class AppointmentService {
       console.log(appointment);
       console.log(this.prisma.$queryRaw`${appointment}`);
       return appointment;
-    } catch (error) {
-      throw new Error(`Unable to fetch appointments: ${error.message}`);
-    }
-  }
-
-  async getPatientAppointments(patientId: number) {
-    try {
-      const appointments = await this.prisma.appointments.findMany({
-        where: {
-          patientID: patientId,
-          status: {
-            in: ['SCHEDULED', 'COMPLETED'],
-          },
-        },
-      });
-      console.log(appointments);
-      return appointments;
     } catch (error) {
       throw new Error(`Unable to fetch appointments: ${error.message}`);
     }
@@ -82,6 +68,26 @@ export class AppointmentService {
       },
     });
   }
+
+  //tanggalin sa list of appointments yun na day if same ng start time.
+  async findAppointmentsByDate(date: Date) {
+    console.log(date);
+
+    //const formattedDate = date.toISOString().slice(0, 10);
+    //console.log(formattedDate);
+
+    //console.log(date.toDateString().split('T')[0]);
+    console.log(date.toString().split('T')[0] + 'T00:00:001Z');
+    return this.prisma.appointments.findMany({
+      where: {
+        startTime: {
+          gte: new Date(date.toString().split('T')[0] + 'T00:00:00.001Z'),
+          lte: new Date(date.toString().split('T')[0] + 'T23:59:59.000Z'),
+        },
+      },
+    });
+  }
+
   async createAppointment(data: {
     startTime: Date;
     endTime: Date;
