@@ -44,7 +44,9 @@ export class ServicesController {
   }
 
   @Get(':id/personnel')
-  async getServiceWithPersonnel(@Param('id') id: string): Promise<Service> {
+  async getServiceWithPersonnelAndSchedules(
+    @Param('id') id: string,
+  ): Promise<Service> {
     const serviceId = parseInt(id, 10); // Parse the string ID to a number
 
     const service =
@@ -55,5 +57,23 @@ export class ServicesController {
     }
 
     return service;
+  }
+
+  @Get('count/:serviceId')
+  async countDoctorsByService(
+    @Param('serviceId') serviceId: string,
+  ): Promise<number> {
+    const parsedServiceId = parseInt(serviceId, 10); // Parse the serviceId to a number
+
+    try {
+      const doctorsCount =
+        await this.servicesService.countDoctorsByService(parsedServiceId);
+
+      return doctorsCount;
+    } catch (error) {
+      throw new NotFoundException(
+        `Unable to count doctors by service: ${error.message}`,
+      );
+    }
   }
 }

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Page({ params }: { params: { slug: string } }) {
@@ -20,38 +20,41 @@ export default function Page({ params }: { params: { slug: string } }) {
   const { date, startTime, endTime, doctorId, serviceId, patientId } =
     parsedParams;
 
+  const dateString = date.slice(0, 10);
+  console.log(startTime);
+
   // Convert the start time
-  const startDateTimeString = `${date} ${startTime}`;
-  const startTimeDate = new Date(startDateTimeString);
-  const startISODate = new Date(
-    Date.UTC(
-      startTimeDate.getFullYear(),
-      startTimeDate.getMonth(),
-      startTimeDate.getDate(),
-      startTimeDate.getHours(),
-      startTimeDate.getMinutes(),
-      startTimeDate.getSeconds()
-    )
-  );
-  const isoFormattedStartTime = startISODate.toISOString();
+  const startDateTimeString = `${dateString}T${startTime}:00.000Z`;
+
+  //const startTimeDate = new Date(startDateTimeString);
+
+  const [personnel, setPersonnel] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchPersonnel = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/personnel/${doctorId}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch personnel");
+        }
+        const responseData = await response.json();
+        const personnelData = responseData.data;
+
+        setPersonnel(personnelData);
+      } catch (error) {
+        console.error("Error fetching personnel:", error);
+      }
+    };
+
+    fetchPersonnel();
+  }, [doctorId]);
 
   // Convert the end time
-  const endDateTimeString = `${date} ${endTime}`;
-  const endTimeDate = new Date(endDateTimeString);
-  const endISODate = new Date(
-    Date.UTC(
-      endTimeDate.getFullYear(),
-      endTimeDate.getMonth(),
-      endTimeDate.getDate(),
-      endTimeDate.getHours(),
-      endTimeDate.getMinutes(),
-      endTimeDate.getSeconds()
-    )
-  );
-  const isoFormattedEndTime = endISODate.toISOString();
+  const endDateTimeString = `${dateString}T${endTime}:00.000Z`;
 
-  console.log("ISO formatted start time:", isoFormattedStartTime);
-  console.log("ISO formatted end time:", isoFormattedEndTime);
+  //const endTimeDate = new Date(endDateTimeString);
 
   const handleCancel = () => {
     router.back();
@@ -61,12 +64,14 @@ export default function Page({ params }: { params: { slug: string } }) {
     patientID: parseInt(patientId, 10),
     personnelID: parseInt(doctorId, 10),
     serviceID: parseInt(serviceId, 10),
-    startTime: isoFormattedStartTime,
-    endTime: isoFormattedEndTime,
+    startTime: startDateTimeString,
+    endTime: endDateTimeString,
     details: "",
     reasonforCancellation: "",
     status: "PENDING",
   };
+  //console.log(startTimeDate);
+  console.log(endDateTimeString);
 
   console.log(formData);
 
@@ -105,7 +110,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         <div className="flex flex-col gap-4">
           <div className="">
             <p className="font-bold">Date:</p>
-            <p>{date}</p>
+            <p>{dateString}</p>
           </div>
           <div className="">
             <p className="font-bold">Start Time:</p>
@@ -115,9 +120,18 @@ export default function Page({ params }: { params: { slug: string } }) {
             <p className="font-bold">End Time:</p>
             <p>{endTime}</p>
           </div>
-          <div className="">
-            <p className="font-bold">Doctor ID:</p>
-            <p>{doctorId}</p>
+
+          <div>
+            {personnel ? (
+              <div>
+                <p className="font-bold">Doctor:</p>
+                <p>
+                  {personnel.firstName} {personnel.lastName}
+                </p>
+              </div>
+            ) : (
+              <p>Loading personnel data...</p>
+            )}
           </div>
         </div>
         <div className="mt-8 flex gap-4">

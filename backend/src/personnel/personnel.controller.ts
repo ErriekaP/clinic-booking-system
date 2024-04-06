@@ -1,20 +1,11 @@
 // patient.controller.ts
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Query } from '@nestjs/common';
 import { PersonnelService } from './personnel.service';
 import { ClinicPersonnel } from '@prisma/client';
 
 @Controller('personnel')
 export class PersonnelController {
   constructor(private readonly personnelService: PersonnelService) {}
-
-  @Post('update/:id')
-  async addPersonnelInfo(
-    @Param('id') id: string,
-    @Body() personnelData: any,
-  ): Promise<any> {
-    const personnelId = parseInt(id, 10); // Parse the string ID to a number
-    return this.personnelService.updatePersonnel(personnelId, personnelData);
-  }
 
   @Get()
   async findAll() {
@@ -33,7 +24,18 @@ export class PersonnelController {
         await this.personnelService.getPersonnelWithServices(personnelId);
       return { success: true, data: personnelWithServices };
     } catch (error) {
-      return { success: false, message: 'Failed to fetch personnel services' };
+      return {
+        success: false,
+        message: 'Failed to fetch personnel services',
+      };
     }
+  }
+  @Post('update/:id')
+  async addPersonnelInfo(
+    @Param('id') id: string,
+    @Body() personnelData: any,
+  ): Promise<any> {
+    const personnelId = parseInt(id, 10); // Parse the string ID to a number
+    return this.personnelService.updatePersonnel(personnelId, personnelData);
   }
 }

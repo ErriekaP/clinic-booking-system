@@ -110,6 +110,24 @@ export class ServicesService {
     }
   }
 
+  async countDoctorsByService(serviceId: number): Promise<number> {
+    try {
+      const doctorsCount = await this.prisma.clinicPersonnel.count({
+        where: {
+          services: {
+            some: {
+              id: serviceId,
+            },
+          },
+        },
+      });
+
+      return doctorsCount;
+    } catch (error) {
+      throw new Error(`Unable to count doctors by service: ${error.message}`);
+    }
+  }
+
   getHello(): string {
     return 'Hello World!';
   }

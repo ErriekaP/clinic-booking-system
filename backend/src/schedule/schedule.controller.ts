@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { WorkScheduleService } from './schedule.service';
 import { WorkScheduleDto } from './schedule.dto';
+import { Interval } from './schedule.dto';
 
 @Controller('schedule')
 export class WorkScheduleController {
@@ -32,13 +33,19 @@ export class WorkScheduleController {
       parsedServiceIds,
     );
   }
-  // @Get('intervals')
-  // async getTimeIntervalsForServices(
-  //   @Query('serviceIds') serviceIds: string,
-  // ): Promise<{ startTime: string; endTime: string }[]> {
-  //   const idsArray = serviceIds.split(',').map(Number);
-  //   return await this.workScheduleService.generateTimeIntervalsForServices(
-  //     idsArray,
-  //   );
-  // }
+
+  @Get('available-doctors')
+  async findAvailableDoctors(
+    @Query() interval: Interval,
+    @Query('date') date: Date,
+    @Query('serviceId') serviceId: number,
+  ): Promise<any[]> {
+    //const parsedServiceIds = serviceIds.split(',').map(Number);
+
+    return this.workScheduleService.findAvailablePersonnel(
+      date,
+      interval,
+      serviceId,
+    );
+  }
 }
