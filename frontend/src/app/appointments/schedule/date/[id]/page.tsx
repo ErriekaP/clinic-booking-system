@@ -44,23 +44,19 @@ const Page = ({ params }: { params: { id: string } }) => {
   }
 
   const [services, setServices] = useState<Service[]>([]);
-
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
   const [selectedServiceId, setSelectedServiceId] = useState<number | null>(
     id ? Number(id) : null
   );
   const [selectedDoctor, setSelectedDoctor] = useState<Personnel>();
-
   const [clickedInterval, setClickedInterval] = useState<Interval>();
   const [clickedDoctors, setClickedDoctors] = useState<Personnel[] | null>(
     null
   );
-
   const [userId, setUserId] = useState<string | null>(null);
-
   const supabase = createClientComponentClient();
-
   const [intervals, setIntervals] = useState<Interval[]>([]);
+  const oneMonthAfterCurrentDate = dayjs().add(1, "month").startOf("day");
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -212,9 +208,28 @@ const Page = ({ params }: { params: { id: string } }) => {
   };
 
   const handleDateChange = (date: Date) => {
-    setSelectedDoctor(undefined);
-    setClickedInterval(undefined);
-    setSelectedDate(dayjs(date));
+    if (date) {
+      setSelectedDoctor(undefined);
+      setClickedInterval(undefined);
+      setSelectedDate(dayjs(date));
+    } else {
+      setSelectedDate(null);
+    }
+  };
+
+  const disableDates = (date: dayjs.Dayjs): boolean => {
+    // Disable dates that are one month or more after the current date
+    const oneMonthAfterCurrentDate = dayjs().add(1, "month").startOf("day");
+    if (date.isAfter(oneMonthAfterCurrentDate)) {
+      return true;
+    }
+
+    // Disable Sundays (day() === 0)
+    if (date.day() === 0) {
+      return true;
+    }
+
+    return false; // Enable all other dates
   };
 
   const handleIntervalClick = (
@@ -236,7 +251,12 @@ const Page = ({ params }: { params: { id: string } }) => {
     <div className="flex flex-row justify-center items-start">
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <div className="bg-white p-4">
-          <DateCalendar value={selectedDate} onChange={handleDateChange} />
+          <DateCalendar
+            value={selectedDate}
+            onChange={handleDateChange}
+            disablePast
+            shouldDisableMonth={disableDates}
+          />
         </div>
       </LocalizationProvider>
       {selectedDate != null && (
