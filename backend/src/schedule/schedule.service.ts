@@ -129,6 +129,9 @@ export class WorkScheduleService {
       where: {
         startTime: dateStartTimeString,
         endTime: dateEndTimeString,
+        status: {
+          in: ['PENDING', 'SCHEDULED'],
+        },
       },
       select: {
         personnelID: true,
@@ -144,7 +147,11 @@ export class WorkScheduleService {
       await this.prisma.clinicPersonnel.findMany({
         include: {
           workSchedule: true,
-          services: true,
+          services: {
+            where: {
+              id: serviceId, // Convert serviceId to a number (if needed)
+            },
+          },
         },
       });
 
@@ -166,7 +173,13 @@ export class WorkScheduleService {
 
         const hasRequiredService = serviceId;
 
-        return isIntervalWithinSchedule && hasRequiredService;
+        const filteredPersonnel = personnel.services.some(
+          (service) => service.id === Number(serviceId),
+        );
+
+        return (
+          isIntervalWithinSchedule && hasRequiredService && filteredPersonnel
+        );
       }),
     );
     console.log(availablePersonnel);

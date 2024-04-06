@@ -83,7 +83,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   //   fetchData();
   // }, []);
 
-  const isoDateString = dayjs(selectedDate).toISOString();
+  const isoDateString = dayjs(selectedDate).add(1, "day").toISOString();
 
   useEffect(() => {
     const fetchScheduleData = async () => {
@@ -198,6 +198,8 @@ const Page = ({ params }: { params: { id: string } }) => {
     fetchAvailablePersonnel();
   }, [isoDateString, clickedInterval]);
 
+  console.log(isoDateString);
+
   const handleSetAppointment = () => {
     if (selectedDate && selectedDoctor && clickedInterval && userId) {
       const { id: doctorId } = selectedDoctor;
@@ -212,15 +214,23 @@ const Page = ({ params }: { params: { id: string } }) => {
       setSelectedDoctor(undefined);
       setClickedInterval(undefined);
       setSelectedDate(dayjs(date));
+      console.log(date);
     } else {
       setSelectedDate(null);
     }
   };
 
   const disableDates = (date: dayjs.Dayjs): boolean => {
-    // Disable dates that are one month or more after the current date
-    const oneMonthAfterCurrentDate = dayjs().add(1, "month").startOf("day");
-    if (date.isAfter(oneMonthAfterCurrentDate)) {
+    const currentDate = dayjs().startOf("day");
+    const oneMonthAfterCurrentDate = currentDate.add(1, "month");
+
+    // Disable dates that are before today's date
+    if (date.isBefore(currentDate, "day")) {
+      return true;
+    }
+
+    // Disable dates that are one month or more after today's date
+    if (date.isAfter(oneMonthAfterCurrentDate, "day")) {
       return true;
     }
 
@@ -254,7 +264,6 @@ const Page = ({ params }: { params: { id: string } }) => {
           <DateCalendar
             value={selectedDate}
             onChange={handleDateChange}
-            disablePast
             shouldDisableMonth={disableDates}
           />
         </div>

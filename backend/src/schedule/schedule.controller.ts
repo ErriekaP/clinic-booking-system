@@ -38,14 +38,15 @@ export class WorkScheduleController {
   async findAvailableDoctors(
     @Query() interval: Interval,
     @Query('date') date: Date,
-    @Query('serviceId') serviceId: number,
+    @Query('serviceId') serviceId: string,
   ): Promise<any[]> {
     //const parsedServiceIds = serviceIds.split(',').map(Number);
+    const parsedServiceId = Number(serviceId);
 
     return this.workScheduleService.findAvailablePersonnel(
       date,
       interval,
-      serviceId,
+      parsedServiceId,
     );
   }
 }
