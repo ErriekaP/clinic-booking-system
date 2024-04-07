@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Service, PrismaClient } from '@prisma/client';
 import { SupabaseService } from 'supabase/supabase.service';
+import { ServiceDto } from './services.dto';
 
 @Injectable()
 export class ServicesService {
@@ -22,7 +23,7 @@ export class ServicesService {
       }
 
       // Update the servicr record with the provided data
-      const updatedPatient = await this.prisma.service.update({
+      const updatedService = await this.prisma.service.update({
         where: {
           id: id,
         },
@@ -30,10 +31,11 @@ export class ServicesService {
           // Update fields that are provided in updatedData
           serviceName: updatedData.serviceName ?? existingService.serviceName,
           description: updatedData.description ?? existingService.description,
+          status: updatedData.status ?? existingService.status,
         },
       });
 
-      return { success: true, data: updatedPatient };
+      return { success: true, data: updatedService };
     } catch (error) {
       return { success: false, error: error.message };
     }
@@ -73,14 +75,13 @@ export class ServicesService {
     });
   }
 
-  async createService(data: {
-    serviceName: string;
-    description: string;
-  }): Promise<any> {
+  async createService(dto: ServiceDto): Promise<any> {
+    const { serviceName, description, status } = dto;
     return this.prisma.service.create({
       data: {
-        serviceName: data.serviceName,
-        description: data.description,
+        serviceName: serviceName,
+        description: description,
+        status: status,
       },
     });
   }

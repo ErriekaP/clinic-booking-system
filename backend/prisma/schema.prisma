@@ -186,6 +186,7 @@ model Service{
 id Int @id @default(autoincrement())
 serviceName String
 description String
+status Status
 appointment Appointments[]
 personnel       ClinicPersonnel[]  @relation("ClinicPersonnelServices")
 createdAt DateTime @default(now())

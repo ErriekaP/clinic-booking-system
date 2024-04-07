@@ -21,6 +21,17 @@ export class WorkScheduleController {
   async createWorkSchedule(@Body() data: WorkScheduleDto): Promise<void> {
     await this.workScheduleService.createWorkSchedule(data);
   }
+
+  @Get()
+  async findAll() {
+    try {
+      const schedule = await this.workScheduleService.getAllschedules();
+      return schedule;
+    } catch (error) {
+      throw new Error(`Unable to fetch schedules: ${error.message}`);
+    }
+  }
+
   @Get('intervals')
   async getAppointmentsAndRemoveIntervalsByDate(
     @Query('date') date: Date,

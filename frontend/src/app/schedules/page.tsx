@@ -7,42 +7,37 @@ import { useRouter } from "next/navigation";
 export default function Page() {
   const router = useRouter();
 
-  interface Services {
+  interface Schedule {
     id: number;
-    serviceName: string;
-    description: string;
-    status: string;
+    timeFrom: string;
+    timeTo: string;
   }
 
-  const [services, setServices] = useState<Services[]>([]);
+  const [schedule, setSchedule] = useState<Schedule[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedService, setSelectedService] = useState<Services | null>(null);
-
-  const handleClick = (service: Services) => {
-    setSelectedService(service);
-    //router.push(`/services/${service.id}`);
-    router.push(`/services/update/${service.id}`);
-  };
+  const [selectedSchedule, setSelectedSchedule] = useState<Schedule | null>(
+    null
+  );
 
   useEffect(() => {
-    const fetchServices = async () => {
+    const fetchSchedule = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/services`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/schedule`,
           {
             method: "GET",
           }
         );
         if (!response.ok) {
-          throw new Error("Failed to fetch services");
+          throw new Error("Failed to fetch Schedule");
         }
         const data = await response.json();
-        setServices(data);
+        setSchedule(data);
       } catch (error) {
-        console.error("Error fetching services:", error);
+        console.error("Error fetching Schedule:", error);
       }
     };
-    fetchServices();
+    fetchSchedule();
   }, []); // Fetch patients on component mount
 
   // Function to handle search query change
@@ -53,19 +48,20 @@ export default function Page() {
   };
 
   // Filter patients based on search query
-  const filteredServices = services.filter(
-    (service) =>
-      service.serviceName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      service.status.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredSchedule = schedule.filter(
+    (schedule) =>
+      schedule.timeFrom.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      schedule.timeTo.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const formatDate = (isoDate: string | number | Date) => {
-    const date = new Date(isoDate);
-    return date.toLocaleDateString();
+  const navigateToAddSchedules = () => {
+    router.push("/schedules/add");
   };
-
-  const navigateToAddService = () => {
-    router.push("/services/add");
+  const extractTimeFromISO = (isoDateTime: string | number | Date) => {
+    const date = new Date(isoDateTime);
+    const hours = date.getUTCHours().toString().padStart(2, "0"); // Get hours in UTC and pad with leading zero if needed
+    const minutes = date.getUTCMinutes().toString().padStart(2, "0"); // Get minutes in UTC and pad with leading zero if needed
+    return `${hours}:${minutes}`;
   };
 
   return (
@@ -89,7 +85,7 @@ export default function Page() {
         </div>
         <div className="basis-1/4">
           <button
-            onClick={navigateToAddService}
+            onClick={navigateToAddSchedules}
             className="   bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-3 rounded focus:outline-none"
           >
             Add
@@ -106,23 +102,16 @@ export default function Page() {
                     ID
                   </th>
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-s font-bold uppercase ">
-                    Service Name
+                    Time From
                   </th>
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-s font-bold uppercase">
-                    Description
-                  </th>
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-s font-bold uppercase">
-                    Status
+                    Time To
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {filteredServices.map((service) => (
-                  <tr
-                    key={service.id}
-                    onClick={() => handleClick(service)}
-                    className="hover:border-4"
-                  >
+                {filteredSchedule.map((schedule) => (
+                  <tr key={schedule.id} className="hover:border-4">
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 w-10 h-10">
@@ -134,7 +123,7 @@ export default function Page() {
                         </div>
                         <div className="ml-3">
                           <p className="text-gray-900 whitespace-no-wrap">
-                            {service.id}
+                            {schedule.id}
                           </p>
                         </div>
                       </div>
@@ -142,19 +131,13 @@ export default function Page() {
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                       <p className="text-gray-900 whitespace-no-wrap">
                         {" "}
-                        {service.serviceName}
+                        {extractTimeFromISO(schedule.timeFrom)}
                       </p>
                     </td>
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                       <p className="text-gray-900 whitespace-no-wrap">
                         {" "}
-                        {service.description}
-                      </p>
-                    </td>
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                      <p className="text-gray-900 whitespace-no-wrap">
-                        {" "}
-                        {service.status}
+                        {extractTimeFromISO(schedule.timeTo)}
                       </p>
                     </td>
                   </tr>

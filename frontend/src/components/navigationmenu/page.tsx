@@ -38,7 +38,7 @@ const NavMenu = () => {
               className="NavigationMenuLink"
               href="/patients"
             >
-              Patient
+              Patients
             </NavigationMenu.Link>
           </NavigationMenu.Item>
 
@@ -54,30 +54,20 @@ const NavMenu = () => {
                 <a href="/personnels" className="ListItemLink">
                   <p className="ListItemHeading">View a Personnel</p>
                 </a>
-                <a href="" className="ListItemLink">
-                  <p className="ListItemHeading">Terminate a Personnel</p>
+                <a href="/schedules" className="ListItemLink">
+                  <p className="ListItemHeading">Work Schedules</p>
                 </a>
               </ul>
             </NavigationMenu.Content>
           </NavigationMenu.Item>
 
           <NavigationMenu.Item className="NavigationMenuItem">
-            <NavigationMenu.Trigger className="NavigationMenuTrigger">
-              Service <CaretDownIcon className="CaretDown" aria-hidden />
-            </NavigationMenu.Trigger>
-            <NavigationMenu.Content className="NavigationMenuContent">
-              <ul className="List two">
-                <a href="" className="ListItemLink">
-                  <p className="ListItemHeading">Add a Service</p>
-                </a>
-                <a href="" className="ListItemLink">
-                  <p className="ListItemHeading">Update a Service</p>
-                </a>
-                <a href="" className="ListItemLink">
-                  <p className="ListItemHeading">Terminate a Service</p>
-                </a>
-              </ul>
-            </NavigationMenu.Content>
+            <NavigationMenu.Link
+              className="NavigationMenuLink"
+              href="/services"
+            >
+              Services
+            </NavigationMenu.Link>
           </NavigationMenu.Item>
 
           <NavigationMenu.Item className="NavigationMenuItem">

@@ -237,12 +237,13 @@ export class PatientService {
     });
   }
   async getPatientAppointments(patientId: number) {
+    console.log(patientId);
     try {
       const appointments = await this.prisma.appointments.findMany({
         where: {
           patientID: patientId,
           status: {
-            in: ['SCHEDULED', 'COMPLETE'],
+            in: ['PENDING', 'SCHEDULED', 'COMPLETE'],
           },
         },
       });

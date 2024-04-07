@@ -23,6 +23,16 @@ export class WorkScheduleService {
     });
   }
 
+  async getAllschedules() {
+    try {
+      const schedule = await this.prisma.workSchedule.findMany();
+      console.log(this.prisma.$queryRaw`${schedule}`);
+      return schedule;
+    } catch (error) {
+      throw new Error(`Unable to fetch patients: ${error.message}`);
+    }
+  }
+
   async generateTimeIntervalsForServices(
     serviceIds: number[],
   ): Promise<{ startTime: string; endTime: string }[]> {
