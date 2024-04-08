@@ -12,6 +12,7 @@ interface Appointment {
   reasonforCancellation: string;
   service: ServiceInfo;
   personnel: PersonnelInfo;
+  patient: PatientInfo;
 }
 
 interface ServiceInfo {
@@ -20,6 +21,12 @@ interface ServiceInfo {
 }
 
 interface PersonnelInfo {
+  firstName: string;
+  lastName: string;
+}
+
+interface PatientInfo {
+  id: number;
   firstName: string;
   lastName: string;
 }
@@ -75,36 +82,21 @@ const Page = ({ params }: { params: { id: string } }) => {
           Appointment Details
         </h1>
 
-        {/* Display cancellation reason if the appointment is cancelled */}
-        {appointment &&
-          (appointment.status === "CANCELLEDBYSTUDENT" ||
-            appointment.status === "CANCELLEDBYDOCTOR") && (
-            <div className=" bg-gray-100 p-4 rounded-lg flex justify-center">
-              <div className="mt-4 text-center  text-black font-bold">
-                <h2 className="">Reason for Cancellation:</h2>
-                <p className="mb-5"> {appointment.reasonforCancellation}</p>
-              </div>
+        {appointment && (
+          <div className=" bg-gray-100 p-4 rounded-lg flex justify-center">
+            <div className="flex flex-col items-center">
+              <p className="text-md text-black font-bold mr-2">
+                {formatDate(appointment.startTime)}
+              </p>
             </div>
-          )}
-
-        {appointment &&
-          (appointment.status === "PENDING" ||
-            appointment.status === "SCHEDULED" ||
-            appointment.status === "COMPLETE") && (
-            <div className=" bg-gray-100 p-4 rounded-lg flex justify-center">
-              <div className="flex flex-col items-center">
-                <p className="text-md text-black font-bold mr-2">
-                  {formatDate(appointment.startTime)}
-                </p>
-              </div>
-              <div className="flex flex-col items-center">
-                <p className="text-md text-black font-bold">
-                  {formatTime(appointment.startTime)} -{" "}
-                  {formatTime(appointment.endTime)}
-                </p>
-              </div>
+            <div className="flex flex-col items-center">
+              <p className="text-md text-black font-bold">
+                {formatTime(appointment.startTime)} -{" "}
+                {formatTime(appointment.endTime)}
+              </p>
             </div>
-          )}
+          </div>
+        )}
       </div>
       {/* Appointment table section */}
       <div className="flex flex-col flex-grow w-full max-w-4xl">
@@ -117,11 +109,15 @@ const Page = ({ params }: { params: { id: string } }) => {
                     Appointment ID
                   </th>
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                    Service Name
+                    Student ID
                   </th>
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                    Description
+                    Student Name
                   </th>
+                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                    Service Name
+                  </th>
+
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
                     Doctor
                   </th>
@@ -142,11 +138,16 @@ const Page = ({ params }: { params: { id: string } }) => {
                       {appointment.id}
                     </td>
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                      {appointment.patient.id}
+                    </td>
+                    <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                      {appointment.patient.firstName}{" "}
+                      {appointment.patient.lastName}
+                    </td>
+                    <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
                       {appointment.service.serviceName}
                     </td>
-                    <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm  text-justify	">
-                      {appointment.service.description}
-                    </td>
+
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
                       {appointment.personnel.firstName}{" "}
                       {appointment.personnel.lastName}
@@ -166,14 +167,6 @@ const Page = ({ params }: { params: { id: string } }) => {
             </table>
           </div>
         </div>
-        {/* Additional information based on appointment status */}
-        {appointment && appointment.status === "PENDING" && (
-          <div className="mt-4 text-center text-sm text-white font-bold">
-            Please arrive 10-15 minutes before your scheduled appointment time.
-            If you have any questions or need to reschedule, kindly contact our
-            clinic at least 24 hours in advance.
-          </div>
-        )}
       </div>
     </div>
   );

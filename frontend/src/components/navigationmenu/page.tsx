@@ -76,14 +76,11 @@ const NavMenu = () => {
             </NavigationMenu.Trigger>
             <NavigationMenu.Content className="NavigationMenuContent">
               <ul className="List two">
-                <a href="" className="ListItemLink">
+                <a href="/appointments" className="ListItemLink">
                   <p className="ListItemHeading">View Appointments</p>
                 </a>
                 <a href="" className="ListItemLink">
-                  <p className="ListItemHeading">Change an Appointment</p>
-                </a>
-                <a href="" className="ListItemLink">
-                  <p className="ListItemHeading">Cancel an Appointment</p>
+                  <p className="ListItemHeading">Appointment Requests</p>
                 </a>
               </ul>
             </NavigationMenu.Content>

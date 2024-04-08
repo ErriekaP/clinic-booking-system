@@ -44,7 +44,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   }
 
   const [services, setServices] = useState<Service[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs);
   const [selectedServiceId, setSelectedServiceId] = useState<number | null>(
     id ? Number(id) : null
   );
@@ -83,7 +83,9 @@ const Page = ({ params }: { params: { id: string } }) => {
   //   fetchData();
   // }, []);
 
-  const isoDateString = dayjs(selectedDate).add(1, "day").toISOString();
+  // const isoDateString = dayjs(selectedDate).add(1, "day").toISOString();
+  const dayjsObject = dayjs(selectedDate);
+  const isoDateString = dayjsObject.format("YYYY-MM-DD");
 
   useEffect(() => {
     const fetchScheduleData = async () => {

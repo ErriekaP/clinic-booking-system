@@ -21,7 +21,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     parsedParams;
 
   const dateString = date.slice(0, 10);
-  console.log(startTime);
+
 
   // Convert the start time
   const startDateTimeString = `${dateString}T${startTime}:00.000Z`;

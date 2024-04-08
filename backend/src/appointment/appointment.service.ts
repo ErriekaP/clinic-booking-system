@@ -23,13 +23,17 @@ export class AppointmentService {
       return { success: false, error: error.message };
     }
   }
-
   async getAllAppointments() {
     try {
-      const appointment = await this.prisma.appointments.findMany();
-      console.log(appointment);
-      console.log(this.prisma.$queryRaw`${appointment}`);
-      return appointment;
+      const appointments = await this.prisma.appointments.findMany({
+        include: {
+          personnel: true,
+          service: true,
+          patient: true,
+        },
+      });
+
+      return appointments;
     } catch (error) {
       throw new Error(`Unable to fetch appointments: ${error.message}`);
     }
@@ -60,15 +64,25 @@ export class AppointmentService {
       return { success: false, error: error.message };
     }
   }
-  async findAppointment(id: number) {
-    //const parsedId = parseInt(id,10);
-    return this.prisma.appointments.findUnique({
-      where: {
-        id: id,
-      },
-    });
-  }
+  async findAppointment(id: string) {
+    try {
+      const parsedId = parseInt(id, 10);
+      const appointment = await this.prisma.appointments.findUnique({
+        where: {
+          id: parsedId,
+        },
+        include: {
+          service: true,
+          personnel: true,
+          patient: true,
+        },
+      });
 
+      return appointment;
+    } catch (error) {
+      throw new Error(`Error finding appointment: ${error.message}`);
+    }
+  }
   //tanggalin sa list of appointments yun na day if same ng start time.
   async findAppointmentsByDate(date: Date) {
     console.log(date);
