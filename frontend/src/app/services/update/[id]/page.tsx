@@ -133,8 +133,8 @@ export default function Page({ params }: { params: { id: string } }) {
               />
             </div>
             <div className="mb-4">
-              <fieldset className="Fieldset">
-                <div className="mb-4">
+              <fieldset>
+                <div className="mb-4 ">
                   <label
                     htmlFor="status"
                     className="block text-gray-700 text-sm font-bold mb-2"
@@ -149,10 +149,10 @@ export default function Page({ params }: { params: { id: string } }) {
                         handleSelectChange(newValue, "status")
                       }
                     >
-                      <Select.Trigger className="select-trigger">
+                      <Select.Trigger>
                         {formData.status === "ACTIVE" ? "Active" : "Inactive"}
                       </Select.Trigger>
-                      <Select.Content className="select-content">
+                      <Select.Content>
                         <Select.Group>
                           <Select.Item value="ACTIVE">Active</Select.Item>
                           <Select.Item value="INACTIVE">Inactive</Select.Item>

@@ -1,9 +1,9 @@
 "use client";
-import "./styles.css";
 import { Card, Container, Flex, Heading, Select, Text } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import MultipleSelect from "@/components/multipleselect/MultipleSelect";
+import MultipleSchedule from "@/components/multipleschedule/MultipleSchedule";
 
 export default function Page() {
   const router = useRouter();
@@ -22,14 +22,17 @@ export default function Page() {
     specialty: "",
     status: "ACTIVE",
     services: [] as number[],
+    workSchedule: [] as number[],
   });
 
   const [services, setServices] = useState<any[]>([]);
+  const [schedule, setSchedule] = useState<any[]>([]);
 
   useEffect(() => {
     if (formData.role === "DOCTOR") {
       // Fetch services for doctors from backend
       fetchServices();
+      fetchSchedule();
     }
   }, [formData.role]);
 
@@ -46,6 +49,22 @@ export default function Page() {
       }
     } catch (error) {
       console.error("Error fetching services:", error);
+    }
+  };
+
+  const fetchSchedule = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/schedule`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setSchedule(data);
+      } else {
+        console.error("Failed to fetch schedules");
+      }
+    } catch (error) {
+      console.error("Error fetching schedules:", error);
     }
   };
 
@@ -123,257 +142,281 @@ export default function Page() {
   console.log(selectedItem);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-4 ">
+    <div className="flex items-center justify-center min-h-screen">
       <Container>
-        <form onSubmit={handleSubmit}>
-          <Flex
-            display="flex"
-            direction="column"
-            align="center"
-            justify="center"
+        <div className="flex items-center justify-center">
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md"
           >
-            <Heading>
-              <Text style={{ color: "white" }}>Register Personnel</Text>
-            </Heading>
-          </Flex>
+            {/* Form Header */}
+            <h2 className="text-2xl font-bold mb-4 text-center">
+              Register Personnel
+            </h2>
+            {/* Basic Details Card */}
+            <div className="mb-6">
+              <Card>
+                <p className="text-lg font-semibold mb-2">Basic Details</p>
+                <div className="flex flex-col gap-4">
+                  {/* First Name */}
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="firstName"
+                      className="text-sm font-bold mb-1"
+                    >
+                      First Name
+                    </label>
+                    <input
+                      id="firstName"
+                      name="firstName"
+                      type="text"
+                      value={formData.firstName}
+                      onChange={handleInputChange}
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
+                  </div>
 
-          <Flex>
-            <Card className="CardsContent">
-              <p className="Text">Basic Details</p>
+                  {/* Middle Name */}
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="middleName"
+                      className="text-sm font-bold mb-1"
+                    >
+                      Middle Name
+                    </label>
+                    <input
+                      id="middleName"
+                      name="middleName"
+                      type="text"
+                      value={formData.middleName}
+                      onChange={handleInputChange}
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
+                  </div>
 
-              <Flex direction="row" gap="3">
-                <fieldset className="Fieldset">
-                  <label className="Label" htmlFor="firstName">
-                    FirstName
-                  </label>
-                  <input
-                    className="Input"
-                    id="firstName"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                  />
-                </fieldset>
+                  {/* Last Name */}
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="lastName"
+                      className="text-sm font-bold mb-1"
+                    >
+                      Last Name
+                    </label>
+                    <input
+                      id="lastName"
+                      name="lastName"
+                      type="text"
+                      value={formData.lastName}
+                      onChange={handleInputChange}
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
+                  </div>
 
-                <fieldset className="Fieldset">
-                  <label className="Label" htmlFor="middleName">
-                    MiddleName
-                  </label>
-                  <input
-                    className="Input"
-                    id="middleName"
-                    name="middleName"
-                    value={formData.middleName}
-                    onChange={handleInputChange}
-                  />
-                </fieldset>
+                  {/* Phone Number */}
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="phoneNumber"
+                      className="text-sm font-bold mb-1"
+                    >
+                      Contact Number
+                    </label>
+                    <input
+                      id="phoneNumber"
+                      name="phoneNumber"
+                      type="tel"
+                      value={formData.phoneNumber}
+                      onChange={handleInputChange}
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
+                  </div>
 
-                <fieldset className="Fieldset">
-                  <label className="Label" htmlFor="lastName">
-                    LastName
-                  </label>
-                  <input
-                    className="Input"
-                    id="lastName"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                  />
-                </fieldset>
-              </Flex>
+                  {/* Date of Birth */}
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="dateOfBirth"
+                      className="text-sm font-bold mb-1"
+                    >
+                      Date of Birth
+                    </label>
+                    <input
+                      id="dateOfBirth"
+                      name="dateOfBirth"
+                      type="date"
+                      value={formData.dateOfBirth}
+                      onChange={handleInputChange}
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
+                  </div>
 
-              <Flex direction="row" gap="3">
-                <fieldset className="Fieldset">
-                  <label className="Label" htmlFor="phoneNumber">
-                    Contact Number
-                  </label>
-                  <input
-                    className="Input"
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    value={formData.phoneNumber}
-                    onChange={handleInputChange}
-                  />
-                </fieldset>
+                  {/* Gender */}
+                  <div className="flex flex-col">
+                    <label htmlFor="gender" className="text-sm font-bold mb-1">
+                      Gender
+                    </label>
+                    <Select.Root
+                      name="gender"
+                      onValueChange={(newValue) =>
+                        handleSelectChange(newValue, "gender")
+                      }
+                    >
+                      <Select.Trigger />
+                      <Select.Content>
+                        <Select.Group>
+                          <Select.Item value="MALE">Male</Select.Item>
+                          <Select.Item value="FEMALE">Female</Select.Item>
+                          <Select.Item value="NON_BINARY">
+                            Non-Binary
+                          </Select.Item>
+                          <Select.Item value="AGENDER">Agender</Select.Item>
+                          <Select.Item value="GENDERFLUID">
+                            Gender Fluid
+                          </Select.Item>
+                          <Select.Item value="BIGENDER">Bigender</Select.Item>
+                          <Select.Item value="ANDROGYNOUS">
+                            Androgynous
+                          </Select.Item>
+                          <Select.Item value="PREFER_NOT_TO_SAY">
+                            Prefer not to say
+                          </Select.Item>
+                          <Select.Item value="OTHER">Other</Select.Item>
+                        </Select.Group>
+                      </Select.Content>
+                    </Select.Root>
+                  </div>
+                </div>
+              </Card>
+            </div>
 
-                <fieldset className="Fieldset">
-                  <label className="Label" htmlFor="dateOfbirth">
-                    Date of Birth
-                  </label>
-                  <input
-                    className="Input"
-                    id="dateOfBirth"
-                    type="date"
-                    name="dateOfBirth"
-                    value={formData.dateOfBirth}
-                    onChange={handleInputChange}
-                  />
-                </fieldset>
+            {/* Login Details Card */}
+            <div className="mb-6">
+              <Card>
+                <p className="text-lg font-semibold mb-2">Login Details</p>
+                <div className="flex flex-col gap-4">
+                  {/* Email */}
+                  <div className="flex flex-col">
+                    <label htmlFor="email" className="text-sm font-bold mb-1">
+                      Email
+                    </label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
+                  </div>
 
-                <fieldset className="Fieldset">
-                  <label className="Label" htmlFor="gender">
-                    Gender
-                  </label>
+                  {/* Password */}
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="password"
+                      className="text-sm font-bold mb-1"
+                    >
+                      Password
+                    </label>
+                    <input
+                      id="password"
+                      name="password"
+                      type="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
+                  </div>
 
-                  <Select.Root
-                    name="gender"
-                    onValueChange={(newValue) =>
-                      handleSelectChange(newValue, "gender")
-                    }
-                  >
-                    <Select.Trigger className="SelectTrigger" />
-                    <Select.Content className="SelectContent">
-                      <Select.Group>
-                        <Select.Label className="SelectLabel">
-                          Gender
-                        </Select.Label>
-                        <Select.Item className="SelectItem" value="MALE">
-                          Male
-                        </Select.Item>
-                        <Select.Item className="SelectItem" value="FEMALE">
-                          Female
-                        </Select.Item>
-                        <Select.Item className="SelectItem" value="NON_BINARY">
-                          Non-Binary
-                        </Select.Item>
-                        <Select.Item className="SelectItem" value="AGENDER">
-                          Agender
-                        </Select.Item>
-                        <Select.Item className="SelectItem" value="GENDERFLUID">
-                          Gender Fluid
-                        </Select.Item>
-                        <Select.Item className="SelectItem" value="BIGENDER">
-                          Bigender
-                        </Select.Item>
-                        <Select.Item className="SelectItem" value="ANDROGYNOUS">
-                          Androgynous
-                        </Select.Item>
-                        <Select.Item
-                          className="SelectItem"
-                          value="PREFER_NOT_TO_SAY"
-                        >
-                          Prefer not to say
-                        </Select.Item>
-                        <Select.Item className="SelectItem" value="OTHER">
-                          Other
-                        </Select.Item>
-                      </Select.Group>
-                    </Select.Content>
-                  </Select.Root>
-                </fieldset>
-              </Flex>
-            </Card>
-          </Flex>
-
-          <Flex>
-            <Card className="CardsContent">
-              <p className="Text">Login Details</p>
-              <Flex direction="row" gap="4">
-                <fieldset className="Fieldset">
-                  <label className="Label" htmlFor="email">
-                    Email
-                  </label>
-                  <input
-                    className="Input"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                  />
-                </fieldset>
-
-                <fieldset className="Fieldset">
-                  <label className="Label" htmlFor="password">
-                    Password
-                  </label>
-                  <input
-                    className="Input"
-                    id="password"
-                    name="password"
-                    type="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                  />
-                </fieldset>
-                <fieldset className="Fieldset">
-                  <label className="Label" htmlFor="role">
-                    Role
-                  </label>
-
-                  <Select.Root
-                    name="role"
-                    onValueChange={(newValue) =>
-                      handleSelectChange(newValue, "role")
-                    }
-                  >
-                    <Select.Trigger className="SelectTrigger" />
-                    <Select.Content className="SelectContent">
-                      <Select.Group>
-                        <Select.Label className="SelectLabel">
-                          Role
-                        </Select.Label>
-                        <Select.Item className="SelectItem" value="DOCTOR">
-                          Doctor
-                        </Select.Item>
-                        <Select.Item className="SelectItem" value="NURSE">
-                          Nurse
-                        </Select.Item>
-                        <Select.Item className="SelectItem" value="STAFF">
-                          Staff
-                        </Select.Item>
-                      </Select.Group>
-                    </Select.Content>
-                  </Select.Root>
-                </fieldset>
-              </Flex>
-            </Card>
-          </Flex>
-
-          <Flex direction="column">
+                  {/* Role */}
+                  <div className="flex flex-col">
+                    <label htmlFor="role" className="text-sm font-bold mb-1">
+                      Role
+                    </label>
+                    <Select.Root
+                      name="role"
+                      onValueChange={(newValue) =>
+                        handleSelectChange(newValue, "role")
+                      }
+                    >
+                      <Select.Trigger />
+                      <Select.Content>
+                        <Select.Group>
+                          <Select.Item value="DOCTOR">Doctor</Select.Item>
+                          <Select.Item value="NURSE">Nurse</Select.Item>
+                          <Select.Item value="STAFF">Staff</Select.Item>
+                          {/* Add more role options as needed */}
+                        </Select.Group>
+                      </Select.Content>
+                    </Select.Root>
+                  </div>
+                </div>
+              </Card>
+            </div>
+            {/* Additional Fields for Doctor Role */}
             {formData.role === "DOCTOR" && (
               <>
-                <Card className="CardsContent">
-                  <p className="Text">Specialty</p>
-                  <Flex direction="row" gap="4">
-                    <fieldset className="Fieldset">
-                      <label className="Label" htmlFor="specialty">
+                <Card>
+                  <div className="flex flex-col gap-2">
+                    {/* Specialty */}
+                    <div className="flex flex-col">
+                      <label
+                        htmlFor="specialty"
+                        className="text-sm font-bold mb-1"
+                      >
                         Specialty
                       </label>
-
                       <input
-                        className="Input"
                         id="specialty"
                         name="specialty"
-                        type="specialty"
+                        type="text"
                         value={formData.specialty}
                         onChange={handleInputChange}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       />
-                    </fieldset>
-                  </Flex>
+                    </div>
+                  </div>
                 </Card>
-
-                <Flex>
-                  <MultipleSelect
-                    options={services}
-                    selectedOptions={formData.services}
-                    onChange={(selectedOptions: any) =>
-                      setFormData((prevData) => ({
-                        ...prevData,
-                        services: selectedOptions,
-                      }))
-                    }
-                  />
-                </Flex>
+                <div className="relative">
+                  <div className="grid grid-row-2 gap-2">
+                    {/* Services (Multiple Select) */}
+                    <div className="relative z-50">
+                      <MultipleSelect
+                        options={services}
+                        selectedOptions={formData.services}
+                        onChange={(selectedOptions) =>
+                          setFormData((prevData) => ({
+                            ...prevData,
+                            services: selectedOptions,
+                          }))
+                        }
+                      />
+                    </div>
+                    <div className="relative select-container">
+                      <MultipleSchedule
+                        options={schedule}
+                        selectedOptions={formData.workSchedule}
+                        onChange={(selectedOptions) =>
+                          setFormData((prevData) => ({
+                            ...prevData,
+                            workSchedule: selectedOptions,
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
               </>
             )}
-          </Flex>
-          <div className="flex mt-20 justify-end">
-            <button className="Button blue" type="submit">
-              Submit
-            </button>
-          </div>
-        </form>
+            {/* Submit Button */}
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
       </Container>
-    </main>
+    </div>
   );
 }
