@@ -49,9 +49,11 @@ export default function LoginForm() {
         if (user.role === "ADMIN") {
           router.push(`/admin/${user.id}`);
         } else if (user.role === "DOCTOR") {
-          router.push(`/doctor/${user.id}`);
+          router.push(`/personnel/doctor/${user.id}`);
         } else if (user.role === "NURSE") {
-          router.push(`/nurse/${user.id}`);
+          router.push(`/personnel/nurse/${user.id}`);
+        } else if (user.role === "STAFF") {
+          router.push(`/personnel/staff/${user.id}`);
         } else if (user.patientType === "STUDENT") {
           router.push(`/patient/student/${user.id}`);
         } else if (user.patientType === "EMPLOYEE") {

@@ -57,7 +57,13 @@ export class ServicesService {
 
   async getAllServices() {
     try {
-      const service = await this.prisma.service.findMany();
+      const service = await this.prisma.service.findMany({
+        where: {
+          status: {
+            in: ['ACTIVE'],
+          },
+        },
+      });
       console.log(service);
       console.log(this.prisma.$queryRaw`${service}`);
       return service;

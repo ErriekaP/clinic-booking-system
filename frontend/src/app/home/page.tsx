@@ -23,6 +23,12 @@ const Home = () => {
           router.push(`/admin/${userInfo.id}`);
         } else if (userInfo.patientType === "STUDENT") {
           router.push(`/patient/student/${userInfo.id}`);
+        } else if (userInfo.role === "DOCTOR") {
+          router.push(`/personnel/doctor/${userInfo.id}`);
+        } else if (userInfo.role === "NURSE") {
+          router.push(`/personnel/nurse/${userInfo.id}`);
+        } else if (userInfo.role === "STAFF") {
+          router.push(`/personnel/staff/${userInfo.id}`);
         } else if (
           !router.pathname.includes("/register") &&
           !router.pathname.includes("/register/patient/student")
