@@ -39,6 +39,16 @@ export class AppointmentController {
     }
   }
 
+  @Get('/pending')
+  async getPendingAppointments() {
+    try {
+      const appointments =
+        await this.appointmentService.getPendingAppointments();
+      return appointments;
+    } catch (error) {
+      throw new Error(`Unable to fetch appointments: ${error.message}`);
+    }
+  }
   @Get('check')
   async findAppointmentsByDate(@Query('date') date: Date) {
     return this.appointmentService.findAppointmentsByDate(date);

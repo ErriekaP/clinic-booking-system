@@ -140,7 +140,12 @@ export class WorkScheduleService {
         startTime: dateStartTimeString,
         endTime: dateEndTimeString,
         status: {
-          in: ['PENDING', 'SCHEDULED'],
+          in: [
+            'PENDING',
+            'SCHEDULED',
+            'REQUESTTOCANCELBYSTUDENT',
+            'REQUESTTOCANCELBYDOCTOR',
+          ],
         },
       },
       select: {

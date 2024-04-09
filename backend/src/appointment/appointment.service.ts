@@ -39,6 +39,31 @@ export class AppointmentService {
     }
   }
 
+  async getPendingAppointments() {
+    try {
+      const appointments = await this.prisma.appointments.findMany({
+        where: {
+          status: {
+            in: [
+              'PENDING',
+              'REQUESTTOCANCELBYSTUDENT',
+              'REQUESTTOCANCELBYDOCTOR',
+            ],
+          },
+        },
+        include: {
+          personnel: true,
+          service: true,
+          patient: true,
+        },
+      });
+
+      return appointments;
+    } catch (error) {
+      throw new Error(`Unable to fetch appointments: ${error.message}`);
+    }
+  }
+
   async updateAppointment(id: string, updatedData: any): Promise<any> {
     const parsedId = parseInt(id, 10);
     try {
@@ -56,6 +81,9 @@ export class AppointmentService {
           id: parsedId,
         },
         data: {
+          reasonforCancellation:
+            updatedData.reasonforCancellation ??
+            existingAppointment.reasonforCancellation,
           status: updatedData.status ?? existingAppointment.status,
         },
       });

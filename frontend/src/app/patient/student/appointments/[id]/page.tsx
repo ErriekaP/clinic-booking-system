@@ -32,12 +32,13 @@ const Page = ({ params }: { params: { id: string } }) => {
   const handleClickAppointment = () => {
     router.push(`/appointments/schedule`);
   };
+
   console.log(appointments);
 
   const handleClick = (appointment: any) => {
     // Handle click action (if needed)
     console.log("Clicked appointment:", appointment);
-    router.push(`/appointments/${appointment.id}`);
+    router.push(`/patient/student/appointment/${appointment.id}`);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,7 +91,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     Appointment ID
                   </th>
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                    Details
+                    Service
                   </th>
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase ">
                     Date
@@ -115,7 +116,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                       {appointment.id}
                     </td>
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      {appointment.details}
+                      {appointment.service.serviceName}
                     </td>
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
                       {formatDate(appointment.startTime)}
@@ -134,13 +135,15 @@ const Page = ({ params }: { params: { id: string } }) => {
             </table>
           </div>
         </div>
-        <div className="flex mt-8 justify-end">
-          <button
-            className="inline-flex items-center justify-center rounded-md px-4 py-2 text-base font-medium bg-blue-500 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            onClick={() => handleClickAppointment()}
-          >
-            Schedule Appointment
-          </button>
+        <div className=" flex flex-row-reverse container mx-auto">
+          <div className=" mt-8 justify-end">
+            <button
+              className="inline-flex items-center justify-center rounded-md px-4 py-2 text-base font-medium bg-blue-500 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              onClick={() => handleClickAppointment()}
+            >
+              Schedule Appointment
+            </button>
+          </div>
         </div>
       </div>
     </div>

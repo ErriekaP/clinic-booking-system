@@ -41,7 +41,7 @@ export default function Page() {
     const fetchAppointments = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/appointments`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/appointments/pending`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch appointments");
@@ -73,11 +73,17 @@ export default function Page() {
       appointment.patient.lastName
         .toLowerCase()
         .includes(searchQuery.toLowerCase()) ||
-      appointment.status.toLowerCase().includes(searchQuery.toLowerCase())
+      appointment.personnel.firstName
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      appointment.personnel.lastName
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      appointment.startTime.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleClick = (appointment: Appointment) => {
-    router.push(`/admin/appointments/${appointment.id}`);
+    router.push(`/appointments/update/${appointment.id}`);
   };
 
   const formatTime = (timeString: string) => {

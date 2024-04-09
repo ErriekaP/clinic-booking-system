@@ -150,7 +150,7 @@ export default function Page({ params }: { params: { id: string } }) {
                       }
                     >
                       <Select.Trigger>
-                        {formData.status === "ACTIVE" ? "Active" : "Inactive"}
+                        {formData.status === "ACTIVE" ? "ACTIVE" : "INACTIVE"}
                       </Select.Trigger>
                       <Select.Content>
                         <Select.Group>

@@ -67,6 +67,10 @@ const Page = ({ params }: { params: { id: string } }) => {
     return isoDateString;
   };
 
+  const handleClickCancel = () => {
+    router.push(`/patient/student/appointments/cancel/${id}`);
+  };
+
   return (
     <div className="flex flex-col h-screen items-center">
       {/* Appointment details section */}
@@ -78,7 +82,9 @@ const Page = ({ params }: { params: { id: string } }) => {
         {/* Display cancellation reason if the appointment is cancelled */}
         {appointment &&
           (appointment.status === "CANCELLEDBYSTUDENT" ||
-            appointment.status === "CANCELLEDBYDOCTOR") && (
+            appointment.status === "CANCELLEDBYDOCTOR" ||
+            appointment.status === "REQUESTTOCANCELBYSTUDENT" ||
+            appointment.status === "REQUESTTOCANCELBYDOCTOR") && (
             <div className=" bg-gray-100 p-4 rounded-lg flex justify-center">
               <div className="mt-4 text-center  text-black font-bold">
                 <h2 className="">Reason for Cancellation:</h2>
@@ -167,6 +173,20 @@ const Page = ({ params }: { params: { id: string } }) => {
           </div>
         </div>
 
+        {appointment &&
+          (appointment.status === "PENDING" ||
+            appointment.status === "SCHEDULED") && (
+            <div className="flex flex-row-reverse">
+              <div className="  mt-8 mr-4 justify-end">
+                <button
+                  className="inline-flex items-center justify-center rounded-md px-4 py-2 text-base font-medium bg-blue-500 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  onClick={() => handleClickCancel()}
+                >
+                  Cancel Appointment
+                </button>
+              </div>
+            </div>
+          )}
         {/* Additional information based on appointment status */}
         {appointment && appointment.status === "SCHEDULED" && (
           <div className="mt-4 text-center text-sm text-white font-bold">

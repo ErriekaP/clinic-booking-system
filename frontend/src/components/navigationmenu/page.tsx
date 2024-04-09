@@ -79,7 +79,7 @@ const NavMenu = () => {
                 <a href="/appointments" className="ListItemLink">
                   <p className="ListItemHeading">View Appointments</p>
                 </a>
-                <a href="" className="ListItemLink">
+                <a href="/admin/appointments/requests" className="ListItemLink">
                   <p className="ListItemHeading">Appointment Requests</p>
                 </a>
               </ul>
