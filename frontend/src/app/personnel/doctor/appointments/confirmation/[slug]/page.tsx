@@ -17,15 +17,14 @@ export default function Page({ params }: { params: { slug: string } }) {
   });
 
   // Extract date, time, and doctorId from parsedParams
-  const { date, startTime, endTime, doctorId, serviceId, patientId } =
-    parsedParams;
+  const { date, startTime, endTime, doctorId, serviceId } = parsedParams;
 
   const dateString = date.slice(0, 10);
 
+  //if doctors will set reserve the appointment because he is off duty
+
   // Convert the start time
   const startDateTimeString = `${dateString}T${startTime}:00.000Z`;
-
-  //const startTimeDate = new Date(startDateTimeString);
 
   const [personnel, setPersonnel] = useState<any>(null);
 
@@ -59,16 +58,15 @@ export default function Page({ params }: { params: { slug: string } }) {
     router.back();
   };
 
-  const formData = {
-    patientID: parseInt(patientId, 10),
+  const [formData, setFormData] = useState({
     personnelID: parseInt(doctorId, 10),
     serviceID: parseInt(serviceId, 10),
     startTime: startDateTimeString,
     endTime: endDateTimeString,
     details: "",
     reasonforCancellation: "",
-    status: "PENDING",
-  };
+    status: "CANCELLEDBYDOCTOR",
+  });
   //console.log(startTimeDate);
   console.log(endDateTimeString);
 
@@ -91,13 +89,21 @@ export default function Page({ params }: { params: { slug: string } }) {
 
       if (response.ok) {
         console.log("Form submitted successfully!");
-        router.push(`/patient/student/${patientId}`);
+        router.push(`/personnel/doctor/appointments/${doctorId}`);
       } else {
         console.error("Form submission failed");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
     }
+  };
+
+  const handleInputChange = (e: { target: { name: any; value: any } }) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   return (
@@ -133,6 +139,22 @@ export default function Page({ params }: { params: { slug: string } }) {
             )}
           </div>
         </div>
+        <div className="my-4">
+          <label
+            htmlFor="reasonforCancellation"
+            className="block text-gray-700 text-sm font-bold mb-2"
+          >
+            Reason for Cancellation
+          </label>
+          <input
+            id="reasonforCancellation"
+            name="reasonforCancellation"
+            type="text"
+            value={formData.reasonforCancellation}
+            onChange={handleInputChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </div>
         <div className="mt-8 flex gap-4">
           <button
             type="button"
@@ -145,7 +167,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
             type="submit"
           >
-            Schedule Appointment
+            Cancel Schedule
           </button>
         </div>
       </form>

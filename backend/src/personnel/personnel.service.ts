@@ -1,7 +1,7 @@
 // patient.service.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Patient, PrismaClient } from '@prisma/client';
+import { Appointments, Patient, PrismaClient } from '@prisma/client';
 import { SupabaseService } from 'supabase/supabase.service';
 
 @Injectable()
@@ -10,6 +10,22 @@ export class PersonnelService {
     private readonly prisma: PrismaService,
     private readonly supabaseService: SupabaseService,
   ) {}
+
+  async getPersonnelIdFromSupabaseId(supabaseId: string) {
+    // Query your database to find the patient's ID using their Supabase ID
+    const personnel = await this.prisma.clinicPersonnel.findFirst({
+      where: {
+        supabaseUserID: supabaseId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (personnel != null) {
+      return personnel.id;
+    } else return null;
+  }
 
   async updatePersonnel(id: number, updatedData: any): Promise<any> {
     try {
@@ -79,5 +95,78 @@ export class PersonnelService {
       where: { id: parseInt(personnelId) },
       include: { services: true },
     });
+  }
+  // async getPersonnelAppointments(personnelId: number): Promise<Appointments[]> {
+  //   try {
+  //     const appointments = await this.prisma.appointments.findMany({
+  //       where: {
+  //         personnelID: personnelId,
+  //       },
+  //       orderBy: {
+  //         startTime: 'desc',
+  //       },
+  //       include: {
+  //         service: true,
+  //         patient: true,
+  //       },
+  //     });
+
+  //     return appointments;
+  //   } catch (error) {
+  //     throw new Error(`Unable to fetch appointments: ${error.message}`);
+  //   }
+  // }
+
+  async getPersonnelAppointments(personnelId: number): Promise<Appointments[]> {
+    try {
+      const appointments = await this.prisma.appointments.findMany({
+        where: {
+          personnelID: personnelId,
+          NOT: {
+            patient: null, // Exclude appointments where patient is null
+          },
+        },
+        orderBy: {
+          startTime: 'desc', // Order by startTime in descending order
+        },
+        include: {
+          service: true,
+          patient: true,
+        },
+      });
+
+      return appointments;
+    } catch (error) {
+      throw new Error(`Unable to fetch appointments: ${error.message}`);
+    }
+  }
+
+  async getNullPatientAppointments(
+    personnelId: number,
+  ): Promise<Appointments[]> {
+    try {
+      const appointments = await this.prisma.appointments.findMany({
+        where: {
+          personnelID: personnelId,
+          patient: null, // Filter appointments where patient is null
+        },
+        orderBy: {
+          startTime: 'desc', // Order by startTime in descending order
+        },
+        include: {
+          service: true,
+          patient: true,
+        },
+      });
+
+      // Filter appointments where patient is null (although we're already filtering in the database query)
+      const filteredAppointments = appointments.filter(
+        (appointment) => !appointment.patient,
+      );
+
+      return filteredAppointments;
+    } catch (error) {
+      throw new Error(`Unable to fetch appointments: ${error.message}`);
+    }
   }
 }

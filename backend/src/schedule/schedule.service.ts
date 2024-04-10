@@ -145,6 +145,7 @@ export class WorkScheduleService {
             'SCHEDULED',
             'REQUESTTOCANCELBYSTUDENT',
             'REQUESTTOCANCELBYDOCTOR',
+            'CANCELLEDBYDOCTOR',
           ],
         },
       },

@@ -38,4 +38,25 @@ export class PersonnelController {
     const personnelId = parseInt(id, 10); // Parse the string ID to a number
     return this.personnelService.updatePersonnel(personnelId, personnelData);
   }
+
+  @Get('appointments/:id')
+  async getPersonnelAppointments(@Param('id') id: string): Promise<any> {
+    const patientId = parseInt(id, 10);
+    return this.personnelService.getPersonnelAppointments(patientId);
+  }
+
+  @Get('appointments/nullPatient/:id')
+  async getNullPatientAppointments(@Param('id') id: string): Promise<any> {
+    const patientId = parseInt(id, 10);
+    return this.personnelService.getNullPatientAppointments(patientId);
+  }
+
+  @Get('supabaseUserID/:supabaseId')
+  async getPersonnelIdFromSupabaseId(
+    @Param('supabaseId') supabaseId: string,
+  ): Promise<number | null> {
+    const patientId =
+      await this.personnelService.getPersonnelIdFromSupabaseId(supabaseId);
+    return patientId;
+  }
 }

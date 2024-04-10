@@ -54,6 +54,8 @@ const Page = ({ params }: { params: { id: string } }) => {
     null
   );
   const [userId, setUserId] = useState<string | null>(null);
+  const [url, setUrl] = useState<string | null>(null);
+
   const supabase = createClientComponentClient();
   const [intervals, setIntervals] = useState<Interval[]>([]);
   const oneMonthAfterCurrentDate = dayjs().add(1, "month").startOf("day");
@@ -131,7 +133,17 @@ const Page = ({ params }: { params: { id: string } }) => {
         }
         const supabaseUserId = session.user.id;
         const patientId = await getPatientIdFromSupabaseId(supabaseUserId);
+        const personnelId = await getPersonnelIdFromSupabaseId(supabaseUserId);
         setUserId(patientId);
+
+        // console.log(patientId);
+        // console.log(personnelId);
+
+        // if (patientId == null) {
+        //   setUserId(personnelId);
+        // } else {
+        //   setUserId(patientId);
+        // }
       } catch (error) {
         console.error("Error fetching user information:", error);
       }
@@ -144,6 +156,25 @@ const Page = ({ params }: { params: { id: string } }) => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/patients/supabaseUserID/${supabaseId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching patient ID:", error);
+      return null;
+    }
+  };
+
+  const getPersonnelIdFromSupabaseId = async (supabaseId: string) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/personnel/supabaseUserID/${supabaseId}`,
         {
           method: "GET",
           headers: {
@@ -203,11 +234,21 @@ const Page = ({ params }: { params: { id: string } }) => {
   console.log(isoDateString);
 
   const handleSetAppointment = () => {
-    if (selectedDate && selectedDoctor && clickedInterval && userId) {
+    if (selectedDate && selectedDoctor && clickedInterval) {
       const { id: doctorId } = selectedDoctor;
+      const { startTime, endTime } = clickedInterval;
 
-      const url = `/appointments/schedule/confirmation/date=${isoDateString}&startTime=${clickedInterval.startTime}&endTime=${clickedInterval.endTime}&doctorId=${doctorId}&serviceId=${params.id}&patientId=${userId}`;
-      router.push(url);
+      let url: string;
+
+      if (userId === null) {
+        // For unauthenticated user
+        url = `/personnel/doctor/appointments/confirmation/date=${isoDateString}&startTime=${startTime}&endTime=${endTime}&doctorId=${doctorId}&serviceId=${params.id}`;
+      } else {
+        // For authenticated user
+        url = `/appointments/schedule/confirmation/date=${isoDateString}&startTime=${startTime}&endTime=${endTime}&doctorId=${doctorId}&serviceId=${params.id}&patientId=${userId}`;
+      }
+
+      router.push(url); // Redirect to the constructed URL
     }
   };
 
@@ -324,19 +365,36 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </div>
                 ))}
               </ul>
-              <div>
-                <button
-                  className={`my-2 px-4 py-2 text-white rounded-md cursor-pointer ${
-                    !selectedDoctor
-                      ? "bg-gray-400"
-                      : "bg-blue-500 hover:bg-blue-600"
-                  }`}
-                  onClick={handleSetAppointment}
-                  disabled={!selectedDoctor}
-                >
-                  Set Appointment
-                </button>
-              </div>
+              {userId == null && (
+                <div>
+                  <button
+                    className={`my-2 px-4 py-2 text-white rounded-md cursor-pointer ${
+                      !selectedDoctor
+                        ? "bg-gray-400"
+                        : "bg-blue-500 hover:bg-blue-600"
+                    }`}
+                    onClick={handleSetAppointment}
+                    disabled={!selectedDoctor}
+                  >
+                    Cancel Appointment
+                  </button>
+                </div>
+              )}
+              {userId != null && (
+                <div>
+                  <button
+                    className={`my-2 px-4 py-2 text-white rounded-md cursor-pointer ${
+                      !selectedDoctor
+                        ? "bg-gray-400"
+                        : "bg-blue-500 hover:bg-blue-600"
+                    }`}
+                    onClick={handleSetAppointment}
+                    disabled={!selectedDoctor}
+                  >
+                    Set Appointment
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>

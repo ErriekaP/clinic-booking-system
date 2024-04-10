@@ -197,7 +197,7 @@ updatedAt DateTime @updatedAt
 
 model Appointments{
 id Int @id @default(autoincrement())
-patientID Int 
+patientID Int?
 personnelID Int 
 serviceID Int 
 startTime DateTime
@@ -205,7 +205,7 @@ endTime DateTime
 details String
 status AppointmentStatus
 reasonforCancellation String
-patient Patient @relation(fields: [patientID], references: [id])
+patient Patient? @relation(fields: [patientID], references: [id])
 personnel ClinicPersonnel @relation(fields: [personnelID], references: [id])
 service Service @relation(fields: [serviceID], references: [id])
 createdAt DateTime @default(now())

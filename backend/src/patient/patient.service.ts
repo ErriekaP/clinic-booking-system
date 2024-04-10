@@ -21,8 +21,9 @@ export class PatientService {
         id: true,
       },
     });
-
-    return patient?.id;
+    if (patient != null) {
+      return patient.id;
+    } else return null;
   }
 
   async updatePatient(id: number, updatedData: any): Promise<any> {

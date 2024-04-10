@@ -136,7 +136,7 @@ export class AppointmentService {
     details: string;
     status: AppointmentStatus;
     reasonforCancellation: string;
-    patientID: number;
+    patientID?: number | null;
     personnelID: number;
     serviceID: number;
   }): Promise<any> {
@@ -147,7 +147,7 @@ export class AppointmentService {
         details: data.details,
         status: data.status,
         reasonforCancellation: data.reasonforCancellation,
-        patientID: data.patientID,
+        patientID: data.patientID ?? null,
         personnelID: data.personnelID,
         serviceID: data.serviceID,
       },
