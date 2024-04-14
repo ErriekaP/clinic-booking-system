@@ -11,22 +11,6 @@ export class PersonnelService {
     private readonly supabaseService: SupabaseService,
   ) {}
 
-  async getPersonnelIdFromSupabaseId(supabaseId: string) {
-    // Query your database to find the patient's ID using their Supabase ID
-    const personnel = await this.prisma.clinicPersonnel.findFirst({
-      where: {
-        supabaseUserID: supabaseId,
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    if (personnel != null) {
-      return personnel.id;
-    } else return null;
-  }
-
   async updatePersonnel(id: number, updatedData: any): Promise<any> {
     try {
       // Retrieve the personnel record by ID

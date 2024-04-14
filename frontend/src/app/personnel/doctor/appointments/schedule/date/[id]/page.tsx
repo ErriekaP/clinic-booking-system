@@ -57,7 +57,6 @@ const Page = ({ params }: { params: { id: string } }) => {
   const [userPersonnel, setPersonnel] = useState<Personnel>();
   const [url, setUrl] = useState<string | null>(null);
 
-  const supabase = createClientComponentClient();
   const [intervals, setIntervals] = useState<Interval[]>([]);
 
   const dayjsObject = dayjs(selectedDate);
@@ -97,44 +96,6 @@ const Page = ({ params }: { params: { id: string } }) => {
 
     fetchScheduleData();
   }, [selectedServiceId, selectedDate]);
-
-  useEffect(() => {
-    const fetchPatientId = async () => {
-      try {
-        const { data: session, error } = await supabase.auth.getUser();
-        if (error) {
-          throw error;
-        }
-        const supabaseUserId = session.user.id;
-        const patientId = await getPatientIdFromSupabaseId(supabaseUserId);
-        setUserId(patientId);
-      } catch (error) {
-        console.error("Error fetching user information:", error);
-      }
-    };
-
-    fetchPatientId();
-  }, []);
-  console.log(userPersonnel);
-
-  const getPatientIdFromSupabaseId = async (supabaseId: string) => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/patients/supabaseUserID/${supabaseId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching patient ID:", error);
-      return null;
-    }
-  };
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -184,15 +145,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       const { id: doctorId } = selectedDoctor;
       const { startTime, endTime } = clickedInterval;
 
-      let url: string;
-
-      if (userId === null) {
-        // For unauthenticated user
-        url = `/personnel/doctor/appointments/schedule/confirmation/date=${isoDateString}&startTime=${startTime}&endTime=${endTime}&doctorId=${doctorId}&serviceId=${params.id}`;
-      } else {
-        // For authenticated user
-        url = `/appointments/schedule/confirmation/date=${isoDateString}&startTime=${startTime}&endTime=${endTime}&doctorId=${doctorId}&serviceId=${params.id}&patientId=${userId}`;
-      }
+      const url = `/personnel/doctor/appointments/schedule/cancellation/date=${isoDateString}&startTime=${startTime}&endTime=${endTime}&doctorId=${doctorId}&serviceId=${params.id}`;
 
       router.push(url); // Redirect to the constructed URL
     }
@@ -322,7 +275,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   onClick={handleSetAppointment}
                   disabled={!selectedDoctor}
                 >
-                  Set Appointment
+                  Cancel Appointment
                 </button>
               </div>
             </div>

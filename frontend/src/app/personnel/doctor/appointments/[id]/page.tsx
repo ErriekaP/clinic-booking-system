@@ -52,7 +52,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   }, []);
 
   const handleClickAppointment = () => {
-    router.push(`/appointments/schedule`);
+    router.push(`/personnel/doctor/appointments/schedule`);
   };
 
   console.log(appointments);
@@ -60,7 +60,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const handleClick = (appointment: any) => {
     // Handle click action (if needed)
     console.log("Clicked appointment:", appointment);
-    //router.push(`/patient/student/appointment/${appointment.id}`);
+    router.push(`/personnel/doctor/appointment/${appointment.id}`);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -226,7 +226,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     !appointment.patient && (
                       <tr
                         key={appointment.id}
-                        onClick={() => handleClick(appointment)}
+                        //onClick={() => handleClick(appointment)}
                         className="hover:bg-gray-50 cursor-pointer"
                       >
                         <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">

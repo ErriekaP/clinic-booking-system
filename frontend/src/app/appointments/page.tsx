@@ -99,7 +99,7 @@ export default function Page() {
     <div className="flex flex-col items-center">
       <div className="flex items-center mt-8">
         <input
-          placeholder="Search Appointments"
+          placeholder="Search"
           className="appearance-none rounded-md border border-gray-400 block py-2 px-4 mr-2 w-64"
           value={searchQuery}
           onChange={handleSearchChange}

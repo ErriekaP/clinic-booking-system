@@ -50,13 +50,4 @@ export class PersonnelController {
     const patientId = parseInt(id, 10);
     return this.personnelService.getNullPatientAppointments(patientId);
   }
-
-  @Get('supabaseUserID/:supabaseId')
-  async getPersonnelIdFromSupabaseId(
-    @Param('supabaseId') supabaseId: string,
-  ): Promise<number | null> {
-    const patientId =
-      await this.personnelService.getPersonnelIdFromSupabaseId(supabaseId);
-    return patientId;
-  }
 }

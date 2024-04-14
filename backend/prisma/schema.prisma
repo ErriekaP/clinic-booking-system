@@ -205,11 +205,31 @@ endTime DateTime
 details String
 status AppointmentStatus
 reasonforCancellation String
+afterAppointmentID AfterAppointment?
 patient Patient? @relation(fields: [patientID], references: [id])
 personnel ClinicPersonnel @relation(fields: [personnelID], references: [id])
 service Service @relation(fields: [serviceID], references: [id])
 createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt
+}
+
+model AfterAppointment{
+id Int @id @default(autoincrement())
+appointmentID Int @unique
+diagnosis String
+medications Medicine[]
+appointment Appointments @relation(fields: [appointmentID], references: [id])
+}
+
+model Medicine{
+id Int @id @default(autoincrement())
+afterAppointmentID Int 
+medicineName String
+medicineStrength String
+medicineQuantity String
+medicineFrequency String
+remarks String
+afterAppointment AfterAppointment? @relation(fields: [afterAppointmentID], references: [id])
 }
 
 model Queue{

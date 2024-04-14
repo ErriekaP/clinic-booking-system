@@ -26,6 +26,14 @@ export class AppointmentService {
   async getAllAppointments() {
     try {
       const appointments = await this.prisma.appointments.findMany({
+        where: {
+          NOT: {
+            patient: null, // Exclude appointments where patient is null
+          },
+        },
+        orderBy: {
+          startTime: 'desc', // Order by startTime in descending order
+        },
         include: {
           personnel: true,
           service: true,

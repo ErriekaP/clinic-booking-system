@@ -10,6 +10,7 @@ import { PersonnelModule } from './personnel/personnel.module';
 import { ServicesModule } from './services/services.module';
 import { AppointmentModule } from './appointment/appointment.module';
 import { ScheduleModule } from './schedule/schedule.module';
+import { AfterAppointmentModule } from './afterAppointment/afterAppointment.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ScheduleModule } from './schedule/schedule.module';
     ServicesModule,
     AppointmentModule,
     ScheduleModule,
+    AfterAppointmentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
