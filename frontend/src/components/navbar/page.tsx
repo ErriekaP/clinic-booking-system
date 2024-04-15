@@ -1,42 +1,187 @@
-"use client";
-import React from "react";
-import * as Toolbar from "@radix-ui/react-toolbar";
-import "../../components/styles.css";
+import React, { useEffect, useState } from "react";
+import * as NavigationMenu from "@radix-ui/react-navigation-menu";
+import { CaretDownIcon } from "@radix-ui/react-icons";
 import * as Avatar from "@radix-ui/react-avatar";
+import * as Separator from "@radix-ui/react-separator";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { PersonIcon } from "@radix-ui/react-icons";
+import "../../components/styles.css";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
+import { fetchUserInfo } from "@/utilities/fetch/patient";
 
-const ToolbarDemo = () => {
+interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  patientType: "STUDENT" | "EMPLOYEE";
+  role: "ADMIN" | "DOCTOR" | "NURSE" | "STAFF";
+  email: string;
+}
+
+const NavBar = () => {
   const supabase = createClientComponentClient();
   const router = useRouter();
+  const [userType, setUserType] = useState<string>();
+  const [user, setUser] = useState<User | undefined>();
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        // Retrieve the session from Supabase
+        const { data: session, error } = await supabase.auth.getUser();
+        if (error) {
+          throw new Error("Failed to fetch session");
+        }
+
+        console.log("sess", session);
+
+        if (session && session.user) {
+          // Fetch user info from your API using the user ID
+          const userInfo = await fetchUserInfo(session.user.id);
+
+          let newUserType;
+          if (userInfo.role != null) {
+            newUserType = userInfo.role;
+          } else {
+            newUserType = userInfo.patientType;
+          }
+
+          // Set user type and ID in state
+          setUserType(newUserType);
+          setUser(userInfo);
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+        // Handle error or show error message to the user
+      }
+    };
+
+    getUserInfo();
+  }, []);
+
+  console.log(user);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.push("/login");
   };
-
   return (
-    <Toolbar.Root className="ToolbarRoot" aria-label="Formatting options">
-      <Toolbar.ToggleGroup type="multiple" aria-label="Text formatting">
-        <div style={{ display: "flex", gap: 20 }}>
-          <Avatar.Root className="AvatarRoot">
-            <Avatar.Image
-              className="AvatarImage"
-              src="https://www.addu.edu.ph/wp-content/uploads/2020/08/UniversitySeal480px.png"
-              alt="Colm Tuite"
+    <div className="CenteredContainer">
+      <NavigationMenu.Root className="NavigationMenuRoot">
+        <NavigationMenu.List className="NavigationMenuList">
+          <NavigationMenu.Item className="NavigationMenuItem">
+            <Avatar.Root className="AvatarRoot">
+              <Avatar.Image
+                className="AvatarImage"
+                src="https://www.addu.edu.ph/wp-content/uploads/2020/08/UniversitySeal480px.png"
+                alt="Colm Tuite"
+              />
+              <Avatar.Fallback className="AvatarFallback" delayMs={600}>
+                CT
+              </Avatar.Fallback>
+            </Avatar.Root>
+          </NavigationMenu.Item>
+          <NavigationMenu.Item className="NavigationMenuItem">
+            <NavigationMenu.Link
+              className="NavigationMenuLink"
+              //href="/patients"
+              href={`/patient/student/appointments/${user?.id}`}
+            >
+              Appointments
+            </NavigationMenu.Link>
+          </NavigationMenu.Item>
+
+          <NavigationMenu.Item className="NavigationMenuItem">
+            <NavigationMenu.Link
+              className="NavigationMenuLink"
+              href="https://github.com/radix-ui"
+            >
+              Services
+            </NavigationMenu.Link>
+          </NavigationMenu.Item>
+
+          <NavigationMenu.Item className="NavigationMenuItem">
+            <NavigationMenu.Trigger className="NavigationMenuTrigger">
+              Queues <CaretDownIcon className="CaretDown" aria-hidden />
+            </NavigationMenu.Trigger>
+            <NavigationMenu.Content className="NavigationMenuContent">
+              <ul className="List two">
+                <a href={`/queue/${user?.id}`} className="ListItemLink">
+                  <p className="ListItemHeading">Queues</p>
+                </a>
+                <a href="/queue/services" className="ListItemLink">
+                  <p className="ListItemHeading">Add a Queue</p>
+                </a>
+              </ul>
+            </NavigationMenu.Content>
+          </NavigationMenu.Item>
+
+          {/* <NavigationMenu.Item className="NavigationMenuItem">
+            <NavigationMenu.Link
+              className="NavigationMenuLink"
+              href="/queue/services"
+            >
+              Queue
+            </NavigationMenu.Link>
+          </NavigationMenu.Item> */}
+
+          <NavigationMenu.Item className="NavigationMenuItem">
+            <Separator.Root
+              className="SeparatorRoot"
+              decorative
+              orientation="vertical"
+              style={{ margin: "0 15px" }}
             />
-            <Avatar.Fallback className="AvatarFallback" delayMs={600}>
-              CT
-            </Avatar.Fallback>
-          </Avatar.Root>
+          </NavigationMenu.Item>
+
+          <NavigationMenu.Item className="NavigationMenuItem">
+            <p>
+              Hi, {user?.firstName} {user?.lastName}
+            </p>
+          </NavigationMenu.Item>
+
+          <NavigationMenu.Item className="NavigationMenuItem">
+            <DropdownMenu.Root>
+              <DropdownMenu.Trigger asChild>
+                <button className="IconButton" aria-label="Customise options">
+                  <PersonIcon />
+                </button>
+              </DropdownMenu.Trigger>
+
+              <DropdownMenu.Portal>
+                <DropdownMenu.Content
+                  className="DropdownMenuContent"
+                  sideOffset={5}
+                >
+                  <DropdownMenu.Item className="DropdownMenuItem">
+                    Profile
+                  </DropdownMenu.Item>
+
+                  <DropdownMenu.Separator className="DropdownMenuSeparator" />
+
+                  <DropdownMenu.Item
+                    className="DropdownMenuItem"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Portal>
+            </DropdownMenu.Root>
+          </NavigationMenu.Item>
+
+          <NavigationMenu.Indicator className="NavigationMenuIndicator">
+            <div className="Arrow" />
+          </NavigationMenu.Indicator>
+        </NavigationMenu.List>
+
+        <div className="ViewportPosition">
+          <NavigationMenu.Viewport className="NavigationMenuViewport" />
         </div>
-      </Toolbar.ToggleGroup>
-      <Toolbar.Separator className="ToolbarSeparator" />
-      <Toolbar.Button className="ToolbarButton" onClick={handleLogout}>
-        Logout
-      </Toolbar.Button>
-    </Toolbar.Root>
+      </NavigationMenu.Root>
+    </div>
   );
 };
 
-export default ToolbarDemo;
+export default NavBar;

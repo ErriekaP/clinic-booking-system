@@ -9,6 +9,8 @@ export const fetchUserInfo = async (
   accessToken: string;
   id: string;
   email: string;
+  firstName: string;
+  lastName: string;
   patientType: "STUDENT" | "EMPLOYEE";
   role: "ADMIN" | "DOCTOR" | "NURSE" | "STAFF";
 }> => {

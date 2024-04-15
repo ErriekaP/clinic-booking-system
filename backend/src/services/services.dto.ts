@@ -1,5 +1,5 @@
 import { Status } from '@prisma/client';
-import { IsEnum, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsString } from 'class-validator';
 
 export class ServiceDto {
   @IsString()
@@ -8,6 +8,12 @@ export class ServiceDto {
   @IsString()
   description: string;
 
+  @IsString()
+  queueStatus: string;
+
   @IsEnum(Status)
   status: Status;
+
+  @IsNumber()
+  currentQueueNumber: number;
 }

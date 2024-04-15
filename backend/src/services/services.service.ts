@@ -88,6 +88,9 @@ export class ServicesService {
         serviceName: serviceName,
         description: description,
         status: status,
+        isStop: true,
+        isPause: true,
+        currentQueueNumber: 1,
       },
     });
   }

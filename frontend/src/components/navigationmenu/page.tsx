@@ -89,7 +89,7 @@ const NavMenu = () => {
           <NavigationMenu.Item className="NavigationMenuItem">
             <NavigationMenu.Link
               className="NavigationMenuLink"
-              href="https://github.com/radix-ui"
+              href="/queues/services"
             >
               Queue
             </NavigationMenu.Link>

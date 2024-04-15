@@ -79,6 +79,8 @@ export class AuthService {
           id: true,
           email: true,
           patientType: true,
+          firstName: true,
+          lastName: true,
         },
       });
 

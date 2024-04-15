@@ -11,7 +11,7 @@ import { ServicesModule } from './services/services.module';
 import { AppointmentModule } from './appointment/appointment.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { AfterAppointmentModule } from './afterAppointment/afterAppointment.module';
-
+import { QueueModule } from './queue/queue.module';
 @Module({
   imports: [
     PrismaModule,
@@ -24,6 +24,7 @@ import { AfterAppointmentModule } from './afterAppointment/afterAppointment.modu
     AppointmentModule,
     ScheduleModule,
     AfterAppointmentModule,
+    QueueModule,
   ],
   controllers: [AppController],
   providers: [AppService],

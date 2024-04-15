@@ -50,6 +50,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
               `/appointments`,
               `/admin/appointments/${userInfo.id}`,
               `/admin/appointments/requests`,
+              `/queues`,
             ],
             DOCTOR: [
               `/personnel/doctor/${userInfo.id}`,
@@ -71,6 +72,9 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
               `/services`,
               `/patient/student/appointments/${userInfo.id}`,
               `/patient/student/appointments/cancel`,
+              `/queue/services`,
+              `/queue/confirmation`,
+              `/queue`,
             ],
             EMPLOYEE: [`/patient/employee/${userInfo.id}`],
           };
