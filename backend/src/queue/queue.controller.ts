@@ -33,36 +33,59 @@ export class QueueController {
     return this.queueService.findPatientQueue(id);
   }
 
-  @Get(':id')
+  @Get('/next/:id')
   async getQueue(@Param('id') id: string): Promise<any> {
     return this.queueService.processNextQueue(id);
+  }
+
+  @Get('/finish/:id')
+  async getFinishQueue(@Param('id') id: string): Promise<any> {
+    return this.queueService.finishQueue(id);
   }
 
   @Get()
   async findAll() {
     try {
-      const services = await this.queueService.getAllQueues();
-      return services;
+      const queues = await this.queueService.getAllQueues();
+      return queues;
     } catch (error) {
-      throw new Error(`Unable to fetch services: ${error.message}`);
+      throw new Error(`Unable to fetch queues: ${error.message}`);
     }
   }
 
-  // @Get(':id/personnel')
-  // async getServiceWithPersonnelAndSchedules(
-  //   @Param('id') id: string,
-  // ): Promise<Queue> {
-  //   const serviceId = parseInt(id, 10); // Parse the string ID to a number
+  @Get('ongoing')
+  async findAllOngoingQueues() {
+    try {
+      const queues = await this.queueService.getAllOngoingQueues();
+      return queues;
+    } catch (error) {
+      throw new Error(`Unable to fetch queues: ${error.message}`);
+    }
+  }
 
-  //   const service =
-  //     await this.queueService.getServiceWithPersonnelAndSchedules(serviceId);
+  @Get('allOngoing')
+  async findQueueswithService() {
+    try {
+      const queues = await this.queueService.getQueueswithService();
+      return queues;
+    } catch (error) {
+      throw new Error(`Unable to fetch queues: ${error.message}`);
+    }
+  }
 
-  //   if (!service) {
-  //     throw new NotFoundException(`Service with id ${id} not found`);
-  //   }
+  @Get('current/:id')
+  async getQueuewithCurrentNumber(@Param('id') id: string): Promise<Queue> {
+    const currentNumber = parseInt(id, 10); // Parse the string ID to a number
 
-  //   return service;
-  // }
+    const queue =
+      await this.queueService.getQueuewithCurrentNumber(currentNumber);
+
+    if (!queue) {
+      throw new NotFoundException(`Queue with id ${id} not found`);
+    }
+
+    return queue;
+  }
 
   @Get('count/:serviceId')
   async countDoctorsByService(

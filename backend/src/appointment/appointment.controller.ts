@@ -16,6 +16,11 @@ import { Appointments } from '@prisma/client';
 export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) {}
 
+  @Get('/cancel/:id')
+  async getCancelAppointment(@Param('id') id: string): Promise<any> {
+    return this.appointmentService.cancelAppointment(id);
+  }
+
   @Post('add')
   async addAppointment(@Body() appointmentData: any): Promise<any> {
     return this.appointmentService.addAppointment(appointmentData);

@@ -9,6 +9,23 @@ import { AppointmentStatus } from '@prisma/client';
 export class AppointmentService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async cancelAppointment(id: string) {
+    try {
+      const parsedId = parseInt(id, 10);
+
+      const updatedAppointment = await this.prisma.appointments.update({
+        where: { id: parsedId },
+        data: { status: 'CANCELLEDBYDOCTOR' },
+      });
+      return {
+        success: true,
+        data: { updatedAppointment },
+      };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  }
+
   async addAppointment(appointmentData: any): Promise<any> {
     try {
       const prismaAppointmentData = {

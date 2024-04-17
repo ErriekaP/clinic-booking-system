@@ -11,9 +11,33 @@ import {
 } from "@radix-ui/themes";
 import Navbar from "@/components/navbar/page";
 //import "./styles.css";
+interface Queue {
+  id: number;
+  queueID: number;
+}
 
 const StudentPage = ({ params }: { params: { id: string } }) => {
   const [patientData, setPatientData] = useState<any>(null);
+  const [queueData, setQueueData] = useState<Queue[]>([]);
+
+  useEffect(() => {
+    const getQueueData = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/queue/allOngoing`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch queue data");
+        }
+        const data = await response.json();
+        setQueueData(data);
+      } catch (error) {
+        console.error("Error fetching queue data:", error);
+      }
+    };
+
+    getQueueData();
+  }, []);
 
   useEffect(() => {
     const getPatientData = async (id: string) => {
@@ -37,6 +61,8 @@ const StudentPage = ({ params }: { params: { id: string } }) => {
   if (!patientData) {
     return null;
   }
+
+  console.log("queue", queueData);
 
   return (
     <div>
@@ -121,10 +147,13 @@ const StudentPage = ({ params }: { params: { id: string } }) => {
           </Flex>
 
           {/* Display Queue Number */}
+
           <div className="flex items-center justify-center mt-20 text-white">
             <div className=" text-center ">
-              <p className="text-lg font-bold">Queue Number:</p>
-              <h1 className="text-9xl font-bold ml-2">1</h1>
+              <p className="text-lg font-bold">Current Queue Numbers:</p>
+              {queueData.map((queue) => (
+                <h1 className="text-9xl font-bold ml-2">{queue.queueID}</h1>
+              ))}
             </div>
           </div>
 

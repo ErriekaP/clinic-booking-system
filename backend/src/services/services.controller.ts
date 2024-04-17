@@ -76,4 +76,14 @@ export class ServicesController {
       );
     }
   }
+
+  @Get('/pause/:id')
+  async getIsPause(@Param('id') id: string): Promise<any> {
+    return this.servicesService.processIsPause(id);
+  }
+
+  @Get('/resume/:id')
+  async getIsNotPause(@Param('id') id: string): Promise<any> {
+    return this.servicesService.processIsNotPause(id);
+  }
 }

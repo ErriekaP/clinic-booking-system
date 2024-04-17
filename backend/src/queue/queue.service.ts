@@ -4,6 +4,8 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Queue, PrismaClient } from '@prisma/client';
 import { SupabaseService } from 'supabase/supabase.service';
 import { QueueDto } from './queue.dto';
+import { error } from 'console';
+import { ok } from 'assert';
 
 @Injectable()
 export class QueueService {
@@ -57,13 +59,7 @@ export class QueueService {
 
   async getAllQueues() {
     try {
-      const service = await this.prisma.service.findMany({
-        where: {
-          status: {
-            in: ['ACTIVE'],
-          },
-        },
-      });
+      const service = await this.prisma.queue.findMany({});
       console.log(service);
       console.log(this.prisma.$queryRaw`${service}`);
       return service;
@@ -72,6 +68,21 @@ export class QueueService {
     }
   }
 
+  async getAllOngoingQueues() {
+    try {
+      const service = await this.prisma.queue.findMany({
+        where: {
+          status: {
+            in: ['ONGOING'],
+          },
+        },
+      });
+      console.log(service);
+      return service;
+    } catch (error) {
+      throw new Error(`Unable to fetch patients: ${error.message}`);
+    }
+  }
   async findPatientQueue(id: string) {
     const parsedId = parseInt(id, 10);
     return this.prisma.queue.findMany({
@@ -80,19 +91,35 @@ export class QueueService {
       },
     });
   }
+
+  async finishQueue(id: string) {
+    try {
+      const parsedId = parseInt(id, 10);
+
+      // Update the status  to "COMPLETED"
+      const updatedQueue = await this.prisma.queue.update({
+        where: { id: parsedId },
+        data: { status: 'COMPLETED' },
+      });
+      return {
+        success: true,
+        data: { updatedQueue },
+      };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  }
   //findqueue from queue number
   async processNextQueue(id: string) {
     try {
       const parsedId = parseInt(id, 10);
 
-      // Find the current service
-      const existingService = await this.prisma.service.findUnique({
-        where: { id: parsedId },
+      const servicePause = await this.prisma.service.findFirst({
+        where: {
+          id: parsedId,
+          isPause: false,
+        },
       });
-
-      if (!existingService) {
-        throw new Error(`Service with ID ${id} not found.`);
-      }
 
       // Find the first pending queue for the service
       const firstPendingQueue = await this.prisma.queue.findFirst({
@@ -101,7 +128,7 @@ export class QueueService {
           status: 'PENDING',
         },
         orderBy: {
-          queueCount: 'asc', // Assuming queueCount determines the order of queues
+          id: 'asc', // Assuming queueCount determines the order of queues
         },
       });
 
@@ -109,41 +136,28 @@ export class QueueService {
         throw new Error(`No pending queues found for service with ID ${id}.`);
       }
 
-      // Find the currently ongoing queue for the service
-      const ongoingQueue = await this.prisma.queue.findFirst({
-        where: {
-          serviceID: parsedId,
-          status: 'ONGOING',
-        },
-        orderBy: {
-          queueCount: 'asc', // Assuming queueCount determines the order of queues
-        },
-      });
-
-      // Update the status of the first pending queue to "ONGOING"
-      const updatedFirstPendingQueue = await this.prisma.queue.update({
-        where: { id: firstPendingQueue.id },
-        data: { status: 'ONGOING' },
-      });
-
-      // If there's an ongoing queue, update its status to "COMPLETED"
-      if (ongoingQueue) {
-        await this.prisma.queue.update({
-          where: { id: ongoingQueue.id },
-          data: { status: 'COMPLETED' },
+      if (servicePause != null) {
+        // Update the status of the first pending queue to "ONGOING"
+        const updatedFirstPendingQueue = await this.prisma.queue.update({
+          where: { id: firstPendingQueue.id },
+          data: { status: 'ONGOING' },
         });
+
+        // Update the currentQueueNumber of the service to the queueCount of the updated pending queue
+        const updatedService = await this.prisma.service.update({
+          where: { id: parsedId },
+          data: { currentQueueNumber: firstPendingQueue.id },
+        });
+
+        return {
+          success: true,
+          data: { updatedService, updatedFirstPendingQueue },
+        };
+      } else {
+        return {
+          success: false,
+        };
       }
-
-      // Update the currentQueueNumber of the service to the queueCount of the updated pending queue
-      const updatedService = await this.prisma.service.update({
-        where: { id: parsedId },
-        data: { currentQueueNumber: firstPendingQueue.queueCount },
-      });
-
-      return {
-        success: true,
-        data: { updatedService, updatedFirstPendingQueue },
-      };
     } catch (error) {
       return { success: false, error: error.message };
     }
@@ -189,28 +203,35 @@ export class QueueService {
     });
   }
 
-  async getServiceWithPersonnelAndSchedules(serviceId: number) {
+  async getQueuewithCurrentNumber(currentQueue: number) {
     try {
-      const service = await this.prisma.service.findUnique({
-        where: { id: serviceId },
-        include: {
-          personnel: {
-            include: {
-              workSchedule: true,
-            },
-          },
-        },
+      const queue = await this.prisma.queue.findUnique({
+        where: { id: currentQueue },
       });
 
-      if (!service) {
-        throw new Error('Service not found');
+      if (!queue) {
+        throw new Error('Queue not found');
       }
 
-      return service;
+      return queue;
     } catch (error) {
-      throw new Error(
-        `Unable to fetch service with personnel and schedules: ${error.message}`,
-      );
+      console.log(`Unable to fetch queue with current queue: ${error.message}`);
+    }
+  }
+
+  async getQueueswithService() {
+    try {
+      const queue = await this.prisma.queue.findMany({
+        where: { status: { in: ['ONGOING'] } },
+      });
+
+      if (!queue) {
+        throw new Error('Queue not found');
+      }
+
+      return queue;
+    } catch (error) {
+      console.log(`Unable to fetch queue with current queue: ${error.message}`);
     }
   }
 

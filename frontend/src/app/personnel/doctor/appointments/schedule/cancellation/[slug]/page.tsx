@@ -65,7 +65,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     endTime: endDateTimeString,
     details: "",
     reasonforCancellation: "",
-    status: "CANCELLEDBYDOCTOR",
+    status: "DOCTORNOTAVAILABLE",
   });
   //console.log(startTimeDate);
   console.log(endDateTimeString);
@@ -144,7 +144,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             htmlFor="reasonforCancellation"
             className="block text-gray-700 text-sm font-bold mb-2"
           >
-            Reason for Cancellation
+            Reason for Removal:
           </label>
           <input
             id="reasonforCancellation"
@@ -167,7 +167,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
             type="submit"
           >
-            Cancel Schedule
+            Remove Schedule
           </button>
         </div>
       </form>

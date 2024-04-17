@@ -275,7 +275,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   onClick={handleSetAppointment}
                   disabled={!selectedDoctor}
                 >
-                  Cancel Appointment
+                  Remove Schedule
                 </button>
               </div>
             </div>

@@ -9,6 +9,79 @@ import { ServiceDto } from './services.dto';
 export class ServicesService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async processIsNotPause(id: string) {
+    try {
+      const parsedId = parseInt(id, 10);
+
+      // Find the current service
+      const existingService = await this.prisma.service.findUnique({
+        where: { id: parsedId },
+      });
+
+      if (!existingService) {
+        throw new Error(`Service with ID ${id} not found.`);
+      }
+
+      // pause queue if not
+      const isPause = await this.prisma.service.findFirst({
+        where: {
+          id: parsedId,
+          isPause: false,
+        },
+      });
+
+      if (!isPause) {
+        await this.prisma.service.update({
+          where: { id: parsedId },
+          data: { isPause: false },
+        });
+      }
+      return {
+        success: true,
+        data: { isPause },
+      };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  }
+
+  async processIsPause(id: string) {
+    try {
+      const parsedId = parseInt(id, 10);
+
+      // Find the current service
+      const existingService = await this.prisma.service.findUnique({
+        where: { id: parsedId },
+      });
+
+      if (!existingService) {
+        throw new Error(`Service with ID ${id} not found.`);
+      }
+
+      // pause queue if not
+      const isPause = await this.prisma.service.findFirst({
+        where: {
+          id: parsedId,
+          isPause: false,
+        },
+      });
+
+      if (isPause) {
+        await this.prisma.service.update({
+          where: { id: parsedId },
+          data: { isPause: true },
+        });
+      }
+
+      return {
+        success: true,
+        data: { isPause },
+      };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  }
+
   async updateService(id: number, updatedData: any): Promise<any> {
     try {
       // Retrieve the service record by ID
@@ -88,8 +161,8 @@ export class ServicesService {
         serviceName: serviceName,
         description: description,
         status: status,
-        isStop: true,
-        isPause: true,
+        isStop: false,
+        isPause: false,
         currentQueueNumber: 1,
       },
     });

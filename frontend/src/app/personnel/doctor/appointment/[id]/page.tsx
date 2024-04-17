@@ -1,4 +1,5 @@
 "use client";
+import DialogDemo from "@/components/cancelAppointment/page";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -75,6 +76,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const handleNoteClick = (appointment: Appointment) => {
     router.push(`/personnel/doctor/appointment/note/${appointment.id}`);
   };
+
   return (
     <div className="flex flex-col h-screen items-center">
       {/* Appointment details section */}
@@ -84,17 +86,22 @@ const Page = ({ params }: { params: { id: string } }) => {
         </h1>
 
         {appointment && (
-          <div className=" bg-gray-100 p-4 rounded-lg flex justify-center">
-            <div className="flex flex-col items-center mr-2">
-              <p className="text-md text-black font-bold">
-                {formatDate(appointment.startTime)}
-              </p>
+          <div className="flex flex-col items-center">
+            <div className=" bg-gray-100 p-4 rounded-lg flex justify-center">
+              <div className="flex flex-col items-center mr-2">
+                <p className="text-md text-black font-bold">
+                  {formatDate(appointment.startTime)}
+                </p>
+              </div>
+              <div className="flex flex-col items-center">
+                <p className="text-md text-black font-bold">
+                  {formatTime(appointment.startTime)} -{" "}
+                  {formatTime(appointment.endTime)}
+                </p>
+              </div>
             </div>
-            <div className="flex flex-col items-center">
-              <p className="text-md text-black font-bold">
-                {formatTime(appointment.startTime)} -{" "}
-                {formatTime(appointment.endTime)}
-              </p>
+            <div className="flex mt-5 ">
+              <DialogDemo appointmentId={appointment.id} />
             </div>
           </div>
         )}
