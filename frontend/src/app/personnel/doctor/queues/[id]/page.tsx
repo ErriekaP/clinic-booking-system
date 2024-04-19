@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 const Page = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
   const { id } = params;
-  const [appointments, setAppointments] = useState<any[]>([]);
+  const [queues, setQueues] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
@@ -14,13 +14,13 @@ const Page = ({ params }: { params: { id: string } }) => {
     const fetchAppointments = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/personnel/appointments/${id}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/queue/ongoing/personnel/${id}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch appointments");
         }
         const data = await response.json();
-        setAppointments(data);
+        setQueues(data);
       } catch (error) {
         console.error("Error fetching appointments:", error);
       }
@@ -29,10 +29,12 @@ const Page = ({ params }: { params: { id: string } }) => {
     fetchAppointments();
   }, []);
 
-  const handleClick = (appointment: any) => {
+  console.log(queues);
+
+  const handleClick = (queue: any) => {
     // Handle click action (if needed)
-    console.log("Clicked appointment:", appointment);
-    router.push(`/personnel/doctor/appointment/${appointment.id}`);
+    console.log("Clicked queue:", queue);
+    router.push(`/personnel/doctor/queues/afterqueues/${queue.id}`);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,8 +42,8 @@ const Page = ({ params }: { params: { id: string } }) => {
     // Implement search functionality (if needed)
   };
 
-  const filteredAppointments = appointments.filter((appointment) =>
-    appointment.status.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredQueues = queues.filter((queue) =>
+    queue.status.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const formatTime = (timeString: string) => {
@@ -86,77 +88,47 @@ const Page = ({ params }: { params: { id: string } }) => {
                     Appointment ID
                   </th>
 
-                  {filteredAppointments.some(
-                    (appointment) => appointment.patient
-                  ) && (
-                    <>
-                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                        Patient ID
-                      </th>
-                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                        Patient Name
-                      </th>
-                    </>
-                  )}
-
+                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                    Patient ID
+                  </th>
+                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                    Patient Name
+                  </th>
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
                     Service
                   </th>
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                    Date
-                  </th>
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                    Time
-                  </th>
+
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
                     Status
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {filteredAppointments.map((appointment) => (
+                {filteredQueues.map((queue) => (
                   <tr
-                    key={appointment.id}
-                    onClick={() => handleClick(appointment)}
+                    key={queue.id}
+                    onClick={() => handleClick(queue)}
                     className="hover:bg-gray-50 cursor-pointer"
                   >
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      {appointment.id}
+                      {queue.id}
                     </td>
 
-                    {appointment.patient ? (
-                      <>
-                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                          {appointment.patient.id}
-                        </td>
-                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                          {`${appointment.patient.firstName} ${appointment.patient.lastName}`}
-                        </td>
-                      </>
-                    ) : (
-                      <>
-                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                          {/* Empty cell when patient is null */}
-                        </td>
-                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                          {/* Empty cell when patient is null */}
-                        </td>
-                      </>
-                    )}
+                    <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                      {queue.patientID}
+                    </td>
 
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      {appointment.service.serviceName}
+                      {" "}
+                      {queue.personnel}
                     </td>
+
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      {formatDate(appointment.startTime)}
+                      {queue.service}
                     </td>
+
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      {`${formatTime(appointment.startTime)} - ${formatTime(
-                        appointment.endTime
-                      )}`}
-                    </td>
-                    <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      {appointment.status}
+                      {queue.status}
                     </td>
                   </tr>
                 ))}

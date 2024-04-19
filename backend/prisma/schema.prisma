@@ -212,7 +212,7 @@ updatedAt DateTime @updatedAt
 model Appointments{
 id Int @id @default(autoincrement())
 patientID Int?
-personnelID Int 
+personnelID Int?
 serviceID Int 
 startTime DateTime
 endTime DateTime
@@ -221,7 +221,7 @@ status AppointmentStatus
 reasonforCancellation String
 afterAppointmentID AfterAppointment?
 patient Patient? @relation(fields: [patientID], references: [id])
-personnel ClinicPersonnel @relation(fields: [personnelID], references: [id])
+personnel ClinicPersonnel? @relation(fields: [personnelID], references: [id])
 service Service @relation(fields: [serviceID], references: [id])
 createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt
@@ -235,15 +235,27 @@ medications Medicine[]
 appointment Appointments @relation(fields: [appointmentID], references: [id])
 }
 
+model AfterQueue{
+id Int @id @default(autoincrement())
+queueID Int @unique
+diagnosis String
+medications Medicine[]
+queue Queue @relation(fields: [queueID], references: [id])
+}
+
+
 model Medicine{
 id Int @id @default(autoincrement())
-afterAppointmentID Int 
+afterAppointmentID Int? 
+afterQueueID Int? 
 medicineName String
 medicineStrength String
 medicineQuantity String
 medicineFrequency String
 remarks String
 afterAppointment AfterAppointment? @relation(fields: [afterAppointmentID], references: [id])
+afterQueue AfterQueue? @relation(fields: [afterQueueID], references: [id])
+
 }
 
 model Queue{
@@ -253,6 +265,7 @@ queueID String
 serviceID Int
 queueCount Int
 status QueueStatus
+afterQueueID AfterQueue?
 patient Patient @relation(fields: [patientID], references: [id])
 createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt

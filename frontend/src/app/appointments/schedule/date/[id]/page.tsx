@@ -98,6 +98,8 @@ const Page = ({ params }: { params: { id: string } }) => {
     fetchScheduleData();
   }, [selectedServiceId, selectedDate]);
 
+  //get user
+
   useEffect(() => {
     const fetchPatientId = async () => {
       try {
@@ -116,6 +118,8 @@ const Page = ({ params }: { params: { id: string } }) => {
     fetchPatientId();
   }, []);
   console.log(userPersonnel);
+
+  //get patient detail from supabaseID
 
   const getPatientIdFromSupabaseId = async (supabaseId: string) => {
     try {
@@ -136,6 +140,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     }
   };
 
+  //get Services
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -154,6 +159,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     fetchServices();
   }, []);
 
+  //get available personnel
   useEffect(() => {
     const fetchAvailablePersonnel = async () => {
       if (clickedInterval) {
@@ -180,18 +186,18 @@ const Page = ({ params }: { params: { id: string } }) => {
   console.log(isoDateString);
 
   const handleSetAppointment = () => {
-    if (selectedDate && selectedDoctor && clickedInterval) {
-      const { id: doctorId } = selectedDoctor;
+    if (selectedDate && clickedInterval) {
+      // const { id: doctorId } = selectedDoctor;
       const { startTime, endTime } = clickedInterval;
 
       let url: string;
 
       if (userId === null) {
         // For unauthenticated user
-        url = `/personnel/doctor/appointments/schedule/confirmation/date=${isoDateString}&startTime=${startTime}&endTime=${endTime}&doctorId=${doctorId}&serviceId=${params.id}`;
+        url = `/personnel/doctor/appointments/schedule/confirmation/date=${isoDateString}&startTime=${startTime}&endTime=${endTime}&serviceId=${params.id}`;
       } else {
         // For authenticated user
-        url = `/appointments/schedule/confirmation/date=${isoDateString}&startTime=${startTime}&endTime=${endTime}&doctorId=${doctorId}&serviceId=${params.id}&patientId=${userId}`;
+        url = `/appointments/schedule/confirmation/date=${isoDateString}&startTime=${startTime}&endTime=${endTime}&serviceId=${params.id}&patientId=${userId}`;
       }
 
       router.push(url); // Redirect to the constructed URL
@@ -275,23 +281,41 @@ const Page = ({ params }: { params: { id: string } }) => {
                       {intervals.map((interval, index) => (
                         <div
                           key={index}
-                          className="bg-white rounded-lg shadow-md p-4 cursor-pointer text-center"
+                          className={`bg-white rounded-lg shadow-md p-4 cursor-pointer text-center ${
+                            clickedInterval?.startTime === interval.startTime &&
+                            clickedInterval?.endTime === interval.endTime
+                              ? "bg-slate-900 text-white"
+                              : "hover:bg-slate-200 hover:border-2 hover:border-slate-900"
+                          }`}
                           onClick={() =>
                             handleIntervalClick(interval, clickedDoctors)
                           }
                         >
                           <p>
-                            {" "}
-                            {interval.startTime} - {interval.endTime}{" "}
+                            {interval.startTime} - {interval.endTime}
                           </p>
                         </div>
                       ))}
+                    </div>
+
+                    <div>
+                      <button
+                        className={`my-2 px-4 py-2 text-white rounded-md cursor-pointer ${
+                          !clickedInterval
+                            ? "bg-gray-400"
+                            : "bg-blue-500 hover:bg-blue-600"
+                        }`}
+                        onClick={handleSetAppointment}
+                        disabled={!clickedInterval}
+                      >
+                        Set Appointment
+                      </button>
                     </div>
                   </div>
                 )
             )}
           </div>
-          {clickedInterval && clickedDoctors && (
+          {/* {clickedInterval && clickedDoctors && (
             <div className="w-1/4 px-4">
               <h3 className="text-lg font-semibold text-white">
                 Doctors Available:
@@ -326,7 +350,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                 </button>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       )}
     </div>

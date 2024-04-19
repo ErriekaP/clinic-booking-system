@@ -18,7 +18,29 @@ interface Queue {
 
 const StudentPage = ({ params }: { params: { id: string } }) => {
   const [patientData, setPatientData] = useState<any>(null);
+  const [queueOngoingData, setQueueOngoingData] = useState<Queue[]>([]);
   const [queueData, setQueueData] = useState<Queue[]>([]);
+
+  useEffect(() => {
+    const getQueueData = async (id: string) => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/queue/ongoing/patient/${id}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch queue data");
+        }
+        const data = await response.json();
+        setQueueData(data);
+      } catch (error) {
+        console.error("Error fetching queue data:", error);
+      }
+    };
+
+    getQueueData(params.id);
+  }, [params.id]);
+
+  console.log("yes", queueData);
 
   useEffect(() => {
     const getQueueData = async () => {
@@ -30,7 +52,7 @@ const StudentPage = ({ params }: { params: { id: string } }) => {
           throw new Error("Failed to fetch queue data");
         }
         const data = await response.json();
-        setQueueData(data);
+        setQueueOngoingData(data);
       } catch (error) {
         console.error("Error fetching queue data:", error);
       }
@@ -61,8 +83,6 @@ const StudentPage = ({ params }: { params: { id: string } }) => {
   if (!patientData) {
     return null;
   }
-
-  console.log("queue", queueData);
 
   return (
     <div>
@@ -148,59 +168,25 @@ const StudentPage = ({ params }: { params: { id: string } }) => {
 
           {/* Display Queue Number */}
 
+          <div className="flex flex-col items-center justify-center text-white">
+            <div className="">
+              <p className="text-lg font-bold">Your Queue Number:</p>
+              <div className="flex flex-row justify-center">
+                {queueData.map((queue) => (
+                  <h1 className="text-5xl font-bold ml-2">{queue.queueID}</h1>
+                ))}
+              </div>
+            </div>
+          </div>
+
           <div className="flex items-center justify-center mt-20 text-white">
             <div className=" text-center ">
               <p className="text-lg font-bold">Current Queue Numbers:</p>
-              {queueData.map((queue) => (
+              {queueOngoingData.map((queue) => (
                 <h1 className="text-9xl font-bold ml-2">{queue.queueID}</h1>
               ))}
             </div>
           </div>
-
-          {/* <Flex className="CardContainer">
-            <Card className="Card">
-              <a href="">
-                <Inset clip="padding-box" side="top" pb="current">
-                  <img
-                    src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-                    alt="Bold typography"
-                    className="Image"
-                  />
-                </Inset>
-                <Text as="p" align="center" className="Text">
-                  <Strong>Services</Strong>
-                </Text>
-              </a>
-            </Card>
-            <Card className="Card">
-              <a href={`/patient/student/appointments/${patientData.id}`}>
-                <Inset clip="padding-box" side="top" pb="current">
-                  <img
-                    src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-                    alt="Bold typography"
-                    className="Image"
-                  />
-                </Inset>
-                <Text as="p" align="center" className="Text">
-                  <Strong>Appointments</Strong>
-                </Text>
-              </a>
-            </Card>
-            <Card className="Card">
-              <a href="/">
-                <Inset clip="padding-box" side="top" pb="current">
-                  <img
-                    src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-                    alt="Bold typography"
-                    className="Image"
-                  />
-                </Inset>
-                <Text as="p" align="center" className="Text">
-                  Queue
-                </Text>
-              </a>
-            </Card>
-          </Flex> */}
         </div>
       </div>
     </div>

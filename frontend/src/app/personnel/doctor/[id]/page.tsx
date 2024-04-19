@@ -108,7 +108,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             </Table.Body>
           </Table.Root>
         </Flex>
-        <Flex className="CardContainer">
+        {/* <Flex className="CardContainer">
           <Card className="Card">
             <a href="">
               <Inset clip="padding-box" side="top" pb="current">
@@ -151,7 +151,7 @@ const Page = ({ params }: { params: { id: string } }) => {
               </Text>
             </a>
           </Card>
-        </Flex>
+        </Flex> */}
       </Container>
     </main>
   );

@@ -27,11 +27,12 @@ export class AppointmentController {
   }
 
   @Post('update/:id')
-  async updateAppointment(
+  async updateServicesInfo(
     @Param('id') id: string,
-    @Body() appointmentData: any,
+    @Body() serviceData: any,
   ): Promise<any> {
-    return this.appointmentService.updateAppointment(id, appointmentData);
+    const serviceId = parseInt(id, 10);
+    return this.appointmentService.updateAppointment(serviceId, serviceData);
   }
 
   @Get()

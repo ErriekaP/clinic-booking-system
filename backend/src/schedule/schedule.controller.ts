@@ -21,7 +21,6 @@ export class WorkScheduleController {
   async createWorkSchedule(@Body() data: WorkScheduleDto): Promise<void> {
     await this.workScheduleService.createWorkSchedule(data);
   }
-
   @Get()
   async findAll() {
     try {

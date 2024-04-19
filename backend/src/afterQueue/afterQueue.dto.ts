@@ -1,6 +1,6 @@
 // DTOs
-export class CreateAfterAppointmentDto {
-  appointmentID: number;
+export class CreateAfterQueueDto {
+  queueID: number;
   diagnosis: string;
   medications: CreateMedicineDto[];
 }
@@ -11,5 +11,5 @@ export class CreateMedicineDto {
   medicineQuantity: string;
   medicineFrequency: string;
   remarks: string;
-  afterQueueID: number;
+  afterAppointmentID: null;
 }

@@ -61,7 +61,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const formData = {
     patientID: parseInt(patientId, 10),
-    personnelID: parseInt(doctorId, 10),
+    personnelID: null,
     serviceID: parseInt(serviceId, 10),
     startTime: startDateTimeString,
     endTime: endDateTimeString,
@@ -120,7 +120,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             <p>{endTime}</p>
           </div>
 
-          <div>
+          {/* <div>
             {personnel ? (
               <div>
                 <p className="font-bold">Doctor:</p>
@@ -131,7 +131,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             ) : (
               <p>Loading personnel data...</p>
             )}
-          </div>
+          </div> */}
         </div>
         <div className="mt-8 flex gap-4">
           <button

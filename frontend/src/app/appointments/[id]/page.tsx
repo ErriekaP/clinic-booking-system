@@ -147,9 +147,11 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm  text-justify	">
                       {appointment.service.description}
                     </td>
-                    <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      {appointment.personnel.firstName}{" "}
-                      {appointment.personnel.lastName}
+                    <td className="py-4 px-6">
+                      {appointment.personnel &&
+                      appointment.personnel.firstName !== null
+                        ? `${appointment.personnel.firstName} ${appointment.personnel.lastName}`
+                        : "null"}
                     </td>
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
                       {appointment.status}

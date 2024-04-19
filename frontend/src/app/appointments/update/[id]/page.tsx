@@ -5,14 +5,42 @@
 import { Card, Container, Flex, Heading, Select, Text } from "@radix-ui/themes";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+
+interface Personnel {
+  id: string;
+  firstName: string;
+  lastName: string;
+}
+
+interface FormData {
+  id: string;
+  startTime: string;
+  endTime: string;
+  description: string;
+  status: string;
+  reasonforCancellation: string;
+  service: {
+    id: string;
+    serviceName: string;
+    description: string;
+  };
+  personnelID: number | null; // Change personnel to string | null
+  patient: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    contactNumber: string;
+  };
+}
 
 export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter();
 
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [personnelList, setPersonnelList] = useState<Personnel[]>([]);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     id: "",
     startTime: "",
     endTime: "",
@@ -24,12 +52,7 @@ export default function Page({ params }: { params: { id: string } }) {
       serviceName: "",
       description: "",
     },
-    personnel: {
-      id: "",
-      firstName: "",
-      lastName: "",
-      phoneNumber: "",
-    },
+    personnelID: null,
     patient: {
       id: "",
       firstName: "",
@@ -64,12 +87,14 @@ export default function Page({ params }: { params: { id: string } }) {
             serviceName: data.service?.serviceName,
             description: data.service?.description,
           },
-          personnel: {
-            id: data.personnel?.id,
-            firstName: data.personnel?.firstName,
-            lastName: data.personnel?.lastName,
-            phoneNumber: data.personnel?.phoneNumber,
-          },
+          personnelID: data.personnel?.id ?? null, // Set personnel as ID or null
+
+          // personnel: {
+          //   id: data.personnel?.id,
+          //   firstName: data.personnel?.firstName,
+          //   lastName: data.personnel?.lastName,
+          //   phoneNumber: data.personnel?.phoneNumber,
+          // },
 
           patient: {
             id: data.patient?.id,
@@ -85,9 +110,26 @@ export default function Page({ params }: { params: { id: string } }) {
     fetchData();
   }, []);
 
-  console.log(formData);
-  console.log("req", formData.status);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (formData.service && formData.service.id) {
+          const personnelResponse = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/services/${formData.service.id}/personnel`
+          );
+          const data = await personnelResponse.json();
+          const personnelData = data.personnel;
+          setPersonnelList(personnelData);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
+    fetchData();
+  }, [formData.service]);
+
+  //console.log(personnel);
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
@@ -116,22 +158,32 @@ export default function Page({ params }: { params: { id: string } }) {
     }
   };
 
-  const handleInputChange = (e: { target: { name: any; value: any } }) => {
-    const { name, value } = e.target;
-
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  console.log(personnelList);
 
   const handleSelectChange = (newValue: string | null, fieldName: "status") => {
     setSelectedItem(newValue);
     setFormData((prevState) => ({
       ...prevState,
       [fieldName]: newValue || "",
+      // personnel: personnelList.id ?? null,
     }));
   };
+
+  const handlePersonnelChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const selectedPersonnelId = event.target.value;
+
+    // Parse the selectedPersonnelId to a number
+    const personnelId =
+      selectedPersonnelId !== "null" ? parseInt(selectedPersonnelId, 10) : null;
+
+    // Update the formData state with the parsed personnel ID
+    setFormData({
+      ...formData,
+      personnelID: personnelId,
+    });
+  };
+
+  console.log("pers", formData);
 
   const formatTime = (timeString: string) => {
     const hours = parseInt(timeString.slice(11, 13), 10);
@@ -184,23 +236,33 @@ export default function Page({ params }: { params: { id: string } }) {
                 {dateSchedule} {formattedstartISO} - {formattedendISO}
               </p>
             </div>
-            <div className=" columns-2 container mx-auto">
-              <div className="mb-4">
-                <p className="text-sm">Doctor:</p>
-                <p className="font-bold">
-                  {formData.personnel.firstName} {formData.personnel.lastName}
-                </p>
-              </div>
-
-              <div className="mb-4">
-                <p className="text-sm">Contact Number:</p>
-                <p className="font-bold">{formData.personnel.phoneNumber}</p>
-              </div>
-            </div>
 
             <div className="mb-4">
               <p className="text-sm">Service:</p>
               <p className="font-bold">{formData.service.serviceName}</p>
+            </div>
+
+            <div className="container mx-auto  font-sans text-sm">
+              <div className="mb-4">
+                <p className="text-sm">Doctor:</p>
+
+                {personnelList.length > 0 ? (
+                  <select
+                    value={formData.personnelID ?? "null"}
+                    onChange={handlePersonnelChange}
+                    className=" font-bold border-2 rounded p-1"
+                  >
+                    <option value="null">Select Personnel</option>
+                    {personnelList.map((personnel) => (
+                      <option key={personnel.id} value={personnel.id}>
+                        {`${personnel.firstName} ${personnel.lastName}`}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <p>Loading personnel data...</p> // Placeholder for loading state
+                )}
+              </div>
             </div>
 
             {formData.status !== "PENDING" &&

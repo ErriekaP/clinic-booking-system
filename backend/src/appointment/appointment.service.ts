@@ -89,30 +89,36 @@ export class AppointmentService {
     }
   }
 
-  async updateAppointment(id: string, updatedData: any): Promise<any> {
-    const parsedId = parseInt(id, 10);
+  async updateAppointment(id: number, updatedData: any): Promise<any> {
     try {
+      // Retrieve the service record by ID
       const existingAppointment = await this.prisma.appointments.findUnique({
         where: {
-          id: parsedId,
+          id: id,
         },
       });
 
       if (!existingAppointment) {
-        throw new Error(`Appointment with ID ${id} not found.`);
+        throw new Error(`Service with ID ${id} not found.`);
       }
-      const updatedAppointment = await this.prisma.appointments.update({
+
+      // Update the servicr record with the provided data
+      const updatedService = await this.prisma.appointments.update({
         where: {
-          id: parsedId,
+          id: id,
         },
         data: {
+          // Update fields that are provided in updatedData
+          personnelID:
+            updatedData.personnelID ?? existingAppointment.personnelID,
           reasonforCancellation:
             updatedData.reasonforCancellation ??
             existingAppointment.reasonforCancellation,
           status: updatedData.status ?? existingAppointment.status,
         },
       });
-      return { success: true, data: updatedAppointment };
+
+      return { success: true, data: updatedService };
     } catch (error) {
       return { success: false, error: error.message };
     }
@@ -162,7 +168,7 @@ export class AppointmentService {
     status: AppointmentStatus;
     reasonforCancellation: string;
     patientID?: number | null;
-    personnelID: number;
+    personnelID?: number | null;
     serviceID: number;
   }): Promise<any> {
     return this.prisma.appointments.create({

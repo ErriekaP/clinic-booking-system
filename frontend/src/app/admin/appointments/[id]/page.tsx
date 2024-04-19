@@ -153,7 +153,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <tr
                       key={appointment.id}
                       onClick={() => handleClick(appointment)}
-                      className="hover:bg-gray-50 cursor-pointer"
+                      className={`hover:cursor-pointer
+                      }`}
                     >
                       <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
                         {appointment.id}
@@ -169,9 +170,11 @@ const Page = ({ params }: { params: { id: string } }) => {
                         {appointment.service.serviceName}
                       </td>
 
-                      <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                        {appointment.personnel.firstName}{" "}
-                        {appointment.personnel.lastName}
+                      <td className="py-4 px-6">
+                        {appointment.personnel &&
+                        appointment.personnel.firstName !== null
+                          ? `${appointment.personnel.firstName} ${appointment.personnel.lastName}`
+                          : "null"}
                       </td>
                       {appointment &&
                         (appointment.status === "CANCELLEDBYDOCTOR" ||

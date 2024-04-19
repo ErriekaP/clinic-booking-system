@@ -60,7 +60,7 @@ const NavBar = () => {
     getUserInfo();
   }, []);
 
-  console.log(user);
+  console.log("user", user);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -82,15 +82,63 @@ const NavBar = () => {
               </Avatar.Fallback>
             </Avatar.Root>
           </NavigationMenu.Item>
-          <NavigationMenu.Item className="NavigationMenuItem">
-            <NavigationMenu.Link
-              className="NavigationMenuLink"
-              //href="/patients"
-              href={`/patient/student/appointments/${user?.id}`}
-            >
-              Appointments
-            </NavigationMenu.Link>
-          </NavigationMenu.Item>
+
+          {user && user.patientType === "STUDENT" && (
+            <NavigationMenu.Item className="NavigationMenuItem">
+              <NavigationMenu.Trigger className="NavigationMenuTrigger">
+                Appointments <CaretDownIcon className="CaretDown" aria-hidden />
+              </NavigationMenu.Trigger>
+              <NavigationMenu.Content className="NavigationMenuContent">
+                <ul className="List two">
+                  <a
+                    href={`/patient/student/appointments/${user?.id}`}
+                    className="ListItemLink"
+                  >
+                    <p className="ListItemHeading">Appointments</p>
+                  </a>
+                  <a href="/queue/services" className="ListItemLink">
+                    <p className="ListItemHeading">After Appointments</p>
+                  </a>
+                </ul>
+              </NavigationMenu.Content>
+            </NavigationMenu.Item>
+          )}
+
+          {user && user.patientType === "EMPLOYEE" && (
+            <NavigationMenu.Item className="NavigationMenuItem">
+              <NavigationMenu.Link
+                className="NavigationMenuLink"
+                //href="/patients"
+                href={`/patient/employee/appointments/${user?.id}`}
+              >
+                Appointments
+              </NavigationMenu.Link>
+            </NavigationMenu.Item>
+          )}
+
+          {user && user.role === "DOCTOR" && (
+            <NavigationMenu.Item className="NavigationMenuItem">
+              <NavigationMenu.Trigger className="NavigationMenuTrigger">
+                Appointments <CaretDownIcon className="CaretDown" aria-hidden />
+              </NavigationMenu.Trigger>
+              <NavigationMenu.Content className="NavigationMenuContent">
+                <ul className="List two">
+                  <a
+                    href={`/personnel/doctor/appointments/${user?.id}`}
+                    className="ListItemLink"
+                  >
+                    <p className="ListItemHeading">Appointments</p>
+                  </a>
+                  <a
+                    href={`/personnel/doctor/remove/${user?.id}`}
+                    className="ListItemLink"
+                  >
+                    <p className="ListItemHeading">Remove Schedule</p>
+                  </a>
+                </ul>
+              </NavigationMenu.Content>
+            </NavigationMenu.Item>
+          )}
 
           <NavigationMenu.Item className="NavigationMenuItem">
             <NavigationMenu.Link
@@ -100,22 +148,38 @@ const NavBar = () => {
               Services
             </NavigationMenu.Link>
           </NavigationMenu.Item>
+          {user && user.patientType === "STUDENT" && (
+            <NavigationMenu.Item className="NavigationMenuItem">
+              <NavigationMenu.Trigger className="NavigationMenuTrigger">
+                Queues <CaretDownIcon className="CaretDown" aria-hidden />
+              </NavigationMenu.Trigger>
+              <NavigationMenu.Content className="NavigationMenuContent">
+                <ul className="List two">
+                  <a href="/queue/services" className="ListItemLink">
+                    <p className="ListItemHeading">Add a Queue</p>
+                  </a>
+                  <a href={`/queue/${user?.id}`} className="ListItemLink">
+                    <p className="ListItemHeading">Queues</p>
+                  </a>
 
-          <NavigationMenu.Item className="NavigationMenuItem">
-            <NavigationMenu.Trigger className="NavigationMenuTrigger">
-              Queues <CaretDownIcon className="CaretDown" aria-hidden />
-            </NavigationMenu.Trigger>
-            <NavigationMenu.Content className="NavigationMenuContent">
-              <ul className="List two">
-                <a href={`/queue/${user?.id}`} className="ListItemLink">
-                  <p className="ListItemHeading">Queues</p>
-                </a>
-                <a href="/queue/services" className="ListItemLink">
-                  <p className="ListItemHeading">Add a Queue</p>
-                </a>
-              </ul>
-            </NavigationMenu.Content>
-          </NavigationMenu.Item>
+                  <a href="/queue/services" className="ListItemLink">
+                    <p className="ListItemHeading">After Queues</p>
+                  </a>
+                </ul>
+              </NavigationMenu.Content>
+            </NavigationMenu.Item>
+          )}
+
+          {user && user.role === "DOCTOR" && (
+            <NavigationMenu.Item className="NavigationMenuItem">
+              <NavigationMenu.Link
+                className="NavigationMenuLink"
+                href={`/personnel/doctor/queues/${user.id}`}
+              >
+                Queues
+              </NavigationMenu.Link>
+            </NavigationMenu.Item>
+          )}
 
           {/* <NavigationMenu.Item className="NavigationMenuItem">
             <NavigationMenu.Link

@@ -49,30 +49,35 @@ export default function Page({ params }: { params: { id: string } }) {
     fetchServiceData();
   }, []);
 
-  const fetchQueueData = useCallback(async () => {
-    if (service?.id) {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/queue/ongoing`
-        );
+  const fetchQueueData = useCallback(
+    async (id: number) => {
+      if (service?.id) {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/queue/ongoing/${id}`
+          );
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch queue");
+          if (!response.ok) {
+            throw new Error("Failed to fetch queue");
+          }
+
+          const data = await response.json();
+
+          setQueues(data);
+          console.log("data", data);
+        } catch (error) {
+          console.error("Error fetching queue data:", error);
         }
-
-        const data = await response.json();
-
-        setQueues(data);
-        console.log(data);
-      } catch (error) {
-        console.error("Error fetching queue data:", error);
       }
-    }
-  }, [service?.id]);
+    },
+    [service?.id]
+  );
 
   useEffect(() => {
-    fetchQueueData();
-  }, [fetchQueueData]);
+    if (service?.id) {
+      fetchQueueData(service.id); // Pass the id directly
+    }
+  }, [fetchQueueData, service?.id]);
 
   const handlePause = async (serviceId: number) => {
     try {
@@ -128,8 +133,10 @@ export default function Page({ params }: { params: { id: string } }) {
       if (!response.ok) {
         throw new Error("Failed to next service");
       }
-      fetchQueueData();
 
+      if (service?.id) {
+        fetchQueueData(service.id); // Pass the id directly
+      }
       const responseData = await response.json();
 
       console.log(responseData);
@@ -159,7 +166,9 @@ export default function Page({ params }: { params: { id: string } }) {
         throw new Error("Failed to finish service");
       }
 
-      fetchQueueData();
+      if (service?.id) {
+        fetchQueueData(service.id); // Pass the id directly
+      }
 
       console.log("Service finish successfully");
     } catch (error) {

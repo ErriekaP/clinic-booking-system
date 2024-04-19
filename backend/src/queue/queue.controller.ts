@@ -53,10 +53,37 @@ export class QueueController {
     }
   }
 
-  @Get('ongoing')
-  async findAllOngoingQueues() {
+  @Get('ongoing/:id')
+  async findAllOngoingQueues(@Param('id') serviceId: string) {
+    const parsedId = parseInt(serviceId, 10);
+
     try {
-      const queues = await this.queueService.getAllOngoingQueues();
+      const queues = await this.queueService.getAllOngoingQueues(parsedId);
+      return queues;
+    } catch (error) {
+      throw new Error(`Unable to fetch queues: ${error.message}`);
+    }
+  }
+
+  @Get('ongoing/patient/:id')
+  async findPatientQueue(@Param('id') patientID: string) {
+    const parsedId = parseInt(patientID, 10);
+
+    try {
+      const queues = await this.queueService.getPatientQueue(parsedId);
+      return queues;
+    } catch (error) {
+      throw new Error(`Unable to fetch queues: ${error.message}`);
+    }
+  }
+
+  @Get('ongoing/personnel/:id')
+  async findAllOngoingQueuesPersonnel(@Param('id') personnelId: string) {
+    const parsedId = parseInt(personnelId, 10);
+
+    try {
+      const queues =
+        await this.queueService.getAllOngoingQueuesPersonnel(parsedId);
       return queues;
     } catch (error) {
       throw new Error(`Unable to fetch queues: ${error.message}`);

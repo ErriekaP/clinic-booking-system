@@ -149,8 +149,10 @@ export default function Page() {
                 </td>
 
                 <td className="py-4 px-6">
-                  {appointment.personnel.firstName}{" "}
-                  {appointment.personnel.lastName}
+                  {appointment.personnel &&
+                  appointment.personnel.firstName !== null
+                    ? `${appointment.personnel.firstName} ${appointment.personnel.lastName}`
+                    : "null"}
                 </td>
                 <td className="py-4 px-6">{appointment.status}</td>
               </tr>

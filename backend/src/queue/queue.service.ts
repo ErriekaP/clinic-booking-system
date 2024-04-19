@@ -68,10 +68,11 @@ export class QueueService {
     }
   }
 
-  async getAllOngoingQueues() {
+  async getAllOngoingQueues(serviceId: number) {
     try {
       const service = await this.prisma.queue.findMany({
         where: {
+          serviceID: serviceId,
           status: {
             in: ['ONGOING'],
           },
@@ -80,9 +81,73 @@ export class QueueService {
       console.log(service);
       return service;
     } catch (error) {
-      throw new Error(`Unable to fetch patients: ${error.message}`);
+      throw new Error(`Unable to fetch queue: ${error.message}`);
     }
   }
+
+  async getAllOngoingQueuesPersonnel(personnelId: number) {
+    try {
+      const personnel = await this.prisma.clinicPersonnel.findUnique({
+        where: {
+          id: personnelId,
+        },
+        include: {
+          services: true,
+        },
+      });
+
+      if (!personnel) {
+        throw new Error(`Personnel with ID ${personnelId} not found.`);
+      }
+
+      const serviceIds = personnel.services.map((service) => service.id);
+      const { firstName, lastName } = personnel;
+
+      const ongoingQueues = await this.prisma.queue.findMany({
+        where: {
+          serviceID: {
+            in: serviceIds,
+          },
+          status: 'ONGOING',
+        },
+        include: {
+          patient: true,
+        },
+      });
+
+      const ongoingQueuesWithDetails = await Promise.all(
+        ongoingQueues.map(async (queue) => {
+          const service = await this.prisma.service.findUnique({
+            where: {
+              id: queue.serviceID,
+            },
+          });
+
+          return {
+            id: queue.id,
+            queueID: queue.queueID,
+            queueCount: queue.queueCount,
+            patientID: queue.patientID,
+            status: queue.status,
+            createdAt: queue.createdAt,
+            updatedAt: queue.updatedAt,
+            personnel: `${firstName} ${lastName}`,
+            service: service ? service.serviceName : 'Service not found', //
+            patient: {
+              firstName: queue.patient.firstName,
+              lastName: queue.patient.lastName,
+            },
+          };
+        }),
+      );
+
+      console.log(ongoingQueuesWithDetails);
+      return ongoingQueuesWithDetails;
+    } catch (error) {
+      throw new Error(`Unable to fetch ongoing queues: ${error.message}`);
+    }
+  }
+
   async findPatientQueue(id: string) {
     const parsedId = parseInt(id, 10);
     return this.prisma.queue.findMany({
@@ -207,6 +272,27 @@ export class QueueService {
     try {
       const queue = await this.prisma.queue.findUnique({
         where: { id: currentQueue },
+      });
+
+      if (!queue) {
+        throw new Error('Queue not found');
+      }
+
+      return queue;
+    } catch (error) {
+      console.log(`Unable to fetch queue with current queue: ${error.message}`);
+    }
+  }
+
+  async getPatientQueue(patientID: number) {
+    try {
+      const queue = await this.prisma.queue.findMany({
+        where: {
+          patientID: patientID,
+          status: {
+            in: ['PENDING'],
+          },
+        },
       });
 
       if (!queue) {

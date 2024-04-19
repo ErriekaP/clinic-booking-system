@@ -7,32 +7,32 @@ const Page = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
   const { id } = params;
   const [appointments, setAppointments] = useState<any[]>([]);
+  const [nullAppointments, setNullAppointments] = useState<any[]>([]);
+
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
     // Fetch appointments data from an API
-    const fetchAppointments = async () => {
+    const fetchNullPatientAppointments = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/personnel/appointments/${id}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/personnel/appointments/nullPatient/${id}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch appointments");
         }
         const data = await response.json();
-        setAppointments(data);
+        setNullAppointments(data);
       } catch (error) {
         console.error("Error fetching appointments:", error);
       }
     };
 
-    fetchAppointments();
+    fetchNullPatientAppointments();
   }, []);
 
-  const handleClick = (appointment: any) => {
-    // Handle click action (if needed)
-    console.log("Clicked appointment:", appointment);
-    router.push(`/personnel/doctor/appointment/${appointment.id}`);
+  const handleClickAppointment = () => {
+    router.push(`/personnel/doctor/appointments/schedule`);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +40,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     // Implement search functionality (if needed)
   };
 
-  const filteredAppointments = appointments.filter((appointment) =>
+  const filteredNullAppointments = nullAppointments.filter((appointment) =>
     appointment.status.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -69,15 +69,15 @@ const Page = ({ params }: { params: { id: string } }) => {
           </svg>
         </span>
         <input
-          placeholder="Search by status"
+          placeholder="Search"
           className="appearance-none rounded-md border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
           value={searchQuery}
           onChange={handleSearchChange}
         />
       </div>
       <div className="flex flex-col flex-grow w-full max-w-4xl">
-        <div className="overflow-x-auto">
-          {/* Display the main appointments table */}
+        <div className="overflow-x-auto mt-8">
+          {/* Display the cancelled appointments (no patient) table */}
           <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
             <table className="table-fixed bg-white min-w-full leading-normal">
               <thead>
@@ -85,20 +85,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
                     Appointment ID
                   </th>
-
-                  {filteredAppointments.some(
-                    (appointment) => appointment.patient
-                  ) && (
-                    <>
-                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                        Patient ID
-                      </th>
-                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                        Patient Name
-                      </th>
-                    </>
-                  )}
-
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
                     Service
                   </th>
@@ -114,55 +100,45 @@ const Page = ({ params }: { params: { id: string } }) => {
                 </tr>
               </thead>
               <tbody>
-                {filteredAppointments.map((appointment) => (
-                  <tr
-                    key={appointment.id}
-                    onClick={() => handleClick(appointment)}
-                    className="hover:bg-gray-50 cursor-pointer"
-                  >
-                    <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      {appointment.id}
-                    </td>
-
-                    {appointment.patient ? (
-                      <>
+                {filteredNullAppointments.map(
+                  (appointment) =>
+                    !appointment.patient && (
+                      <tr
+                        key={appointment.id}
+                        //onClick={() => handleClick(appointment)}
+                        className="hover:bg-gray-50 cursor-pointer"
+                      >
                         <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                          {appointment.patient.id}
+                          {appointment.id}
                         </td>
                         <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                          {`${appointment.patient.firstName} ${appointment.patient.lastName}`}
-                        </td>
-                      </>
-                    ) : (
-                      <>
-                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                          {/* Empty cell when patient is null */}
+                          {appointment.service.serviceName}
                         </td>
                         <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                          {/* Empty cell when patient is null */}
+                          {formatDate(appointment.startTime)}
                         </td>
-                      </>
-                    )}
-
-                    <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      {appointment.service.serviceName}
-                    </td>
-                    <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      {formatDate(appointment.startTime)}
-                    </td>
-                    <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      {`${formatTime(appointment.startTime)} - ${formatTime(
-                        appointment.endTime
-                      )}`}
-                    </td>
-                    <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      {appointment.status}
-                    </td>
-                  </tr>
-                ))}
+                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                          {`${formatTime(appointment.startTime)} - ${formatTime(
+                            appointment.endTime
+                          )}`}
+                        </td>
+                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                          {appointment.status}
+                        </td>
+                      </tr>
+                    )
+                )}
               </tbody>
             </table>
           </div>
+        </div>
+        <div className="flex justify-end mt-8">
+          <button
+            className="inline-flex items-center justify-center rounded-md px-4 py-2 text-base font-medium bg-blue-500 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            onClick={() => handleClickAppointment()}
+          >
+            Remove Schedule
+          </button>
         </div>
       </div>
     </div>
