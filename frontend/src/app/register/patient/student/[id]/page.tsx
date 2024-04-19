@@ -8,6 +8,7 @@ export default function Page() {
   const router = useRouter();
 
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     schoolID: "",
@@ -84,6 +85,8 @@ export default function Page() {
 
       if (response.ok) {
         console.log("Form submitted successfully");
+        setMessage("Registered successfully");
+
         const patient = await response.json();
         console.log(patient.data.id);
         console.log("patientType:", patient.data.patientType);
@@ -96,9 +99,11 @@ export default function Page() {
         }
       } else {
         console.error("Form submission failed");
+        setMessage("Invalid Email, Password or Role");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+      setMessage("Invalid Email, Password or Role");
     }
   };
 

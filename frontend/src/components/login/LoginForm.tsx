@@ -4,6 +4,7 @@ import "../../components/styles.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import LoginToast from "../loginToast/LoginToast";
 
 export default function LoginForm() {
   const supabase = createClientComponentClient();
@@ -12,17 +13,11 @@ export default function LoginForm() {
     email: "",
     password: "",
   });
-
-  const [formRegisterData, setFormRegisterData] = useState({
-    email: "",
-    password: "",
-    role: "",
-  });
-
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+
     await supabase.auth.signInWithPassword({
       email: formData.email,
       password: formData.password,
@@ -44,6 +39,7 @@ export default function LoginForm() {
 
       if (response.ok) {
         console.log("Login successfully");
+        setMessage("Login successfully");
         const user = await response.json();
         console.log(user.id);
         if (user.role === "ADMIN") {
@@ -63,9 +59,11 @@ export default function LoginForm() {
         }
       } else {
         console.error("Failed to submit form");
+        setMessage("Invalid email or password."); // Show error if login fails
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+      setMessage("Invalid email or password."); // Show error if login fails
     }
   };
 
@@ -83,7 +81,6 @@ export default function LoginForm() {
       <Tabs.Root className="TabsRoot" defaultValue="tab1">
         <form onSubmit={handleSubmit}>
           <Tabs.Content className="TabsContent" value="tab1">
-            <p className="Text">Login your account here!</p>
             <fieldset className="Fieldset">
               <label className="Label" htmlFor="email">
                 Email
@@ -116,9 +113,10 @@ export default function LoginForm() {
                 justifyContent: "flex-end",
               }}
             >
-              <button className="Button brown" type="submit">
+              {/* <button className="Button brown" type="submit">
                 Login
-              </button>
+              </button> */}
+              <LoginToast message={message} />
             </div>
           </Tabs.Content>
         </form>

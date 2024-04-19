@@ -4,6 +4,9 @@ import { fetchUserInfo } from "@/utilities/fetch/patient";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { createContext, useContext } from "react";
 import { usePathname } from "next/navigation";
+import Loading from "@/components/loading/Loading";
+import { Callout } from "@radix-ui/themes";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
 
 export const UserContext = createContext({});
 
@@ -78,6 +81,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
               `/queue/services`,
               `/queue/confirmation`,
               `/queue`,
+              `/unauthorized`,
             ],
             EMPLOYEE: [`/patient/employee/${userInfo.id}`],
           };
@@ -96,25 +100,63 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       } catch (error) {
         console.error("Error fetching user info:", error);
       } finally {
-        setLoading(false);
+        //setLoading(false);
       }
     };
 
     getUserInfo();
   }, [router, supabase]);
 
+  useEffect(() => {
+    if (loading) {
+      return;
+    }
+
+    if (!isAllowed) {
+      router.push("/unauthorized");
+    }
+  }, [loading, isAllowed, router]);
+
+  useEffect(() => {
+    // Simulate data loading or any asynchronous operation
+    const timer = setTimeout(() => {
+      setLoading(false); // Set loading to false after a delay (simulated data loading)
+    }, 3000); // Simulate loading for 3 seconds
+
+    return () => clearTimeout(timer); // Cleanup timer on component unmount
+  }, []);
+
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <p className="text-2xl text-white mb-4 font-bold">Loading...</p>
+        <Loading />;
+      </div>
+    );
   }
 
-  // Return unauthorized page if not allowed
   if (!isAllowed) {
-    router.push("/unauthorized");
-    return null;
+    return (
+      <div>
+        <div className="flex flex-row bg-zinc-800/50 border-2-zinc-800/50 p-4 rounded-md items-center">
+          <div className="text-white mr-2 ">
+            <InfoCircledIcon />
+          </div>
+          <div className="text-white ">
+            <p>You will need admin privileges to access this page.</p>
+          </div>
+        </div>
+
+        {/* <p>Hold Up</p>
+    <p>Error 401: Unauthorized</p> */}
+      </div>
+    );
   }
 
   return (
-    <UserContext.Provider value={{ user: "" }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ userType, userId }}>
+      {children}
+    </UserContext.Provider>
   );
 }
 

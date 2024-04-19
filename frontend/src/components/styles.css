@@ -68,8 +68,9 @@ input {
   flex-grow: 1;
   padding: 20px;
   background-color: #d9dcd6;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
+  /* border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px; */
+  border-radius: 6px;
   outline: none;
 }
 .TabsContent:focus {

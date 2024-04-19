@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import "../../components/styles.css";
+import RegisterToast from "../registerToast/RegisterToast";
 
 export default function RegisterForm() {
   const supabase = createClientComponentClient();
@@ -20,6 +21,7 @@ export default function RegisterForm() {
   });
 
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
   const handleRegisterSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -43,24 +45,24 @@ export default function RegisterForm() {
         password: formRegisterData.password,
       });
 
-      if (loginResponse.error) {
-        console.error("Error logging in user:", loginResponse.error.message);
-        return;
-      }
-
       if (response.ok) {
         console.log("Register successfully");
+        setMessage("Registered Successfully");
+
         const patient = await response.json();
         if (patient.data.patientType === "STUDENT") {
           router.push(`/register/patient/student/${patient.data.id}`);
         } else if (patient.data.patientType === "EMPLOYEE") {
           router.push(`/register/patient/employees/${patient.data.id}`);
         }
+        setMessage("Registered Successfully");
       } else {
         console.error("Failed to submit form");
+        //setMessage("Invalid Email, Password or Role");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+      setMessage("Invalid Email, Password or Role");
     }
   };
 
@@ -151,9 +153,10 @@ export default function RegisterForm() {
                 justifyContent: "flex-end",
               }}
             >
-              <button className="Button" type="submit">
+              {/* <button className="Button" type="submit">
                 Register
-              </button>
+              </button> */}
+              <RegisterToast message={message} />
             </div>
           </Tabs.Content>
         </form>

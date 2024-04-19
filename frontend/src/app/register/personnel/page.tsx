@@ -8,6 +8,7 @@ import MultipleSchedule from "@/components/multipleschedule/MultipleSchedule";
 export default function Page() {
   const router = useRouter();
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -101,14 +102,17 @@ export default function Page() {
       );
       if (response.ok) {
         console.log("Form submitted successfully");
+        setMessage("Registered successfully");
         const user = await response.json();
         console.log(user);
         router.back();
       } else {
-        console.error("Failed to submit form");
+        setMessage("Invalid Email, Password or Role");
+        console.error("Error submitting form:");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+      setMessage("Invalid Email, Password or Role");
     }
   };
 
