@@ -93,27 +93,26 @@ export class WorkScheduleService {
       // Generate time intervals for the given service IDs
       const intervals = await this.generateTimeIntervalsForServices(serviceIds);
 
-      const filteredIntervals = intervals.filter(async (interval) => {
-        // Filter appointments for the current interval's service ID
-        const appointmentsForService = appointments.filter(
-          (appointment) =>
-            appointment.serviceID === serviceIds[0] && // Assuming serviceIds array has only one element
-            new Date(appointment.endTime) > new Date(date), // Ensure appointment is for the specified date
-        );
+      const filteredIntervals = intervals.filter((interval) => {
+        const { startTime, endTime } = interval;
 
-        // Check if any doctor for this service is still available during the interval
-        const doctors = new Set(
-          appointmentsForService.map((appointment) => appointment.id),
-        );
+        // Check if the interval exactly matches the start and end times of any appointment
+        const isMatchingAppointment = appointments.some((appointment) => {
+          const startTimeStr = appointment.startTime
+            .toISOString()
+            .slice(11, 16);
+          const endTimeStr = appointment.endTime.toISOString().slice(11, 16);
 
-        const totalDoctorsForService =
-          await this.serviceService.countDoctorsByService(serviceIds[0]);
+          return (
+            startTimeStr === startTime &&
+            endTimeStr === endTime &&
+            appointment.serviceID === serviceIds[0] // Assuming serviceIds array has only one element
+          );
+        });
 
-        // Keep the interval if there are still available doctors for this service
-        return doctors.size < totalDoctorsForService;
+        // Keep the interval if it's not a matching appointment
+        return !isMatchingAppointment;
       });
-
-      console.log(filteredIntervals);
 
       return filteredIntervals;
     } catch (error) {
@@ -122,6 +121,48 @@ export class WorkScheduleService {
       );
     }
   }
+
+  // async getAppointmentsAndRemoveIntervalsByDate(
+  //   date: Date,
+  //   serviceIds: number[],
+  // ): Promise<{ startTime: string; endTime: string }[]> {
+  //   try {
+  //     // Fetch appointments for the given date
+  //     const appointments =
+  //       await this.appointmentService.findAppointmentsByDate(date);
+
+  //     // Generate time intervals for the given service IDs
+  //     const intervals = await this.generateTimeIntervalsForServices(serviceIds);
+
+  //     const filteredIntervals = intervals.filter(async (interval) => {
+  //       // Filter appointments for the current interval's service ID
+  //       const appointmentsForService = appointments.filter(
+  //         (appointment) =>
+  //           appointment.serviceID === serviceIds[0] && // Assuming serviceIds array has only one element
+  //           new Date(appointment.endTime) > new Date(date), // Ensure appointment is for the specified date
+  //       );
+
+  //       // Check if any doctor for this service is still available during the interval
+  //       const doctors = new Set(
+  //         appointmentsForService.map((appointment) => appointment.id),
+  //       );
+
+  //       const totalDoctorsForService =
+  //         await this.serviceService.countDoctorsByService(serviceIds[0]);
+
+  //       // Keep the interval if there are still available doctors for this service
+  //       return doctors.size < totalDoctorsForService;
+  //     });
+
+  //     //console.log(filteredIntervals);
+
+  //     return filteredIntervals;
+  //   } catch (error) {
+  //     throw new Error(
+  //       `Failed to fetch appointments and remove intervals: ${error.message}`,
+  //     );
+  //   }
+  // }
 
   async findAvailablePersonnel(
     date: Date,

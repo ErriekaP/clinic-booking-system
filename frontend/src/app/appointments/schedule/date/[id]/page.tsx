@@ -284,7 +284,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                           className={`bg-white rounded-lg shadow-md p-4 cursor-pointer text-center ${
                             clickedInterval?.startTime === interval.startTime &&
                             clickedInterval?.endTime === interval.endTime
-                              ? "bg-slate-900 text-white"
+                              ? "bg-cyan-950 text-white"
                               : "hover:bg-slate-200 hover:border-2 hover:border-slate-900"
                           }`}
                           onClick={() =>
