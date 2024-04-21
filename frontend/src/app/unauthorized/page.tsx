@@ -10,7 +10,7 @@ const UnauthorizedPage = () => {
           <InfoCircledIcon />
         </div>
         <div className="text-white ">
-          <p>You will need admin privileges to access this page.</p>
+          <p>You are not Authorized to access this page.</p>
         </div>
       </div>
 

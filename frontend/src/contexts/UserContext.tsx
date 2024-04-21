@@ -121,7 +121,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     // Simulate data loading or any asynchronous operation
     const timer = setTimeout(() => {
       setLoading(false); // Set loading to false after a delay (simulated data loading)
-    }, 3000); // Simulate loading for 3 seconds
+    }, 1000); // Simulate loading for 1 second
 
     return () => clearTimeout(timer); // Cleanup timer on component unmount
   }, []);
@@ -143,7 +143,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
             <InfoCircledIcon />
           </div>
           <div className="text-white ">
-            <p>You will need admin privileges to access this page.</p>
+            <p>You are not Authorized to access this page.</p>
           </div>
         </div>
 

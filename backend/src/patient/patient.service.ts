@@ -56,6 +56,8 @@ export class PatientService {
           firstName: updatedData.firstName ?? existingPatient.firstName,
           middleName: updatedData.middleName ?? existingPatient.middleName,
           lastName: updatedData.lastName ?? existingPatient.lastName,
+          email: updatedData.email ?? existingPatient.email,
+          password: updatedData.password ?? existingPatient.password,
           address:
             updatedData.address !== undefined
               ? {

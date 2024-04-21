@@ -8,7 +8,7 @@ input {
 .CardsContent {
   flex-grow: 1;
   padding: 20px;
-  background-color: #d9dcd6;
+  background-color: white;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   outline: none;
@@ -70,7 +70,7 @@ input {
   color: black;
   box-shadow: 0 0 0 1px #16425b;
   height: 35px;
-  background-color: #d9dcd6;
+  background-color: white;
 }
 
 .SelectTrigger:focus {
@@ -109,13 +109,13 @@ input {
   user-select: none;
 }
 .SelectItem[data-disabled] {
-  color: #d9dcd6;
+  color: white;
   pointer-events: none;
 }
 .SelectItem[data-highlighted] {
   outline: none;
   background-color: #16425b;
-  color: #d9dcd6;
+  color: white;
 }
 
 .SelectLabel {
@@ -149,7 +149,7 @@ input {
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  padding: 0 15px;
+  padding: 0 25px;
   font-size: 15px;
   line-height: 1;
   font-weight: 500;
@@ -161,7 +161,7 @@ input {
 }
 .Button.blue:hover {
   background-color: #0c2838;
-  color: #d9dcd6;
+  color: white;
 }
 .Button.blue:focus {
   box-shadow: 0 0 0 2px #3a7ca5;

@@ -15,6 +15,8 @@ export default function Page({ params }: { params: { id: string } }) {
     firstName: "",
     middleName: "",
     lastName: "",
+    email: "",
+    password: "",
     address: {
       city: "",
       province: "",
@@ -92,6 +94,8 @@ export default function Page({ params }: { params: { id: string } }) {
           occupation: data.occupation,
           facultyDepartment: data.facultyDepartment,
           patientType: data.patientType,
+          email: data.email,
+          password: data.password,
           address: {
             city: data.address?.city,
             province: data.address?.province,
@@ -156,7 +160,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
       if (response.ok) {
         console.log("Form submitted successfully");
-        router.back;
+        router.back();
       } else {
         console.error("Failed to submit form");
       }
@@ -233,7 +237,7 @@ export default function Page({ params }: { params: { id: string } }) {
             justify="center"
           >
             <Heading>
-              <Text>Info</Text>
+              <p className="text-white text-4xl">Update Information</p>
             </Heading>
           </Flex>
           <Flex>
@@ -830,7 +834,41 @@ export default function Page({ params }: { params: { id: string } }) {
             </Card>
           </Flex>
 
-          <div className="flex mt-20 justify-end">
+          <Flex>
+            <Card className="CardsContent">
+              <p className="Text">Logins</p>
+
+              <Flex direction="row" gap="3">
+                <fieldset className="Fieldset">
+                  <label className="Label" htmlFor="email">
+                    Email
+                  </label>
+                  <input
+                    className="UpdateInput"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                  />
+                </fieldset>
+                <fieldset className="Fieldset">
+                  <label className="Label" htmlFor="password">
+                    Password
+                  </label>
+                  <input
+                    className="UpdateInput"
+                    id="password"
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                  />
+                </fieldset>
+              </Flex>
+            </Card>
+          </Flex>
+
+          <div className="flex justify-end mt-5 ">
             <button className="Button blue" type="submit">
               Submit
             </button>
