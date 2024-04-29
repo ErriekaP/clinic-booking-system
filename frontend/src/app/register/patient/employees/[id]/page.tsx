@@ -238,6 +238,19 @@ export default function Page() {
 
               <Flex direction="row" gap="3">
                 <fieldset className="Fieldset">
+                  <label className="Label" htmlFor="course">
+                    Course
+                  </label>
+                  <input
+                    className="Input"
+                    id="course"
+                    name="course"
+                    value={formData.course}
+                    onChange={handleInputChange}
+                  />
+                </fieldset>
+
+                <fieldset className="Fieldset">
                   <label className="Label" htmlFor="occupation">
                     Occupation
                   </label>
@@ -262,7 +275,9 @@ export default function Page() {
                     onChange={handleInputChange}
                   />
                 </fieldset>
+              </Flex>
 
+              <Flex direction="row" gap="3">
                 <fieldset className="Fieldset">
                   <label className="Label" htmlFor="contactNumber">
                     Contact Number
@@ -275,9 +290,7 @@ export default function Page() {
                     onChange={handleInputChange}
                   />
                 </fieldset>
-              </Flex>
 
-              <Flex direction="row" gap="3">
                 <fieldset className="Fieldset">
                   <label className="Label" htmlFor="dateOfbirth">
                     Date of Birth

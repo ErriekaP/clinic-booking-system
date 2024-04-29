@@ -134,6 +134,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             </Table.Body>
           </Table.Root>
         </Flex>
+
         <div className="flex items-center justify-center mt-10 text-white">
           <div className=" text-center ">
             <p className="text-lg font-bold">Current Queue Numbers:</p>

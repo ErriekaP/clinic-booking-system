@@ -3,9 +3,12 @@
 "use client";
 import { SetStateAction, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { fetchUserInfo } from "@/utilities/fetch/patient";
 
 export default function Page() {
   const router = useRouter();
+  const supabase = createClientComponentClient();
 
   interface Services {
     id: number;
@@ -17,11 +20,14 @@ export default function Page() {
   const [services, setServices] = useState<Services[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedService, setSelectedService] = useState<Services | null>(null);
+  const [user, setUser] = useState<String | null>(null);
 
   const handleClick = (service: Services) => {
     setSelectedService(service);
+    if (user == "ADMIN" || user == "NURSE") {
+      router.push(`/services/update/${service.id}`);
+    }
     //router.push(`/services/${service.id}`);
-    router.push(`/services/update/${service.id}`);
   };
 
   useEffect(() => {
@@ -44,7 +50,37 @@ export default function Page() {
     };
     fetchServices();
   }, []); // Fetch patients on component mount
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const { data: sessionData, error } = await supabase.auth.getSession();
+        if (error || !sessionData || !sessionData.session) {
+          // Error or no session data, redirect to login page
+          router.push("/login");
+          return;
+        }
+        const userInfo = await fetchUserInfo(sessionData.session.user.id);
+        console.log("user", userInfo);
+        if (userInfo.role === "ADMIN") {
+          setUser("ADMIN");
+        } else if (userInfo.patientType === "STUDENT") {
+          setUser("STUDENT");
+        } else if (userInfo.patientType === "EMPLOYEE") {
+          setUser("EMPLOYEE");
+        } else if (userInfo.role === "DOCTOR") {
+          setUser("DOCTOR");
+        } else if (userInfo.role === "NURSE") {
+          setUser("NURSE");
+        } else if (userInfo.role === "STAFF") {
+          setUser("STAFF");
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
 
+    getUserInfo();
+  }, [router]);
   // Function to handle search query change
   const handleSearchChange = (event: {
     target: { value: SetStateAction<string> };

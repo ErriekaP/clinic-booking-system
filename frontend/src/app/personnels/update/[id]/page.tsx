@@ -123,7 +123,7 @@ export default function Page({ params }: { params: { id: string } }) {
             justify="center"
           >
             <Heading>
-              <Text>Info</Text>
+              <p className="text-white text-3xl">Personnel Information</p>
             </Heading>
           </Flex>
 

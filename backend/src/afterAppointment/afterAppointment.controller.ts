@@ -6,9 +6,10 @@ import {
   Get,
   Param,
   NotFoundException,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { afterAppointmentService } from './afterAppointment.service';
-import { AfterAppointment } from '@prisma/client';
+import { AfterAppointment, Appointments } from '@prisma/client';
 import {
   CreateAfterAppointmentDto,
   CreateMedicineDto,
@@ -38,10 +39,11 @@ export class afterAppointmentController {
     return this.afterAppointmentsService.updateService(serviceId, serviceData);
   }
 
-  // @Get(':id')
-  // async getServices(@Param('id') id: string): Promise<AfterAppointment> {
-  //   return this.afterAppointmentsService.findService(id);
-  // }
+  @Get('/:id')
+  async getAppointmentsByPatientID(@Param('id') patientID: string) {
+    const id = parseInt(patientID, 10);
+    return this.afterAppointmentsService.getAfterAppointmentId(id);
+  }
 
   @Get()
   async findAll() {

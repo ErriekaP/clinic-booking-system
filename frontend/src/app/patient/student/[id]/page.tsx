@@ -10,6 +10,7 @@ import {
   Text,
 } from "@radix-ui/themes";
 import Navbar from "@/components/navbar/page";
+import dayjs from "dayjs";
 //import "./styles.css";
 interface Queue {
   id: number;
@@ -151,7 +152,7 @@ const StudentPage = ({ params }: { params: { id: string } }) => {
                     Date of Birth:
                   </Table.RowHeaderCell>
                   <Table.Cell className="border-r-2 p-8 text-center text-white align-middle">
-                    {patientData.dateOfBirth}
+                    {dayjs(patientData.dateOfBirth).format("MM/DD/YYYY")}
                   </Table.Cell>
 
                   {/* Gender */}

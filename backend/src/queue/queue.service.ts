@@ -59,12 +59,42 @@ export class QueueService {
 
   async getAllQueues() {
     try {
-      const service = await this.prisma.queue.findMany({});
-      console.log(service);
-      console.log(this.prisma.$queryRaw`${service}`);
-      return service;
+      const queues = await this.prisma.queue.findMany({
+        orderBy: {
+          createdAt: 'desc', // Order by createdAt field in descending order
+        },
+      });
+      // Map each queue to its associated service and patient
+      const queuesWithDetails = await Promise.all(
+        queues.map(async (queue) => {
+          const service = await this.prisma.service.findUnique({
+            where: {
+              id: queue.serviceID,
+            },
+          });
+
+          const patient = await this.prisma.patient.findUnique({
+            where: {
+              id: queue.patientID,
+            },
+          });
+          console.log(service);
+          console.log(patient);
+
+          return {
+            ...queue,
+            service,
+            patient,
+          };
+        }),
+      );
+
+      return queuesWithDetails;
     } catch (error) {
-      throw new Error(`Unable to fetch patients: ${error.message}`);
+      console.error(
+        `Unable to fetch queues with student and service information: ${error.message}`,
+      );
+      throw error;
     }
   }
 
@@ -150,11 +180,40 @@ export class QueueService {
 
   async findPatientQueue(id: string) {
     const parsedId = parseInt(id, 10);
-    return this.prisma.queue.findMany({
+    const queues = await this.prisma.queue.findMany({
       where: {
         patientID: parsedId,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
+
+    // Map each queue to its associated service and patient
+    const queuesWithDetails = await Promise.all(
+      queues.map(async (queue) => {
+        const service = await this.prisma.service.findUnique({
+          where: {
+            id: queue.serviceID,
+          },
+        });
+
+        const patient = await this.prisma.patient.findUnique({
+          where: {
+            id: queue.patientID,
+          },
+        });
+        console.log(service);
+        console.log(patient);
+
+        return {
+          ...queue,
+          service,
+          patient,
+        };
+      }),
+    );
+    return queuesWithDetails;
   }
 
   async finishQueue(id: string) {
@@ -318,6 +377,81 @@ export class QueueService {
       return queue;
     } catch (error) {
       console.log(`Unable to fetch queue with current queue: ${error.message}`);
+    }
+  }
+
+  async getMedication(afterQueueID: number) {
+    try {
+      const medication = await this.prisma.medicine.findFirst({
+        where: { afterQueueID: afterQueueID },
+      });
+
+      if (!medication) {
+        throw new Error('medication not found');
+      }
+
+      return medication;
+    } catch (error) {
+      console.log(`Unable to fetch queue with current queue: ${error.message}`);
+    }
+  }
+  async getAfterQueue(patientID: number) {
+    try {
+      const queues = await this.prisma.queue.findMany({
+        where: {
+          patientID: patientID,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+
+      // Map each queue to its associated service and patient
+      const queuesWithDetails = await Promise.all(
+        queues.map(async (queue) => {
+          const afterQueue = await this.prisma.afterQueue.findUnique({
+            where: { queueID: queue.id },
+          });
+
+          let medication = null; // Declare medication variable outside the if block
+
+          if (afterQueue !== null) {
+            medication = await this.prisma.medicine.findFirst({
+              where: { afterQueueID: afterQueue.id },
+            });
+          }
+
+          const service = await this.prisma.service.findUnique({
+            where: {
+              id: queue.serviceID,
+            },
+          });
+
+          const patient = await this.prisma.patient.findUnique({
+            where: {
+              id: queue.patientID,
+            },
+          });
+
+          console.log(service);
+          console.log(patient);
+          console.log(medication);
+
+          // Return or do something with the gathered details for each queue
+
+          return {
+            ...queue,
+            afterQueue,
+            medication,
+            service,
+            patient,
+          };
+        }),
+      );
+
+      return queuesWithDetails;
+    } catch (error) {
+      throw new Error(`Unable to fetch afterQueue: ${error.message}`);
     }
   }
 

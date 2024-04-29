@@ -42,23 +42,6 @@ export class afterQueueService {
     }
   }
 
-  async getAllServices() {
-    try {
-      const service = await this.prisma.service.findMany({
-        where: {
-          status: {
-            in: ['ACTIVE'],
-          },
-        },
-      });
-      console.log(service);
-      console.log(this.prisma.$queryRaw`${service}`);
-      return service;
-    } catch (error) {
-      throw new Error(`Unable to fetch patients: ${error.message}`);
-    }
-  }
-
   async findService(id: string) {
     const parsedId = parseInt(id, 10);
     return this.prisma.service.findUnique({

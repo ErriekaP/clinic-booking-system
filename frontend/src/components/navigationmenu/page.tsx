@@ -49,10 +49,10 @@ const NavMenu = () => {
             <NavigationMenu.Content className="NavigationMenuContent">
               <ul className="List two">
                 <a href="/register/personnel" className="ListItemLink">
-                  <p className="ListItemHeading">Add a Personnel</p>
+                  <p className="ListItemHeading">Add Personnel</p>
                 </a>
                 <a href="/personnels" className="ListItemLink">
-                  <p className="ListItemHeading">View a Personnel</p>
+                  <p className="ListItemHeading">View Personnel</p>
                 </a>
                 <a href="/schedules" className="ListItemLink">
                   <p className="ListItemHeading">Work Schedules</p>
@@ -79,7 +79,7 @@ const NavMenu = () => {
                 <a href="/appointments" className="ListItemLink">
                   <p className="ListItemHeading">View Appointments</p>
                 </a>
-                <a href="/admin/appointments/requests" className="ListItemLink">
+                <a href="/appointments/requests" className="ListItemLink">
                   <p className="ListItemHeading">Appointment Requests</p>
                 </a>
               </ul>

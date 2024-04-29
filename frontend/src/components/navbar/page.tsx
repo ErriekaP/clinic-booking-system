@@ -82,7 +82,6 @@ const NavBar = () => {
               </Avatar.Fallback>
             </Avatar.Root>
           </NavigationMenu.Item>
-
           {user && user.patientType === "STUDENT" && (
             <NavigationMenu.Item className="NavigationMenuItem">
               <NavigationMenu.Trigger className="NavigationMenuTrigger">
@@ -96,14 +95,16 @@ const NavBar = () => {
                   >
                     <p className="ListItemHeading">Appointments</p>
                   </a>
-                  <a href="/queue/services" className="ListItemLink">
+                  <a
+                    href={`/afterAppointments/student/${user?.id}`}
+                    className="ListItemLink"
+                  >
                     <p className="ListItemHeading">After Appointments</p>
                   </a>
                 </ul>
               </NavigationMenu.Content>
             </NavigationMenu.Item>
           )}
-
           {user && user.patientType === "EMPLOYEE" && (
             <NavigationMenu.Item className="NavigationMenuItem">
               <NavigationMenu.Link
@@ -115,7 +116,6 @@ const NavBar = () => {
               </NavigationMenu.Link>
             </NavigationMenu.Item>
           )}
-
           {user && user.role === "DOCTOR" && (
             <NavigationMenu.Item className="NavigationMenuItem">
               <NavigationMenu.Trigger className="NavigationMenuTrigger">
@@ -139,34 +139,82 @@ const NavBar = () => {
               </NavigationMenu.Content>
             </NavigationMenu.Item>
           )}
+          {user && user.role === "NURSE" && (
+            <NavigationMenu.Item className="NavigationMenuItem">
+              <NavigationMenu.Link
+                className="NavigationMenuLink"
+                href="/patients"
+              >
+                Patients
+              </NavigationMenu.Link>
+            </NavigationMenu.Item>
+          )}
 
           <NavigationMenu.Item className="NavigationMenuItem">
             <NavigationMenu.Link
               className="NavigationMenuLink"
-              href="https://github.com/radix-ui"
+              href="/services"
             >
               Services
             </NavigationMenu.Link>
           </NavigationMenu.Item>
-          {user && user.patientType === "STUDENT" && (
+
+          {user &&
+            (user.patientType === "STUDENT" ||
+              user.patientType === "EMPLOYEE") && (
+              <NavigationMenu.Item className="NavigationMenuItem">
+                <NavigationMenu.Trigger className="NavigationMenuTrigger">
+                  Queues <CaretDownIcon className="CaretDown" aria-hidden />
+                </NavigationMenu.Trigger>
+                <NavigationMenu.Content className="NavigationMenuContent">
+                  <ul className="List two">
+                    <a href="/queue/services" className="ListItemLink">
+                      <p className="ListItemHeading">Add a Queue</p>
+                    </a>
+                    <a href={`/queue/${user?.id}`} className="ListItemLink">
+                      <p className="ListItemHeading">Queues</p>
+                    </a>
+                  </ul>
+                </NavigationMenu.Content>
+              </NavigationMenu.Item>
+            )}
+          {user && user.role === "NURSE" && (
             <NavigationMenu.Item className="NavigationMenuItem">
               <NavigationMenu.Trigger className="NavigationMenuTrigger">
-                Queues <CaretDownIcon className="CaretDown" aria-hidden />
+                Appointment <CaretDownIcon className="CaretDown" aria-hidden />
               </NavigationMenu.Trigger>
               <NavigationMenu.Content className="NavigationMenuContent">
                 <ul className="List two">
-                  <a href="/queue/services" className="ListItemLink">
-                    <p className="ListItemHeading">Add a Queue</p>
+                  <a href="/appointments" className="ListItemLink">
+                    <p className="ListItemHeading">View Appointments</p>
                   </a>
-                  <a href={`/queue/${user?.id}`} className="ListItemLink">
-                    <p className="ListItemHeading">Queues</p>
-                  </a>
-
-                  <a href="/queue/services" className="ListItemLink">
-                    <p className="ListItemHeading">After Queues</p>
+                  <a href="/appointments/requests" className="ListItemLink">
+                    <p className="ListItemHeading">Appointment Requests</p>
                   </a>
                 </ul>
               </NavigationMenu.Content>
+            </NavigationMenu.Item>
+          )}
+
+          {user && user.role === "STAFF" && (
+            <NavigationMenu.Item className="NavigationMenuItem">
+              <NavigationMenu.Link
+                className="NavigationMenuLink"
+                href="/queues/services"
+              >
+                Queue
+              </NavigationMenu.Link>
+            </NavigationMenu.Item>
+          )}
+
+          {user && user.role === "NURSE" && (
+            <NavigationMenu.Item className="NavigationMenuItem">
+              <NavigationMenu.Link
+                className="NavigationMenuLink"
+                href={`/personnel/nurse/queues`}
+              >
+                Queue
+              </NavigationMenu.Link>
             </NavigationMenu.Item>
           )}
 
@@ -181,15 +229,6 @@ const NavBar = () => {
             </NavigationMenu.Item>
           )}
 
-          {/* <NavigationMenu.Item className="NavigationMenuItem">
-            <NavigationMenu.Link
-              className="NavigationMenuLink"
-              href="/queue/services"
-            >
-              Queue
-            </NavigationMenu.Link>
-          </NavigationMenu.Item> */}
-
           <NavigationMenu.Item className="NavigationMenuItem">
             <Separator.Root
               className="SeparatorRoot"
@@ -198,13 +237,11 @@ const NavBar = () => {
               style={{ margin: "0 15px" }}
             />
           </NavigationMenu.Item>
-
           <NavigationMenu.Item className="NavigationMenuItem">
             <p>
               Hi, {user?.firstName} {user?.lastName}
             </p>
           </NavigationMenu.Item>
-
           <NavigationMenu.Item className="NavigationMenuItem">
             <DropdownMenu.Root>
               <DropdownMenu.Trigger asChild>
@@ -234,7 +271,6 @@ const NavBar = () => {
               </DropdownMenu.Portal>
             </DropdownMenu.Root>
           </NavigationMenu.Item>
-
           <NavigationMenu.Indicator className="NavigationMenuIndicator">
             <div className="Arrow" />
           </NavigationMenu.Indicator>

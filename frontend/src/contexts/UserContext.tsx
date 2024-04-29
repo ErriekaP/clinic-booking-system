@@ -55,6 +55,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
               `/admin/appointments/requests`,
               `/admin/appointments`,
               `/queues`,
+              `/afterAppointments/student`,
             ],
             DOCTOR: [
               `/personnel/doctor/${userInfo.id}`,
@@ -67,9 +68,16 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
               `/personnel/doctor/appointment/note/`,
               `/personnel/doctor/remove/${userInfo.id}`,
               `/personnel/doctor/queues/${userInfo.id}`,
+              `/services`,
             ],
-            NURSE: [`/personnel/nurse/${userInfo.id}`],
-            STAFF: [`/personnel/staff/${userInfo.id}`],
+            NURSE: [
+              `/personnel/nurse/${userInfo.id}`,
+              `/patients`,
+              `/appointments`,
+              `/personnel/nurse/queues`,
+              `/services`,
+            ],
+            STAFF: [`/personnel/staff/${userInfo.id}`, `/queues`, `/services`],
             STUDENT: [
               `/date`,
               `/patient/student/${userInfo.id}`,
@@ -82,8 +90,21 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
               `/queue/confirmation`,
               `/queue`,
               `/unauthorized`,
+              `/afterAppointments/student`,
             ],
-            EMPLOYEE: [`/patient/employee/${userInfo.id}`],
+            EMPLOYEE: [
+              `/patient/employee/${userInfo.id}`,
+              `/home`,
+              `/register/patient/employees/${userInfo.id}`,
+              `/patient/employee/appointments/${userInfo.id}`,
+              `/patient/employee/appointments/cancel`,
+              `/queue/services`,
+              `/queue/confirmation`,
+              `/queue`,
+              `/unauthorized`,
+              `/appointments`,
+              `/services`,
+            ],
           };
 
           let allowed = false;

@@ -77,7 +77,7 @@ export default function Page() {
   );
 
   const handleClick = (appointment: Appointment) => {
-    router.push(`/admin/appointments/${appointment.id}`);
+    router.push(`/appointments/appointment/${appointment.id}`);
   };
 
   const formatTime = (timeString: string) => {
@@ -110,8 +110,8 @@ export default function Page() {
           <thead className="bg-gray-100 text-gray-800 uppercase text-sm leading-normal">
             <tr>
               <th className="py-3 px-6 text-left">Appointment ID</th>
-              <th className="py-3 px-6 text-left">Student ID</th>
-              <th className="py-3 px-6 text-left">Student Name</th>
+              <th className="py-3 px-6 text-left">School ID</th>
+              <th className="py-3 px-6 text-left">Patient Name</th>
               <th className="py-3 px-6 text-left">Service Name</th>
               <th className="py-3 px-6 text-left">Date</th>
               <th className="py-3 px-6 text-left">Schedule</th>

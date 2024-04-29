@@ -8,7 +8,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { QueueService } from './queue.service';
-import { Queue } from '@prisma/client';
+import { AfterQueue, Queue } from '@prisma/client';
 
 @Controller('queue')
 export class QueueController {
@@ -52,7 +52,12 @@ export class QueueController {
       throw new Error(`Unable to fetch queues: ${error.message}`);
     }
   }
+  @Get('/afterQueue/:id')
+  async getAfterQueue(@Param('id') queueID: string) {
+    const parsedId = parseInt(queueID, 10);
 
+    return this.queueService.getAfterQueue(parsedId);
+  }
   @Get('ongoing/:id')
   async findAllOngoingQueues(@Param('id') serviceId: string) {
     const parsedId = parseInt(serviceId, 10);

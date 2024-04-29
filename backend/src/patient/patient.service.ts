@@ -245,17 +245,40 @@ export class PatientService {
       const appointments = await this.prisma.appointments.findMany({
         where: {
           patientID: patientId,
-
-          // status: {
-          //   in: ['PENDING', 'SCHEDULED', 'COMPLETE'],
-          // },
         },
         include: {
           service: true,
+          patient: true,
         },
       });
-      console.log(appointments);
-      return appointments;
+      // Map each queue to its associated service and patient
+      const appointmentWithDetails = await Promise.all(
+        appointments.map(async (appointment) => {
+          const afterAppointment =
+            await this.prisma.afterAppointment.findUnique({
+              where: { appointmentID: appointment.id },
+            });
+
+          let medication = null; // Declare medication variable outside the if block
+
+          if (afterAppointment !== null) {
+            medication = await this.prisma.medicine.findFirst({
+              where: { afterAppointmentID: afterAppointment.id },
+            });
+          }
+
+          console.log(medication);
+
+          // Return or do something with the gathered details for each queue
+
+          return {
+            ...appointment,
+            afterAppointment,
+            medication,
+          };
+        }),
+      );
+      return appointmentWithDetails;
     } catch (error) {
       throw new Error(`Unable to fetch appointments: ${error.message}`);
     }

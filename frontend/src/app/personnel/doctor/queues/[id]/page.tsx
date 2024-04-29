@@ -85,7 +85,10 @@ const Page = ({ params }: { params: { id: string } }) => {
               <thead>
                 <tr>
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                    Appointment ID
+                    Queue ID
+                  </th>
+                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                    Queue Name
                   </th>
 
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
@@ -112,6 +115,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                   >
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
                       {queue.id}
+                    </td>
+                    <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                      {queue.queueID}
                     </td>
 
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">

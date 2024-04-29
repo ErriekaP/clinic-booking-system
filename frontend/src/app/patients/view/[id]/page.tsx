@@ -64,6 +64,10 @@ const PatientDetails = ({ params }: { params: { id: string } }) => {
     router.push(`/admin/appointments/patient/student/${patientID}`);
   };
 
+  const handleDoctorNoteClick = (patientID: string) => {
+    router.push(`/afterAppointments/student/${patientID}`);
+  };
+
   return (
     <>
       <div className="flex justify-center items-center min-h-screen">
@@ -207,15 +211,7 @@ const PatientDetails = ({ params }: { params: { id: string } }) => {
           </div>
           {/* span #2 */}
 
-          <div className="flex flex-col justify-center bg-white p-5 rounded-md space-y-1">
-            <div className="flex justify-end mb-5 ">
-              <button
-                className=" bg-blue-500 text-white px-4 py-2 rounded shadow "
-                onClick={() => handleEditClick()}
-              >
-                Update Profile
-              </button>
-            </div>
+          <div className="flex flex-col justify-center bg-white p-5 rounded-md space-y-2">
             <div>
               <table className="text-center bg-white min-w-full leading-normal ">
                 <thead>
@@ -300,17 +296,10 @@ const PatientDetails = ({ params }: { params: { id: string } }) => {
             </div>
             <div className=" min-w-full">
               <table className="text-center bg-white min-w-full leading-normal">
-                <thead>
-                  <tr>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-s font-bold uppercase ">
-                      Appointments
-                    </th>
-                  </tr>
-                </thead>
                 <tbody>
                   <tr className="border-b border-gray-200 h-20">
                     <td
-                      className="px-4 py-2 hover:bg-gray-200 hover:p-2"
+                      className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-s font-bold uppercase hover:bg-gray-200 hover:p-2"
                       onClick={() => handleAppointmentClick(patientData.id)}
                     >
                       <div className="flex flex-col items-center">
@@ -338,16 +327,12 @@ const PatientDetails = ({ params }: { params: { id: string } }) => {
 
             <div className=" min-w-full">
               <table className="text-center bg-white min-w-full leading-normal">
-                <thead>
-                  <tr>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-s font-bold uppercase ">
-                      Doctor's Note
-                    </th>
-                  </tr>
-                </thead>
                 <tbody>
                   <tr className="border-b border-gray-200 h-20">
-                    <td className="px-4 py-2 hover:bg-gray-200 hover:p-2	">
+                    <td
+                      className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-s font-bold uppercase hover:bg-gray-200 hover:p-2 "
+                      onClick={() => handleDoctorNoteClick(patientData.id)}
+                    >
                       <div className="flex flex-col items-center">
                         <svg
                           width="25"
@@ -363,180 +348,24 @@ const PatientDetails = ({ params }: { params: { id: string } }) => {
                             clip-rule="evenodd"
                           ></path>
                         </svg>
-                        <button>yes</button>
+                        <p>Doctor's Note</p>
                       </div>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
+            <div className="flex justify-end mt-5 ">
+              <button
+                className=" bg-blue-500 text-white px-4 py-2 rounded shadow "
+                onClick={() => handleEditClick()}
+              >
+                Update Profile
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* <div className="flex ">
-        <div className="bg-white rounded-md">
-          <table className="text-center  min-w-full leading-normal">
-            <thead>
-              <tr>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-s font-bold uppercase ">
-                  School ID
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-s font-bold uppercase  ">
-                  Name
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100  text-s font-bold uppercase ">
-                  Course
-                </th>
-
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100  text-s font-bold uppercase ">
-                  Section
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100  text-s font-bold uppercase ">
-                  Cluster
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100  text-s font-bold uppercase ">
-                  Department
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100  text-s font-bold uppercase ">
-                  Contact Number
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100  text-s font-bold uppercase ">
-                  Date of Birth
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100  text-s font-bold uppercase ">
-                  Gender
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100  text-s font-bold uppercase ">
-                  Blood Type
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b border-gray-200 ">
-                <td className="px-5 py-5 border-b border-gray-200 text-sm">
-                  {patientData.schoolID}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 text-sm">
-                  {patientData.lastName}, {patientData.firstName}{" "}
-                  {patientData.middleName}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  {patientData.course}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  {patientData.section}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  {patientData.cluster}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  {patientData.department}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  {patientData.contactNumber}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  {patientData.dateOfBirth}
-                </td>
-
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  {patientData.gender}
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  {patientData.bloodType}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div className="flex flex-col space-y-4 items-center justify-center ">
-        <div>
-          <table className="text-center bg-white min-w-full leading-normal ">
-            <thead>
-              <tr>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-s font-bold uppercase ">
-                  Address
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-s font-bold uppercase ">
-                  Emergency Contact
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-s font-bold uppercase ">
-                  Family Physician
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-centertext-s font-bold uppercase ">
-                  Medical History
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b border-gray-200 h-20">
-                <td className="px-4 py-2">
-                  <AddressHover
-                    city={patientData.address.city}
-                    province={patientData.address.province}
-                    houseNo={patientData.address.houseNo}
-                    street={patientData.address.street}
-                    barangay={patientData.address.barangay}
-                    subdivision={patientData.address.subdivision}
-                    zipCode={patientData.address.zipCode}
-                  />{" "}
-                </td>
-                <td className="px-4 py-2">
-                  <EmergencyContactHover
-                    lastName={patientData.emergencyContact.lastName}
-                    firstName={patientData.emergencyContact.firstName}
-                    contactNumber={patientData.emergencyContact.contactNumber}
-                    relation={patientData.emergencyContact.relation}
-                    healthInsuranceCompany={
-                      patientData.emergencyContact.healthInsuranceCompany
-                    }
-                    emergencyHospital={
-                      patientData.emergencyContact.emergencyHospital
-                    }
-                  />
-                </td>
-                <td className="px-4 py-2">
-                  {" "}
-                  <FamilyPhysicianHover
-                    lastName={patientData.familyPhysician.lastName}
-                    firstName={patientData.familyPhysician.firstName}
-                    contactNumber={patientData.familyPhysician.contactNumber}
-                  />
-                </td>
-                <td className="px-4 py-2">
-                  <MedicalHistoryHover
-                    famHistory={patientData.medicalHistory.famHistory}
-                    childhoodDiseases={
-                      patientData.medicalHistory.childhoodDiseases
-                    }
-                    medicalCondition={
-                      patientData.medicalHistory.medicalCondition
-                    }
-                    hospitalization={patientData.medicalHistory.hospitalization}
-                    medication={patientData.medicalHistory.medication}
-                    allergies={patientData.medicalHistory.allergies}
-                    vaccines={patientData.medicalHistory.vaccines}
-                    psychosocialHistory={
-                      patientData.medicalHistory.psychosocialHistory
-                    }
-                    sexualHistory={patientData.medicalHistory.sexualHistory}
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div>
-          <button
-            className=" bg-blue-500 text-white px-4 py-2 rounded shadow"
-            onClick={() => handleEditClick()}
-          >
-            Update
-          </button>
-        </div>
-      </div> */}
     </>
   );
 };

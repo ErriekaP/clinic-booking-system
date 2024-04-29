@@ -1,45 +1,44 @@
 "use client";
-import AfterQueueDialogue from "@/components/afterModal/afterQueueModal";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-//appointments under his number
+
 const Page = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
   const { id } = params;
-  const [queues, setQueues] = useState<any[]>([]);
+  const [appointments, setAppointments] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     // Fetch appointments data from an API
-    const fetchAfterQueue = async () => {
+    const fetchAppointments = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/queue/afterQueue/${id}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/patients/appointments/${id}`
         );
         if (!response.ok) {
-          throw new Error("Failed to fetch after queue");
+          throw new Error("Failed to fetch appointments");
         }
         const data = await response.json();
-        setQueues(data);
+        setAppointments(data);
       } catch (error) {
-        console.error("Error fetching after queue:", error);
+        console.error("Error fetching appointments:", error);
       }
     };
 
-    fetchAfterQueue();
+    fetchAppointments();
   }, []);
 
-  console.log(queues);
+  const handleClickAppointment = () => {
+    router.push(`/appointments/schedule`);
+  };
 
-  const handleClick = (queue: any) => {
-    // afterqueues
-    console.log("Clicked queue:", queue.afterQueue?.diagnosis);
+  console.log(appointments);
 
-    setIsDialogOpen(true);
-
-    //router.push(`/personnel/doctor/queues/afterqueues/${queue.id}`);
+  const handleClick = (appointment: any) => {
+    // Handle click action (if needed)
+    console.log("Clicked appointment:", appointment);
+    router.push(`/patient/student/appointment/${appointment.id}`);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,9 +46,22 @@ const Page = ({ params }: { params: { id: string } }) => {
     // Implement search functionality (if needed)
   };
 
-  const filteredQueues = queues.filter((queue) =>
-    queue.status.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredAppointments = appointments.filter((appointment) =>
+    appointment.status.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const formatTime = (timeString: string) => {
+    const hours = parseInt(timeString.slice(11, 13), 10);
+    const minutes = timeString.slice(14, 16);
+    const period = hours < 12 ? "AM" : "PM";
+    const formattedHours = hours > 12 ? hours - 12 : hours;
+    return `${formattedHours}:${minutes} ${period}`;
+  };
+  const formatDate = (dateString: string) => {
+    const dayjsObject = dayjs(dateString);
+    const isoDateString = dayjsObject.format("MMMM D, YYYY	");
+    return isoDateString;
+  };
 
   return (
     <div className="flex flex-col h-screen items-center">
@@ -63,7 +75,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           </svg>
         </span>
         <input
-          placeholder="Search"
+          placeholder="Search by status"
           className="appearance-none rounded-md border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
           value={searchQuery}
           onChange={handleSearchChange}
@@ -71,69 +83,51 @@ const Page = ({ params }: { params: { id: string } }) => {
       </div>
       <div className="flex flex-col flex-grow w-full max-w-4xl">
         <div className="overflow-x-auto">
-          {/* Display the main appointments table */}
           <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
             <table className="table-fixed bg-white min-w-full leading-normal">
               <thead>
                 <tr>
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase ">
-                    Queue ID
-                  </th>
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                    Queue Name
-                  </th>
-
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                    Patient Name
+                  <th className=" px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                    Appointment ID
                   </th>
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
                     Service
                   </th>
-
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                    Status
+                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase ">
+                    Date
                   </th>
-                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                    After Queue
+                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase ">
+                    Time
+                  </th>
+
+                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase ">
+                    Status
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {filteredQueues.map((queue) => (
+                {filteredAppointments.map((appointment) => (
                   <tr
-                    key={queue.id}
-                    onClick={() => handleClick(queue)}
+                    key={appointment.id}
+                    onClick={() => handleClick(appointment)}
                     className="hover:bg-gray-50 cursor-pointer"
                   >
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      {queue.id}
+                      {appointment.id}
                     </td>
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      {queue.queueID}
+                      {appointment.service.serviceName}
                     </td>
-
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      {" "}
-                      {queue.patient.firstName} {queue.patient.lastName}
+                      {formatDate(appointment.startTime)}
                     </td>
-
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      {queue.service.serviceName}
+                      {formatTime(appointment.startTime)} -{" "}
+                      {formatTime(appointment.endTime)}
                     </td>
 
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      {queue.status}
-                    </td>
-
-                    <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                      <AfterQueueDialogue
-                        diagnosis={queue.afterQueue?.diagnosis}
-                        medicineName={queue.medication?.medicineName}
-                        medicineStrength={queue.medication?.medicineStrength}
-                        medicineQuantity={queue.medication?.medicineQuantity}
-                        medicineFrequency={queue.medication?.medicineFrequency}
-                        remarks={queue.medication?.remarks}
-                      />
+                      {appointment.status}
                     </td>
                   </tr>
                 ))}
@@ -141,8 +135,19 @@ const Page = ({ params }: { params: { id: string } }) => {
             </table>
           </div>
         </div>
+        <div className=" flex flex-row-reverse container mx-auto">
+          <div className=" mt-8 justify-end">
+            <button
+              className="inline-flex items-center justify-center rounded-md px-4 py-2 text-base font-medium bg-blue-500 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              onClick={() => handleClickAppointment()}
+            >
+              Schedule Appointment
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
+
 export default Page;

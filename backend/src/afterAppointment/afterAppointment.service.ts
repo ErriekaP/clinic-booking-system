@@ -1,9 +1,10 @@
 // patient.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Prisma, AfterAppointment } from '@prisma/client';
+import { Prisma, AfterAppointment, Appointments } from '@prisma/client';
 import { SupabaseService } from 'supabase/supabase.service';
 import { CreateAfterAppointmentDto } from './afterAppointment.dto';
+import { after } from 'node:test';
 
 @Injectable()
 export class afterAppointmentService {
@@ -58,13 +59,41 @@ export class afterAppointmentService {
     }
   }
 
-  async findService(id: string) {
-    const parsedId = parseInt(id, 10);
-    return this.prisma.service.findUnique({
-      where: {
-        id: parsedId,
-      },
-    });
+  // Function to get afterAppointment ID by patientID
+  async getAfterAppointmentId(patientId: number) {
+    try {
+      console.log(patientId);
+      // Find the appointment with the given patientID
+      const appointments = await this.prisma.appointments.findMany({
+        where: { patientID: patientId },
+        include: { afterAppointmentID: true, patient: true }, // Include the related afterAppointment
+      });
+
+      // Map appointments to extract afterAppointment IDs and filter out nulls
+      const afterAppointmentIds = appointments
+        .filter((appointment) => appointment.afterAppointmentID !== null) // Filter out appointments with no afterAppointmentID
+        .map((appointment) => appointment.afterAppointmentID.id); // Map to get the afterAppointmentID
+
+      const afterAppointments: AfterAppointment[] =
+        await this.prisma.afterAppointment.findMany({
+          where: {
+            id: {
+              in: afterAppointmentIds,
+            },
+          },
+          include: {
+            medications: true,
+          },
+        });
+
+      console.log('AfterAppointments:', afterAppointments);
+      console.log('AfterAppointmentsID:', afterAppointmentIds);
+      return afterAppointments;
+    } catch (error) {
+      // Handle errors appropriately
+      console.error('Error retrieving afterAppointment ID:', error);
+      throw error; // Optionally rethrow the error or handle as needed
+    }
   }
 
   async createAfterAppointment(
