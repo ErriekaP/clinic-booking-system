@@ -107,13 +107,25 @@ const NavBar = () => {
           )}
           {user && user.patientType === "EMPLOYEE" && (
             <NavigationMenu.Item className="NavigationMenuItem">
-              <NavigationMenu.Link
-                className="NavigationMenuLink"
-                //href="/patients"
-                href={`/patient/employee/appointments/${user?.id}`}
-              >
-                Appointments
-              </NavigationMenu.Link>
+              <NavigationMenu.Trigger className="NavigationMenuTrigger">
+                Appointments <CaretDownIcon className="CaretDown" aria-hidden />
+              </NavigationMenu.Trigger>
+              <NavigationMenu.Content className="NavigationMenuContent">
+                <ul className="List two">
+                  <a
+                    href={`/patient/employee/appointments/${user?.id}`}
+                    className="ListItemLink"
+                  >
+                    <p className="ListItemHeading">Appointments</p>
+                  </a>
+                  <a
+                    href={`/afterAppointments/employee/${user?.id}`}
+                    className="ListItemLink"
+                  >
+                    <p className="ListItemHeading">After Appointments</p>
+                  </a>
+                </ul>
+              </NavigationMenu.Content>
             </NavigationMenu.Item>
           )}
           {user && user.role === "DOCTOR" && (

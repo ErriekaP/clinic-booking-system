@@ -1,5 +1,5 @@
 "use client";
-import BackNavbar from "@/components/backNavbar/backNavbar";
+import AfterAppointmentDialogue from "@/components/afterModal/afterAppointmentModal";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -30,22 +30,20 @@ const Page = ({ params }: { params: { id: string } }) => {
     fetchAppointments();
   }, []);
 
+  console.log(appointments);
+
+  const handleClick = (appointment: any) => {
+    // Handle click action (if needed)
+    console.log("Clicked appointment:", appointment);
+  };
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
     // Implement search functionality (if needed)
   };
 
-  const filteredAppointments = appointments.filter(
-    (appointment) =>
-      appointment.status.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      appointment.service.serviceName
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      appointment.startTime.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      appointment.id
-        .toString()
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase())
+  const filteredAppointments = appointments.filter((appointment) =>
+    appointment.status.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const formatTime = (timeString: string) => {
@@ -63,7 +61,6 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="flex flex-col h-screen items-center">
-      <BackNavbar />
       <div className="block relative max-w-sm mb-4">
         <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">
           <svg
@@ -74,7 +71,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           </svg>
         </span>
         <input
-          placeholder="Search"
+          placeholder="Search by status"
           className="appearance-none rounded-md border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
           value={searchQuery}
           onChange={handleSearchChange}
@@ -102,12 +99,17 @@ const Page = ({ params }: { params: { id: string } }) => {
                   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase ">
                     Status
                   </th>
+
+                  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase ">
+                    After Appointment
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {filteredAppointments.map((appointment) => (
                   <tr
                     key={appointment.id}
+                    onClick={() => handleClick(appointment)}
                     className="hover:bg-gray-50 cursor-pointer"
                   >
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
@@ -127,13 +129,29 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
                       {appointment.status}
                     </td>
+
+                    <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                      <AfterAppointmentDialogue
+                        diagnosis={appointment.afterAppointment?.diagnosis}
+                        medicineName={appointment.medication?.medicineName}
+                        medicineStrength={
+                          appointment.medication?.medicineStrength
+                        }
+                        medicineQuantity={
+                          appointment.medication?.medicineQuantity
+                        }
+                        medicineFrequency={
+                          appointment.medication?.medicineFrequency
+                        }
+                        remarks={appointment.medication?.remarks}
+                      />
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         </div>
-        <div className=" flex flex-row-reverse container mx-auto"></div>
       </div>
     </div>
   );

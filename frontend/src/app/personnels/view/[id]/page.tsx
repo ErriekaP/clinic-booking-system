@@ -1,5 +1,6 @@
 "use client";
 
+import BackNavbar from "@/components/backNavbar/backNavbar";
 import AddressHover from "@/components/patienthovercard/AddressHover";
 import EmergencyContactHover from "@/components/patienthovercard/EmergencyContactHover";
 import FamilyPhysicianHover from "@/components/patienthovercard/FamilyPhysicianHover";
@@ -71,6 +72,7 @@ const PersonnelDetails = ({ params }: { params: { id: string } }) => {
 
   return (
     <>
+      <BackNavbar />
       <div className="flex justify-center items-center min-h-screen">
         <div className="flex flex-row justify-center items-center space-x-4">
           <div className="flex flex-col flex-wrap justify-start space-y-3">

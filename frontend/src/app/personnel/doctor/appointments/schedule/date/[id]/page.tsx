@@ -9,6 +9,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import dayjs, { Dayjs } from "dayjs";
+import BackNavbar from "@/components/backNavbar/backNavbar";
 
 const Page = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
@@ -200,88 +201,96 @@ const Page = ({ params }: { params: { id: string } }) => {
   };
 
   return (
-    <div className="flex flex-row justify-center items-start">
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <div className="bg-white p-4">
-          <DateCalendar
-            value={selectedDate}
-            onChange={handleDateChange}
-            shouldDisableMonth={disableDates}
-          />
-        </div>
-      </LocalizationProvider>
-      {selectedDate != null && (
-        <div className="flex ml-8">
-          <div className="schedules-list w-25 mx-10">
-            <h2 className="text-lg font-semibold text-white">
-              Schedules for selected date:
-            </h2>
-            {services.map(
-              (service) =>
-                service.id === selectedServiceId && (
-                  <div key={service.id}>
-                    <h3 className="text-lg font-semibold text-white">
-                      {service.serviceName}
-                    </h3>
-                    {/* Display intervals for the selected service */}
-                    <div className="grid grid-cols-1 gap-4">
-                      {intervals.map((interval, index) => (
-                        <div
-                          key={index}
-                          className="bg-white rounded-lg shadow-md p-4 cursor-pointer text-center"
-                          onClick={() =>
-                            handleIntervalClick(interval, clickedDoctors)
-                          }
-                        >
-                          <p>
-                            {" "}
-                            {interval.startTime} - {interval.endTime}{" "}
-                          </p>
-                        </div>
-                      ))}
+    <div>
+      <BackNavbar />
+      <div className="flex flex-row justify-center items-start">
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <div className="bg-white p-4">
+            <DateCalendar
+              value={selectedDate}
+              onChange={handleDateChange}
+              shouldDisableMonth={disableDates}
+            />
+          </div>
+        </LocalizationProvider>
+        {selectedDate != null && (
+          <div className="flex ml-8">
+            <div className="schedules-list w-25 mx-10">
+              <h2 className="text-lg font-semibold text-white">
+                Schedules for selected date:
+              </h2>
+              {services.map(
+                (service) =>
+                  service.id === selectedServiceId && (
+                    <div key={service.id}>
+                      <h3 className="text-lg font-semibold text-white">
+                        {service.serviceName}
+                      </h3>
+                      {/* Display intervals for the selected service */}
+                      <div className="grid grid-cols-1 gap-4">
+                        {intervals.map((interval, index) => (
+                          <div
+                            key={index}
+                            className={` rounded-lg shadow-md p-4 cursor-pointer text-center hover:bg-gray-400 ${
+                              clickedInterval === interval
+                                ? "bg-gray-500"
+                                : "bg-white"
+                            }
+                           `}
+                            onClick={() =>
+                              handleIntervalClick(interval, clickedDoctors)
+                            }
+                          >
+                            <p>
+                              {" "}
+                              {interval.startTime} - {interval.endTime}{" "}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )
+                  )
+              )}
+            </div>
+            {clickedInterval && clickedDoctors && (
+              <div className="w-1/4 px-4">
+                <h3 className="text-lg font-semibold text-white">
+                  Doctors Available:
+                </h3>
+                <ul>
+                  {clickedDoctors.map((doctor) => (
+                    <div
+                      className={`bg-gray-200 rounded-md my-2 py-2 px-4 hover:bg-gray-400 cursor-pointer text-black ${
+                        selectedDoctor === doctor ? "bg-gray-500" : ""
+                      }`}
+                      key={doctor.id}
+                      onClick={() => handleDoctorClick(doctor)}
+                    >
+                      <li>
+                        {doctor.firstName} {doctor.lastName}
+                      </li>
+                    </div>
+                  ))}
+                </ul>
+
+                <div>
+                  <button
+                    className={`my-2 px-4 py-2 text-white rounded-md cursor-pointer ${
+                      !selectedDoctor
+                        ? "bg-gray-400"
+                        : "bg-blue-500 hover:bg-blue-600"
+                    }`}
+                    onClick={handleSetAppointment}
+                    disabled={!selectedDoctor}
+                  >
+                    Remove Schedule
+                  </button>
+                </div>
+              </div>
             )}
           </div>
-          {clickedInterval && clickedDoctors && (
-            <div className="w-1/4 px-4">
-              <h3 className="text-lg font-semibold text-white">
-                Doctors Available:
-              </h3>
-              <ul>
-                {clickedDoctors.map((doctor) => (
-                  <div
-                    className={`bg-gray-200 rounded-md my-2 py-2 px-4 hover:bg-gray-400 cursor-pointer text-black ${
-                      selectedDoctor === doctor ? "bg-gray-500" : ""
-                    }`}
-                    key={doctor.id}
-                    onClick={() => handleDoctorClick(doctor)}
-                  >
-                    <li>
-                      {doctor.firstName} {doctor.lastName}
-                    </li>
-                  </div>
-                ))}
-              </ul>
-
-              <div>
-                <button
-                  className={`my-2 px-4 py-2 text-white rounded-md cursor-pointer ${
-                    !selectedDoctor
-                      ? "bg-gray-400"
-                      : "bg-blue-500 hover:bg-blue-600"
-                  }`}
-                  onClick={handleSetAppointment}
-                  disabled={!selectedDoctor}
-                >
-                  Remove Schedule
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

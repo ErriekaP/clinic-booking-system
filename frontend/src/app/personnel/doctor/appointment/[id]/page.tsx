@@ -1,4 +1,5 @@
 "use client";
+import BackNavbar from "@/components/backNavbar/backNavbar";
 import DialogDemo from "@/components/cancelAppointment/page";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
@@ -78,141 +79,145 @@ const Page = ({ params }: { params: { id: string } }) => {
   };
 
   return (
-    <div className="flex flex-col h-screen items-center">
-      {/* Appointment details section */}
-      <div className="max-w-4xl my-8 px-4">
-        <h1 className="text-3xl font-bold mb-6 text-white">
-          Appointment Details
-        </h1>
+    <div>
+      <BackNavbar />
+      <div className="flex flex-col h-screen items-center">
+        {/* Appointment details section */}
+        <div className="max-w-4xl my-8 px-4">
+          <h1 className="text-3xl font-bold mb-6 text-white">
+            Appointment Details
+          </h1>
 
-        {appointment && (
-          <div className="flex flex-col items-center">
-            <div className=" bg-gray-100 p-4 rounded-lg flex justify-center">
-              <div className="flex flex-col items-center mr-2">
-                <p className="text-md text-black font-bold">
-                  {formatDate(appointment.startTime)}
-                </p>
+          {appointment && (
+            <div className="flex flex-col items-center">
+              <div className=" bg-gray-100 p-4 rounded-lg flex justify-center">
+                <div className="flex flex-col items-center mr-2">
+                  <p className="text-md text-black font-bold">
+                    {formatDate(appointment.startTime)}
+                  </p>
+                </div>
+                <div className="flex flex-col items-center">
+                  <p className="text-md text-black font-bold">
+                    {formatTime(appointment.startTime)} -{" "}
+                    {formatTime(appointment.endTime)}
+                  </p>
+                </div>
               </div>
-              <div className="flex flex-col items-center">
-                <p className="text-md text-black font-bold">
-                  {formatTime(appointment.startTime)} -{" "}
-                  {formatTime(appointment.endTime)}
-                </p>
+              <div className="flex mt-5 ">
+                <DialogDemo appointmentId={appointment.id} />
               </div>
             </div>
-            <div className="flex mt-5 ">
-              <DialogDemo appointmentId={appointment.id} />
-            </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
 
-      {/* Appointment table section */}
-      <div className="flex w-full max-w-4xl items-center flex-col">
-        <div className="justify-between items-center row-2  ">
-          <div className="overflow-x-auto">
-            <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-              <table className="table-fixed bg-white min-w-full leading-normal">
-                <thead>
-                  <tr>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                      Appointment ID
-                    </th>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                      Student ID
-                    </th>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                      Student Name
-                    </th>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                      Service Name
-                    </th>
+        {/* Appointment table section */}
+        <div className="flex w-full max-w-4xl items-center flex-col">
+          <div className="justify-between items-center row-2  ">
+            <div className="overflow-x-auto">
+              <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                <table className="table-fixed bg-white min-w-full leading-normal">
+                  <thead>
+                    <tr>
+                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                        Appointment ID
+                      </th>
+                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                        Student ID
+                      </th>
+                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                        Student Name
+                      </th>
+                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                        Service Name
+                      </th>
 
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                      Doctor
-                    </th>
-                    {appointment &&
-                      (appointment.status === "CANCELLEDBYDOCTOR" ||
-                        appointment.status === "CANCELLEDBYSTUDENT" ||
-                        appointment.status === "REQUESTTOCANCELBYSTUDENT" ||
-                        appointment.status === "REQUESTTOCANCELBYDOCTOR") && (
-                        <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                          Reason for Cancellation
-                        </th>
-                      )}
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                      Status
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {appointment ? (
-                    <tr
-                      key={appointment.id}
-                      onClick={() => handleClick()}
-                      className="hover:bg-gray-50 cursor-pointer"
-                    >
-                      <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                        {appointment.id}
-                      </td>
-                      <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                        {appointment.patient.id}
-                      </td>
-                      <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                        {appointment.patient.firstName}{" "}
-                        {appointment.patient.lastName}
-                      </td>
-                      <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                        {appointment.service.serviceName}
-                      </td>
-
-                      <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                        {appointment.personnel.firstName}{" "}
-                        {appointment.personnel.lastName}
-                      </td>
+                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                        Doctor
+                      </th>
                       {appointment &&
                         (appointment.status === "CANCELLEDBYDOCTOR" ||
                           appointment.status === "CANCELLEDBYSTUDENT" ||
                           appointment.status === "REQUESTTOCANCELBYSTUDENT" ||
                           appointment.status === "REQUESTTOCANCELBYDOCTOR") && (
-                          <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                            {appointment.reasonforCancellation}
-                          </td>
+                          <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                            Reason for Cancellation
+                          </th>
                         )}
-                      <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                        {appointment.status}
-                      </td>
+                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                        Status
+                      </th>
                     </tr>
-                  ) : (
-                    <tr>
-                      <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                        No appointment details available.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-          {appointment &&
-            appointment.status !== "COMPLETE" &&
-            appointment.status !== "CANCELLEDBYSTUDENT" &&
-            appointment.status !== "CANCELLEDBYDOCTOR" && (
-              <div className="flex flex-row-reverse">
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                  onClick={() => handleClick()}
-                >
-                  Set Follow-up Appointment
-                </button>
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
-                  onClick={() => handleNoteClick(appointment)}
-                >
-                  Doctor's Note
-                </button>
+                  </thead>
+                  <tbody>
+                    {appointment ? (
+                      <tr
+                        key={appointment.id}
+                        //onClick={() => handleClick()}
+                        className="hover:bg-gray-50 cursor-pointer"
+                      >
+                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                          {appointment.id}
+                        </td>
+                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                          {appointment.patient.id}
+                        </td>
+                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                          {appointment.patient.firstName}{" "}
+                          {appointment.patient.lastName}
+                        </td>
+                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                          {appointment.service.serviceName}
+                        </td>
+
+                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                          {appointment.personnel.firstName}{" "}
+                          {appointment.personnel.lastName}
+                        </td>
+                        {appointment &&
+                          (appointment.status === "CANCELLEDBYDOCTOR" ||
+                            appointment.status === "CANCELLEDBYSTUDENT" ||
+                            appointment.status === "REQUESTTOCANCELBYSTUDENT" ||
+                            appointment.status ===
+                              "REQUESTTOCANCELBYDOCTOR") && (
+                            <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                              {appointment.reasonforCancellation}
+                            </td>
+                          )}
+                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                          {appointment.status}
+                        </td>
+                      </tr>
+                    ) : (
+                      <tr>
+                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                          No appointment details available.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
-            )}
+            </div>
+            {appointment &&
+              appointment.status !== "COMPLETE" &&
+              appointment.status !== "CANCELLEDBYSTUDENT" &&
+              appointment.status !== "CANCELLEDBYDOCTOR" && (
+                <div className="flex flex-row-reverse">
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    onClick={() => handleClick()}
+                  >
+                    Set Follow-up Appointment
+                  </button>
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
+                    onClick={() => handleNoteClick(appointment)}
+                  >
+                    Doctor's Note
+                  </button>
+                </div>
+              )}
+          </div>
         </div>
       </div>
     </div>

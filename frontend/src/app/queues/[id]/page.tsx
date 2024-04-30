@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import React from "react";
+import BackNavbar from "@/components/backNavbar/backNavbar";
 
 interface Service {
   id: number;
@@ -177,49 +178,52 @@ export default function Page({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      {queues.map((queue) => (
-        <div className=" flex flex-col text-black items-center bg-white m-5 p-5">
-          <p className="">Current Queue Number:</p>
-          <p className="text-6xl font-bold">{queue?.queueID}</p>
+    <div>
+      <BackNavbar />
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        {queues.map((queue) => (
+          <div className=" flex flex-col text-black items-center bg-white m-5 p-5">
+            <p className="">Current Queue Number:</p>
+            <p className="text-6xl font-bold">{queue?.queueID}</p>
+            <div>
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-5"
+                type="submit"
+                onClick={() => handleFinish(queue.id)}
+              >
+                Finish
+              </button>
+            </div>
+          </div>
+        ))}
+        {service ? (
           <div>
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-5"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
               type="submit"
-              onClick={() => handleFinish(queue.id)}
+              onClick={() => handlePause(service?.id)}
             >
-              Finish
+              Pause
+            </button>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
+              type="submit"
+              onClick={() => handleResume(service?.id)}
+            >
+              Resume
+            </button>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
+              type="submit"
+              onClick={() => handleNext(service?.id)}
+            >
+              Next
             </button>
           </div>
-        </div>
-      ))}
-      {service ? (
-        <div>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
-            type="submit"
-            onClick={() => handlePause(service?.id)}
-          >
-            Pause
-          </button>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
-            type="submit"
-            onClick={() => handleResume(service?.id)}
-          >
-            Resume
-          </button>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
-            type="submit"
-            onClick={() => handleNext(service?.id)}
-          >
-            Next
-          </button>
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+        ) : (
+          <p>Loading...</p>
+        )}
+      </div>
     </div>
   );
 }

@@ -18,6 +18,32 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+enum LastMensPeriod {
+  REGULAR
+  IRREGULAR
+
+}
+
+enum PhysicalExamination {
+  NORMAL
+  ABNORMAL
+
+}
+
+enum GeneralSurvey {
+  CONSCIOUS
+  COHERENT
+  AMBULATORY
+  NOTINDISTRESS
+
+}
+
+enum ClinicAssess {
+  PENDING
+  CLEARED
+
+}
+
 enum Role {
   ADMIN
   DOCTOR
@@ -227,9 +253,59 @@ createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt
 }
 
+model PhysicalExam{
+id Int @id @default(autoincrement())
+purpose String
+genSurvey GeneralSurvey
+bloodPressure String
+pulseRate String
+respRate String
+bodyTemp String
+LMP LastMensPeriod
+hypertension Boolean
+bronchialAsthma Boolean
+heartDisease Boolean
+chestPain Boolean
+seizureDisorder Boolean
+others String
+LOC String
+injuries String
+skin PhysicalExamination
+head PhysicalExamination
+eyes PhysicalExamination
+ears PhysicalExamination
+neck PhysicalExamination
+throat PhysicalExamination
+chestAndLungs PhysicalExamination
+heart PhysicalExamination
+abdomen PhysicalExamination
+gut PhysicalExamination
+masculoSkeletal PhysicalExamination
+neurological PhysicalExamination
+CBC PhysicalExamination
+urinalysis PhysicalExamination
+fecalysis PhysicalExamination
+chestXray PhysicalExamination
+ECG PhysicalExamination
+HBSAG PhysicalExamination
+drugTest PhysicalExamination
+isPhysicallyFit Boolean
+clinicAssessment ClinicAssess
+forClearance String
+forLaboratory String
+forOthers String
+finalAssessment String
+afterAppointmentID Int @unique
+afterQueueID Int @unique
+afterAppointment AfterAppointment @relation(fields: [afterAppointmentID], references: [id])
+afterQueue AfterQueue @relation(fields: [afterQueueID], references: [id])
+
+}
+
 model AfterAppointment{
 id Int @id @default(autoincrement())
 appointmentID Int @unique
+physicalExamID PhysicalExam?
 diagnosis String
 medications Medicine[]
 appointment Appointments @relation(fields: [appointmentID], references: [id])
@@ -238,6 +314,7 @@ appointment Appointments @relation(fields: [appointmentID], references: [id])
 model AfterQueue{
 id Int @id @default(autoincrement())
 queueID Int @unique
+physicalExamID PhysicalExam?
 diagnosis String
 medications Medicine[]
 queue Queue @relation(fields: [queueID], references: [id])

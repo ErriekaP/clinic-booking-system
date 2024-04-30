@@ -312,10 +312,23 @@ input {
   justify-content: center;
 }
 
+.StartContainer {
+  display: flex;
+  justify-content: start;
+}
+
 .NavigationMenuRoot {
   position: relative;
   display: flex;
   justify-content: center;
+  width: 100vw;
+  z-index: 1;
+}
+
+.NavigationMenuRootStart {
+  position: relative;
+  display: flex;
+  justify-content: start;
   width: 100vw;
   z-index: 1;
 }

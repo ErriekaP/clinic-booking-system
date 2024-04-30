@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import BackNavbar from "@/components/backNavbar/backNavbar";
 
 export default function Page({ params }: { params: { slug: string } }) {
   const router = useRouter();
@@ -101,54 +102,45 @@ export default function Page({ params }: { params: { slug: string } }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-md"
-      >
-        <div className="flex flex-col gap-4">
-          <div className="">
-            <p className="font-bold">Date:</p>
-            <p>{dateString}</p>
-          </div>
-          <div className="">
-            <p className="font-bold">Start Time:</p>
-            <p>{startTime}</p>
-          </div>
-          <div className="">
-            <p className="font-bold">End Time:</p>
-            <p>{endTime}</p>
-          </div>
+    <div>
+      <BackNavbar />
 
-          {/* <div>
-            {personnel ? (
-              <div>
-                <p className="font-bold">Doctor:</p>
-                <p>
-                  {personnel.firstName} {personnel.lastName}
-                </p>
-              </div>
-            ) : (
-              <p>Loading personnel data...</p>
-            )}
-          </div> */}
-        </div>
-        <div className="mt-8 flex gap-4">
-          <button
-            type="button"
-            className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-md"
-            onClick={handleCancel}
-          >
-            Cancel
-          </button>
-          <button
-            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
-            type="submit"
-          >
-            Schedule Appointment
-          </button>
-        </div>
-      </form>
+      <div className="flex flex-col items-center justify-center h-screen">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-8 rounded-lg shadow-md"
+        >
+          <div className="flex flex-col gap-4">
+            <div className="">
+              <p className="font-bold">Date:</p>
+              <p>{dateString}</p>
+            </div>
+            <div className="">
+              <p className="font-bold">Start Time:</p>
+              <p>{startTime}</p>
+            </div>
+            <div className="">
+              <p className="font-bold">End Time:</p>
+              <p>{endTime}</p>
+            </div>
+          </div>
+          <div className="mt-8 flex gap-4">
+            <button
+              type="button"
+              className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-md"
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
+            <button
+              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
+              type="submit"
+            >
+              Schedule Appointment
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

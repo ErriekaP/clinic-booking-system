@@ -56,6 +56,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
               `/admin/appointments`,
               `/queues`,
               `/afterAppointments/student`,
+              `/home`,
             ],
             DOCTOR: [
               `/personnel/doctor/${userInfo.id}`,
@@ -69,6 +70,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
               `/personnel/doctor/remove/${userInfo.id}`,
               `/personnel/doctor/queues/${userInfo.id}`,
               `/services`,
+              `/home`,
+              `/personnel/doctor/queues/afterqueues/`,
             ],
             NURSE: [
               `/personnel/nurse/${userInfo.id}`,
@@ -76,8 +79,16 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
               `/appointments`,
               `/personnel/nurse/queues`,
               `/services`,
+              `/home`,
+              `/admin/appointments/patient`,
+              `/afterAppointments/student`,
             ],
-            STAFF: [`/personnel/staff/${userInfo.id}`, `/queues`, `/services`],
+            STAFF: [
+              `/personnel/staff/${userInfo.id}`,
+              `/queues`,
+              `/services`,
+              `/home`,
+            ],
             STUDENT: [
               `/date`,
               `/patient/student/${userInfo.id}`,
@@ -91,6 +102,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
               `/queue`,
               `/unauthorized`,
               `/afterAppointments/student`,
+              `/home`,
             ],
             EMPLOYEE: [
               `/patient/employee/${userInfo.id}`,
@@ -104,6 +116,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
               `/unauthorized`,
               `/appointments`,
               `/services`,
+              `/afterAppointments/employee`,
             ],
           };
 

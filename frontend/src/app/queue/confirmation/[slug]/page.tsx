@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { fetchUserInfo } from "@/utilities/fetch/patient";
+import BackNavbar from "@/components/backNavbar/backNavbar";
 
 interface User {
   id: string;
@@ -149,29 +150,32 @@ export default function Page({ params }: { params: { slug: string } }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-md"
-      >
-        <div className="flex flex-col gap-4">
-          <div className="">
-            <p className="font-bold">ServiceID:</p>
-            <p>{serviceID}</p>
-          </div>
+    <div>
+      <BackNavbar />
 
-          <div>
-            {service ? (
-              <div>
-                <p className="font-bold">Service Name:</p>
-                <p>{service.serviceName}</p>
-              </div>
-            ) : (
-              <p>Loading service data...</p>
-            )}
-          </div>
+      <div className="flex flex-col items-center justify-center h-screen">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-8 rounded-lg shadow-md"
+        >
+          <div className="flex flex-col gap-4">
+            <div className="">
+              <p className="font-bold">ServiceID:</p>
+              <p>{serviceID}</p>
+            </div>
 
-          {/* <div>
+            <div>
+              {service ? (
+                <div>
+                  <p className="font-bold">Service Name:</p>
+                  <p>{service.serviceName}</p>
+                </div>
+              ) : (
+                <p>Loading service data...</p>
+              )}
+            </div>
+
+            {/* <div>
             {personnel ? (
               <div>
                 <p className="font-bold">Doctor:</p>
@@ -183,23 +187,24 @@ export default function Page({ params }: { params: { slug: string } }) {
               <p>Loading personnel data...</p>
             )}
           </div> */}
-        </div>
-        <div className="mt-8 flex gap-4">
-          <button
-            type="button"
-            className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-md"
-            onClick={handleCancel}
-          >
-            Cancel
-          </button>
-          <button
-            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
-            type="submit"
-          >
-            Get Ticket
-          </button>
-        </div>
-      </form>
+          </div>
+          <div className="mt-8 flex gap-4">
+            <button
+              type="button"
+              className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-md"
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
+            <button
+              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
+              type="submit"
+            >
+              Get Ticket
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
