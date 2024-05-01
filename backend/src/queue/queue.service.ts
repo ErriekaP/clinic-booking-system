@@ -473,6 +473,23 @@ export class QueueService {
     }
   }
 
+  async cancelQueue(id: string) {
+    try {
+      const parsedId = parseInt(id, 10);
+
+      const updatedQueue = await this.prisma.queue.update({
+        where: { id: parsedId },
+        data: { status: 'CANCELLED' },
+      });
+      return {
+        success: true,
+        data: { updatedQueue },
+      };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  }
+
   getHello(): string {
     return 'Hello World!';
   }

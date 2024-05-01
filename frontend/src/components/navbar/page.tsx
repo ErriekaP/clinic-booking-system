@@ -186,6 +186,12 @@ const NavBar = () => {
                     <a href={`/queue/${user?.id}`} className="ListItemLink">
                       <p className="ListItemHeading">Queues</p>
                     </a>
+                    <a
+                      href={`/queue/cancel/${user?.id}`}
+                      className="ListItemLink"
+                    >
+                      <p className="ListItemHeading">Cancel Queue</p>
+                    </a>
                   </ul>
                 </NavigationMenu.Content>
               </NavigationMenu.Item>

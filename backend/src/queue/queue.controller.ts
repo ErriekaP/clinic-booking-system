@@ -70,6 +70,10 @@ export class QueueController {
     }
   }
 
+  @Get('/cancel/:id')
+  async getCancelQueue(@Param('id') id: string): Promise<any> {
+    return this.queueService.cancelQueue(id);
+  }
   @Get('ongoing/patient/:id')
   async findPatientQueue(@Param('id') patientID: string) {
     const parsedId = parseInt(patientID, 10);
