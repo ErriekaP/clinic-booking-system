@@ -99,6 +99,18 @@ export class QueueController {
     }
   }
 
+  @Get('personnel/:id')
+  async findAllQueuesPersonnel(@Param('id') personnelId: string) {
+    const parsedId = parseInt(personnelId, 10);
+
+    try {
+      const queues =
+        await this.queueService.getAllQueuesPersonnel(parsedId);
+      return queues;
+    } catch (error) {
+      throw new Error(`Unable to fetch queues: ${error.message}`);
+    }
+  }
   @Get('allOngoing')
   async findQueueswithService() {
     try {

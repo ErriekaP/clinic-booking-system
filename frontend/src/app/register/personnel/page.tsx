@@ -179,7 +179,7 @@ export default function Page() {
                         type="text"
                         value={formData.firstName}
                         onChange={handleInputChange}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="shadow appearance-none border rounded w-full py-2 pl-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       />
                     </div>
 
@@ -197,7 +197,7 @@ export default function Page() {
                         type="text"
                         value={formData.middleName}
                         onChange={handleInputChange}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="shadow appearance-none border rounded w-full py-2 pl-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       />
                     </div>
 
@@ -215,7 +215,7 @@ export default function Page() {
                         type="text"
                         value={formData.lastName}
                         onChange={handleInputChange}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="shadow appearance-none border rounded w-full py-2 pl-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       />
                     </div>
 
@@ -233,7 +233,7 @@ export default function Page() {
                         type="tel"
                         value={formData.phoneNumber}
                         onChange={handleInputChange}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="shadow appearance-none border rounded w-full py-2 pl-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       />
                     </div>
 
@@ -251,7 +251,7 @@ export default function Page() {
                         type="date"
                         value={formData.dateOfBirth}
                         onChange={handleInputChange}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="shadow appearance-none border rounded w-full py-2 pl-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       />
                     </div>
 
@@ -313,7 +313,7 @@ export default function Page() {
                         type="email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="shadow appearance-none border rounded w-full py-2 pl-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       />
                     </div>
 
@@ -331,7 +331,7 @@ export default function Page() {
                         type="password"
                         value={formData.password}
                         onChange={handleInputChange}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="shadow appearance-none border rounded w-full py-2 pl-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       />
                     </div>
 
@@ -379,7 +379,7 @@ export default function Page() {
                           type="text"
                           value={formData.specialty}
                           onChange={handleInputChange}
-                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                          className="shadow appearance-none border rounded w-full py-2 pl-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                       </div>
                     </div>
@@ -419,7 +419,7 @@ export default function Page() {
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded focus:outline-none focus:shadow-outline"
                 >
                   Submit
                 </button>

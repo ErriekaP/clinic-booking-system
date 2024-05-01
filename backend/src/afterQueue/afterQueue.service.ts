@@ -52,7 +52,8 @@ export class afterQueueService {
   }
 
   async createAfterQueue(createAfterAppointmentDto: CreateAfterQueueDto) {
-    const { queueID, diagnosis, medications } = createAfterAppointmentDto;
+    const { queueID, diagnosis, medications, physicalExam } =
+      createAfterAppointmentDto;
 
     // Create AfterAppointment
     const afterQueue = await this.prisma.afterQueue.create({
@@ -72,7 +73,20 @@ export class afterQueueService {
       }),
     );
 
-    await Promise.all(createMedicationsPromises);
+    // Create PE for AfterAppointment
+    const createPhysicalExamPromises = physicalExam.map((physicalExam) =>
+      this.prisma.physicalExam.create({
+        data: {
+          afterQueueID: afterQueue.id,
+          ...physicalExam,
+        },
+      }),
+    );
+
+    await Promise.all([
+      ...createMedicationsPromises,
+      ...createPhysicalExamPromises,
+    ]);
 
     // // Update the status of the associated appointment to "COMPLETE"
     // await this.prisma.queue.update({

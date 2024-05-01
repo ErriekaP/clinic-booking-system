@@ -73,7 +73,7 @@ export default function Page() {
                 Time From
               </label>
               <input
-                className="shadow appearance-none border rounded w-full py-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 pl-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="timeFrom"
                 name="timeFrom"
                 type="text"
@@ -89,7 +89,7 @@ export default function Page() {
                 Time To
               </label>
               <input
-                className="shadow appearance-none border rounded w-full py-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 pl-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="timeTo"
                 name="timeTo"
                 type="text"

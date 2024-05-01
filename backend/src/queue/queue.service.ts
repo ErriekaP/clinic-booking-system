@@ -178,6 +178,71 @@ export class QueueService {
     }
   }
 
+  async getAllQueuesPersonnel(personnelId: number) {
+    try {
+      const personnel = await this.prisma.clinicPersonnel.findUnique({
+        where: {
+          id: personnelId,
+        },
+        include: {
+          services: true,
+        },
+      });
+
+      if (!personnel) {
+        throw new Error(`Personnel with ID ${personnelId} not found.`);
+      }
+
+      const serviceIds = personnel.services.map((service) => service.id);
+      const { firstName, lastName } = personnel;
+
+      const ongoingQueues = await this.prisma.queue.findMany({
+        where: {
+          serviceID: {
+            in: serviceIds,
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+        include: {
+          patient: true,
+        },
+      });
+
+      const ongoingQueuesWithDetails = await Promise.all(
+        ongoingQueues.map(async (queue) => {
+          const service = await this.prisma.service.findUnique({
+            where: {
+              id: queue.serviceID,
+            },
+          });
+
+          return {
+            id: queue.id,
+            queueID: queue.queueID,
+            queueCount: queue.queueCount,
+            patientID: queue.patientID,
+            status: queue.status,
+            createdAt: queue.createdAt,
+            updatedAt: queue.updatedAt,
+            personnel: `${firstName} ${lastName}`,
+            service: service ? service.serviceName : 'Service not found', //
+            patient: {
+              firstName: queue.patient.firstName,
+              lastName: queue.patient.lastName,
+            },
+          };
+        }),
+      );
+
+      console.log(ongoingQueuesWithDetails);
+      return ongoingQueuesWithDetails;
+    } catch (error) {
+      throw new Error(`Unable to fetch ongoing queues: ${error.message}`);
+    }
+  }
+
   async findPatientQueue(id: string) {
     const parsedId = parseInt(id, 10);
     const queues = await this.prisma.queue.findMany({

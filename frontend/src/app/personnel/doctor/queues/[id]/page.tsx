@@ -1,5 +1,6 @@
 "use client";
 import BackNavbar from "@/components/backNavbar/backNavbar";
+import FormsDialog from "@/components/formsDialog/page";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -15,7 +16,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     const fetchAppointments = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/queue/ongoing/personnel/${id}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/queue/personnel/${id}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch appointments");
@@ -35,7 +36,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const handleClick = (queue: any) => {
     // Handle click action (if needed)
     console.log("Clicked queue:", queue);
-    router.push(`/personnel/doctor/queues/afterqueues/${queue.id}`);
+    //router.push(`/personnel/doctor/queues/afterqueues/${queue.id}`);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,19 +47,6 @@ const Page = ({ params }: { params: { id: string } }) => {
   const filteredQueues = queues.filter((queue) =>
     queue.status.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  const formatTime = (timeString: string) => {
-    const hours = parseInt(timeString.slice(11, 13), 10);
-    const minutes = timeString.slice(14, 16);
-    const period = hours < 12 ? "AM" : "PM";
-    const formattedHours = hours > 12 ? hours - 12 : hours;
-    return `${formattedHours}:${minutes} ${period}`;
-  };
-  const formatDate = (dateString: string) => {
-    const dayjsObject = dayjs(dateString);
-    const isoDateString = dayjsObject.format("MMMM D, YYYY	");
-    return isoDateString;
-  };
 
   return (
     <div>
@@ -107,6 +95,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
                       Status
                     </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                      Forms
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -129,7 +120,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
                       <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
                         {" "}
-                        {queue.personnel}
+                        {queue.patient.firstName} {queue.patient.lastName}
                       </td>
 
                       <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
@@ -139,6 +130,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                       <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
                         {queue.status}
                       </td>
+
+                      {queue.status === "ONGOING" ? (
+                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                          <FormsDialog queueId={queue.id} />
+                        </td>
+                      ) : (
+                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center"></td>
+                      )}
                     </tr>
                   ))}
                 </tbody>
