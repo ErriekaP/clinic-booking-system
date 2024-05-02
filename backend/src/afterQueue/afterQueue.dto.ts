@@ -25,11 +25,12 @@ export class CreatePhysicalExamDto {
   respRate: string;
   bodyTemp: string;
   LMP: 'REGULAR' | 'IRREGULAR';
-  hypertension: boolean;
-  bronchialAsthma: boolean;
-  heartDisease: boolean;
-  chestPain: boolean;
-  seizureDisorder: boolean;
+  menstruation: string;
+  hypertension: string;
+  bronchialAsthma: string;
+  heartDisease: string;
+  chestPain: string;
+  seizureDisorder: string;
   others: string;
   LOC: string;
   injuries: string;

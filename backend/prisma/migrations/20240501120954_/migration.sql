@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "PhysicalExam" ALTER COLUMN "hypertension" SET DATA TYPE TEXT,
+ALTER COLUMN "bronchialAsthma" SET DATA TYPE TEXT,
+ALTER COLUMN "heartDisease" SET DATA TYPE TEXT,
+ALTER COLUMN "chestPain" SET DATA TYPE TEXT,
+ALTER COLUMN "seizureDisorder" SET DATA TYPE TEXT;
