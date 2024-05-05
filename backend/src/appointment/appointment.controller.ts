@@ -1,14 +1,4 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  Param,
-  Query,
-  NotFoundException,
-  InternalServerErrorException,
-  BadRequestException,
-} from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Query } from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
 import { Appointments } from '@prisma/client';
 

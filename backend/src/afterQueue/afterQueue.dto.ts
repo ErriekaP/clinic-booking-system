@@ -4,7 +4,6 @@ export class CreateAfterQueueDto {
   queueID: number;
   diagnosis: string;
   medications: CreateMedicineDto[];
-  physicalExam: CreatePhysicalExamDto[];
 }
 
 export class CreateMedicineDto {
@@ -17,7 +16,8 @@ export class CreateMedicineDto {
 }
 
 export class CreatePhysicalExamDto {
-  afterAppointmentID: null;
+  queueID: number;
+  appointmentID: number;
   purpose: string;
   genSurvey: GeneralSurvey[];
   bloodPressure: string;
@@ -25,7 +25,7 @@ export class CreatePhysicalExamDto {
   respRate: string;
   bodyTemp: string;
   LMP: 'REGULAR' | 'IRREGULAR';
-  menstruation: string;
+  menstruation: Date | null;
   hypertension: string;
   bronchialAsthma: string;
   heartDisease: string;

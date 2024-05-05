@@ -471,7 +471,7 @@ export class QueueService {
         },
       });
 
-      // Map each queue to its associated service and patient
+      // Map each queue
       const queuesWithDetails = await Promise.all(
         queues.map(async (queue) => {
           const afterQueue = await this.prisma.afterQueue.findUnique({

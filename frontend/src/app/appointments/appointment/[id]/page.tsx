@@ -1,8 +1,12 @@
 "use client";
 import BackNavbar from "@/components/backNavbar/backNavbar";
+import QueuePhysicalExamDialog from "@/components/afterModal/QueuePhysicalExam";
+
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import QueuePhysicalExamDialogue from "@/components/afterModal/QueuePhysicalExam";
+import AfterAppointmentDialogue from "@/components/afterModal/afterAppointmentModal";
 
 interface Appointment {
   id: string;
@@ -14,11 +18,26 @@ interface Appointment {
   service: ServiceInfo;
   personnel: PersonnelInfo;
   patient: PatientInfo;
+  afterAppointment?: AfterAppointmentInfo;
+  medication?: MedicationInfo;
 }
 
+interface AfterAppointmentInfo {
+  diagnosis: String;
+  // Add other properties as needed
+}
+
+interface MedicationInfo {
+  medicineName: String;
+  medicineStrength: String;
+  medicineQuantity: String;
+  medicineFrequency: String;
+  remarks: String;
+  // Add other properties as needed
+}
 interface ServiceInfo {
-  serviceName: string;
-  description: string;
+  serviceName: String;
+  description: String;
 }
 
 interface PersonnelInfo {
@@ -36,6 +55,13 @@ const Page = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
   const { id } = params;
   const [appointment, setAppointment] = useState<Appointment | null>(null);
+  const [physicalExam, setPhysicalExam] = useState<any>(null);
+  const [dialogOpen, setDialogOpen] = useState(false); // State to manage dialog visibility
+
+  // Function to toggle dialog state
+  const toggleDialog = () => {
+    setDialogOpen(!dialogOpen);
+  };
 
   useEffect(() => {
     const fetchAppointment = async () => {
@@ -55,6 +81,27 @@ const Page = ({ params }: { params: { id: string } }) => {
 
     fetchAppointment();
   }, [id]);
+
+  useEffect(() => {
+    // Fetch physical exam data from an API
+    const fetchPhysicalExam = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/afterAppointment/physicalExam/${id}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch after queue");
+        }
+        const data = await response.json();
+        const res = data.physicalExam;
+        setPhysicalExam(data);
+      } catch (error) {
+        console.error("Error fetching after queue:", error);
+      }
+    };
+
+    fetchPhysicalExam();
+  }, []);
 
   const formatTime = (timeString: string) => {
     const hours = parseInt(timeString.slice(11, 13), 10);
@@ -110,19 +157,6 @@ const Page = ({ params }: { params: { id: string } }) => {
         {/* Appointment table section */}
         <div className="flex w-full max-w-4xl items-center flex-col">
           <div className="justify-between items-center row-2  ">
-            {/* {appointment &&
-            appointment.status !== "COMPLETE" &&
-            appointment.status !== "CANCELLEDBYSTUDENT" &&
-            appointment.status !== "CANCELLEDBYDOCTOR" && (
-              <div className="right-0">
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                  onClick={() => handleClick(appointment)}
-                >
-                  Update
-                </button>
-              </div>
-            )} */}
             <div className="overflow-x-auto">
               <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
                 <table className="table-fixed bg-white min-w-full leading-normal">
@@ -155,6 +189,12 @@ const Page = ({ params }: { params: { id: string } }) => {
                         )}
                       <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
                         Status
+                      </th>
+                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                        Diagnosis
+                      </th>
+                      <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                        Physical Exam
                       </th>
                     </tr>
                   </thead>
@@ -198,6 +238,88 @@ const Page = ({ params }: { params: { id: string } }) => {
                           )}
                         <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
                           {appointment.status}
+                        </td>
+                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                          <AfterAppointmentDialogue
+                            diagnosis={
+                              appointment.afterAppointment?.diagnosis || ""
+                            }
+                            medicineName={
+                              appointment.medication?.medicineName || ""
+                            }
+                            medicineStrength={
+                              appointment.medication?.medicineStrength || ""
+                            }
+                            medicineQuantity={
+                              appointment.medication?.medicineQuantity || ""
+                            }
+                            medicineFrequency={
+                              appointment.medication?.medicineFrequency || ""
+                            }
+                            remarks={appointment.medication?.remarks || ""}
+                          />
+                        </td>
+
+                        <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                          {physicalExam.map((exam: any, index: number) => (
+                            <QueuePhysicalExamDialog
+                              key={index}
+                              queueID={exam.physicalExam?.queueID}
+                              purpose={exam.physicalExam?.purpose}
+                              genSurvey={exam.physicalExam?.genSurvey}
+                              bloodPressure={exam.physicalExam?.bloodPressure}
+                              pulseRate={exam.physicalExam?.pulseRate}
+                              respRate={exam.physicalExam?.respRate}
+                              bodyTemp={exam.physicalExam?.bodyTemp}
+                              LMP={exam.physicalExam?.LMP}
+                              menstruation={exam.physicalExam?.menstruation}
+                              hypertension={exam.physicalExam?.hypertension}
+                              bronchialAsthma={
+                                exam.physicalExam?.bronchialAsthma
+                              }
+                              heartDisease={exam.physicalExam?.heartDisease}
+                              chestPain={exam.physicalExam?.chestPain}
+                              seizureDisorder={
+                                exam.physicalExam?.seizureDisorder
+                              }
+                              others={exam.physicalExam?.others}
+                              LOC={exam.physicalExam?.LOC}
+                              injuries={exam.physicalExam?.injuries}
+                              skin={exam.physicalExam?.skin}
+                              head={exam.physicalExam?.head}
+                              eyes={exam.physicalExam?.eyes}
+                              ears={exam.physicalExam?.ears}
+                              neck={exam.physicalExam?.neck}
+                              throat={exam.physicalExam?.throat}
+                              chestAndLungs={exam.physicalExam?.chestAndLungs}
+                              heart={exam.physicalExam?.heart}
+                              abdomen={exam.physicalExam?.abdomen}
+                              gut={exam.physicalExam?.gut}
+                              masculoSkeletal={
+                                exam.physicalExam?.masculoSkeletal
+                              }
+                              neurological={exam.physicalExam?.neurological}
+                              CBC={exam.physicalExam?.CBC}
+                              urinalysis={exam.physicalExam?.urinalysis}
+                              fecalysis={exam.physicalExam?.fecalysis}
+                              chestXray={exam.physicalExam?.chestXray}
+                              ECG={exam.physicalExam?.ECG}
+                              HBSAG={exam.physicalExam?.HBSAG}
+                              drugTest={exam.physicalExam?.drugTest}
+                              isPhysicallyFit={
+                                exam.physicalExam?.isPhysicallyFit
+                              }
+                              clinicAssessment={
+                                exam.physicalExam?.clinicAssessment
+                              }
+                              forClearance={exam.physicalExam?.forClearance}
+                              forLaboratory={exam.physicalExam?.forLaboratory}
+                              forOthers={exam.physicalExam?.forOthers}
+                              finalAssessment={
+                                exam.physicalExam?.finalAssessment
+                              }
+                            />
+                          ))}
                         </td>
                       </tr>
                     ) : (

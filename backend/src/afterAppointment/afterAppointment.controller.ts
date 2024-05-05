@@ -13,6 +13,7 @@ import { AfterAppointment, Appointments } from '@prisma/client';
 import {
   CreateAfterAppointmentDto,
   CreateMedicineDto,
+  CreatePhysicalExamDto,
 } from './afterAppointment.dto';
 
 @Controller('afterAppointment')
@@ -53,6 +54,20 @@ export class afterAppointmentController {
     } catch (error) {
       throw new Error(`Unable to fetch services: ${error.message}`);
     }
+  }
+
+  @Post('pe/add')
+  async createPE(@Body() createPhysicalExamDto: CreatePhysicalExamDto) {
+    return this.afterAppointmentsService.createPhysicalExam(
+      createPhysicalExamDto,
+    );
+  }
+
+  @Get('/physicalExam/:id')
+  async getAfterAppointment(@Param('id') appointmentID: string) {
+    const parsedId = parseInt(appointmentID, 10);
+
+    return this.afterAppointmentsService.getPhysicalExam(parsedId);
   }
 
   // @Get(':id/personnel')

@@ -1,6 +1,8 @@
 "use client";
 import AfterAppointmentDialogue from "@/components/afterModal/afterAppointmentModal";
 import BackNavbar from "@/components/backNavbar/backNavbar";
+import QueuePhysicalExamDialog from "@/components/afterModal/QueuePhysicalExam";
+
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,6 +12,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const [appointments, setAppointments] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [physicalExam, setPhysicalExam] = useState<any[]>([]);
 
   useEffect(() => {
     // Fetch appointments data from an API
@@ -33,6 +36,26 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   console.log(appointments);
 
+  useEffect(() => {
+    // Fetch physical exam data from an API
+    const fetchPhysicalExam = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/afterAppointment/physicalExam/${id}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch after queue");
+        }
+        const data = await response.json();
+        setPhysicalExam(data);
+      } catch (error) {
+        console.error("Error fetching after queue:", error);
+      }
+    };
+
+    fetchPhysicalExam();
+  }, []);
+
   const handleClick = (appointment: any) => {
     // Handle click action (if needed)
     console.log("Clicked appointment:", appointment);
@@ -45,6 +68,10 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const filteredAppointments = appointments.filter((appointment) =>
     appointment.status.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const filteredPhysicalExam = physicalExam.filter((pe) =>
+    pe.status.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const formatTime = (timeString: string) => {
@@ -109,10 +136,13 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase ">
                       After Appointment
                     </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                      Physical Exam
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredAppointments.map((appointment) => (
+                  {filteredAppointments.map((appointment, index) => (
                     <tr
                       key={appointment.id}
                       onClick={() => handleClick(appointment)}
@@ -151,6 +181,149 @@ const Page = ({ params }: { params: { id: string } }) => {
                           }
                           remarks={appointment.medication?.remarks}
                         />
+                      </td>
+                      <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                        {index < filteredPhysicalExam.length ? (
+                          <QueuePhysicalExamDialog
+                            queueID={
+                              filteredPhysicalExam[index].physicalExam?.queueID
+                            }
+                            purpose={
+                              filteredPhysicalExam[index].physicalExam?.purpose
+                            }
+                            genSurvey={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.genSurvey
+                            }
+                            bloodPressure={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.bloodPressure
+                            }
+                            pulseRate={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.pulseRate
+                            }
+                            respRate={
+                              filteredPhysicalExam[index].physicalExam?.respRate
+                            }
+                            bodyTemp={
+                              filteredPhysicalExam[index].physicalExam?.bodyTemp
+                            }
+                            LMP={filteredPhysicalExam[index].physicalExam?.LMP}
+                            menstruation={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.menstruation
+                            }
+                            hypertension={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.hypertension
+                            }
+                            bronchialAsthma={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.bronchialAsthma
+                            }
+                            heartDisease={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.heartDisease
+                            }
+                            chestPain={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.chestPain
+                            }
+                            seizureDisorder={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.seizureDisorder
+                            }
+                            others={
+                              filteredPhysicalExam[index].physicalExam?.others
+                            }
+                            LOC={filteredPhysicalExam[index].physicalExam?.LOC}
+                            injuries={
+                              filteredPhysicalExam[index].physicalExam?.injuries
+                            }
+                            skin={
+                              filteredPhysicalExam[index].physicalExam?.skin
+                            }
+                            head={
+                              filteredPhysicalExam[index].physicalExam?.head
+                            }
+                            eyes={
+                              filteredPhysicalExam[index].physicalExam?.eyes
+                            }
+                            ears={
+                              filteredPhysicalExam[index].physicalExam?.ears
+                            }
+                            neck={
+                              filteredPhysicalExam[index].physicalExam?.neck
+                            }
+                            throat={
+                              filteredPhysicalExam[index].physicalExam?.throat
+                            }
+                            chestAndLungs={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.chestAndLungs
+                            }
+                            heart={
+                              filteredPhysicalExam[index].physicalExam?.heart
+                            }
+                            abdomen={
+                              filteredPhysicalExam[index].physicalExam?.abdomen
+                            }
+                            gut={filteredPhysicalExam[index].physicalExam?.gut}
+                            masculoSkeletal={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.masculoSkeletal
+                            }
+                            neurological={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.neurological
+                            }
+                            CBC={filteredPhysicalExam[index].physicalExam?.CBC}
+                            urinalysis={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.urinalysis
+                            }
+                            fecalysis={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.fecalysis
+                            }
+                            chestXray={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.chestXray
+                            }
+                            ECG={filteredPhysicalExam[index].physicalExam?.ECG}
+                            HBSAG={
+                              filteredPhysicalExam[index].physicalExam?.HBSAG
+                            }
+                            drugTest={
+                              filteredPhysicalExam[index].physicalExam?.drugTest
+                            }
+                            isPhysicallyFit={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.isPhysicallyFit
+                            }
+                            clinicAssessment={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.clinicAssessment
+                            }
+                            forClearance={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.forClearance
+                            }
+                            forLaboratory={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.forLaboratory
+                            }
+                            forOthers={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.forOthers
+                            }
+                            finalAssessment={
+                              filteredPhysicalExam[index].physicalExam
+                                ?.finalAssessment
+                            }
+                          />
+                        ) : null}
                       </td>
                     </tr>
                   ))}

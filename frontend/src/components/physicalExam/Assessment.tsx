@@ -1,28 +1,16 @@
 "use client";
 import { Flex, Text } from "@radix-ui/themes";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const Assessment = () => {
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
-  const [selectedConditions, setSelectedConditions] = useState<string[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [physicallyFitActivated, setPhysicallyFitActivated] = useState(false);
   const [forClearanceActivated, setForClearanceActivated] = useState(false);
   const [forLaboratoryActivated, setForLaboratoryActivated] = useState(false);
   const [othersActivated, setOthersActivated] = useState(false);
   const [finalAssessmentActivated, setFinalAssessmentActivated] =
     useState(false);
 
-  const conditionOptions = [
-    "CONSCIOUS",
-    "COHERENT",
-    "AMBULATORY",
-    "NOTINDISTRESS",
-  ];
-
   const [formData, setFormData] = useState({
-    afterAppointmentID: null,
+    appointmentID: null,
     purpose: "",
     genSurvey: [] as string[],
     bloodPressure: "",

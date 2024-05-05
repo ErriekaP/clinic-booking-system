@@ -4,14 +4,18 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import "./styles.css";
 import { useRouter } from "next/navigation";
 
-const FormsDialog = ({ queueId }: { queueId: string }) => {
+const AppointmentFormDialog = ({
+  appointmentId,
+}: {
+  appointmentId: string;
+}) => {
   const router = useRouter();
 
   const handleAfterCheckupClick = () => {
-    router.push(`/personnel/doctor/queues/afterqueues/checkup/${queueId}`);
+    router.push(`/personnel/doctor/appointment/note/${appointmentId}`);
   };
   const handlePhysicalExamClick = () => {
-    router.push(`/personnel/doctor/queues/afterqueues/pe/${queueId}`);
+    router.push(`/personnel/doctor/appointment/pe/${appointmentId}`);
   };
 
   return (
@@ -59,4 +63,4 @@ const FormsDialog = ({ queueId }: { queueId: string }) => {
   );
 };
 
-export default FormsDialog;
+export default AppointmentFormDialog;

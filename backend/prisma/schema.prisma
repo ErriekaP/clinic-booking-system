@@ -242,6 +242,7 @@ details String
 status AppointmentStatus
 reasonforCancellation String
 afterAppointmentID AfterAppointment?
+physicalExamID PhysicalExam?
 patient Patient? @relation(fields: [patientID], references: [id])
 personnel ClinicPersonnel? @relation(fields: [personnelID], references: [id])
 service Service @relation(fields: [serviceID], references: [id])
@@ -251,8 +252,8 @@ updatedAt DateTime @updatedAt
 
 model PhysicalExam{
 id Int @id @default(autoincrement())
-afterQueueID Int? 
-afterAppointmentID Int? 
+queueID Int? @unique
+appointmentID Int? @unique
 purpose String
 genSurvey GeneralSurvey[]
 bloodPressure String
@@ -294,15 +295,14 @@ forClearance String
 forLaboratory String
 forOthers String
 finalAssessment String
-afterAppointment AfterAppointment? @relation(fields: [afterAppointmentID], references: [id])
-afterQueue AfterQueue? @relation(fields: [afterQueueID], references: [id])
+queue Queue? @relation(fields: [queueID], references: [id])
+appointment Appointments? @relation(fields: [appointmentID], references: [id])
 }
 
 model AfterAppointment{
 id Int @id @default(autoincrement())
 appointmentID Int @unique
 diagnosis String
-physicalExam PhysicalExam[]
 medications Medicine[]
 appointment Appointments @relation(fields: [appointmentID], references: [id])
 }
@@ -311,7 +311,6 @@ model AfterQueue{
 id Int @id @default(autoincrement())
 queueID Int @unique
 diagnosis String
-physicalExam PhysicalExam[]
 medications Medicine[]
 queue Queue @relation(fields: [queueID], references: [id])
 }
@@ -339,6 +338,7 @@ serviceID Int
 queueCount Int
 status QueueStatus
 afterQueueID AfterQueue?
+physicalExamID PhysicalExam?
 patient Patient @relation(fields: [patientID], references: [id])
 createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt

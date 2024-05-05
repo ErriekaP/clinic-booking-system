@@ -1,9 +1,6 @@
 "use client";
 import BackNavbar from "@/components/backNavbar/backNavbar";
-import Assessment from "@/components/physicalExam/Assessment";
-import GeneralSurvey from "@/components/physicalExam/GeneralSurvey";
-import PhysicalExamination from "@/components/physicalExam/PhysicalExamination";
-import { Card, Checkbox, Container, Flex, Text } from "@radix-ui/themes";
+import { Flex, Text } from "@radix-ui/themes";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -58,8 +55,8 @@ const Page = ({ params }: { params: { id: string } }) => {
   ];
 
   const [formData, setFormData] = useState({
-    queueID: parseInt(params.id),
-    appointmentID: null,
+    queueID: null,
+    appointmentID: parseInt(params.id),
     purpose: "",
     genSurvey: [] as string[],
     bloodPressure: "",
@@ -107,7 +104,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/afterQueue/pe/add`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/afterAppointment/pe/add`,
         {
           method: "POST",
           headers: {

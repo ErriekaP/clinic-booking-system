@@ -3,8 +3,8 @@ import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import "./styles.css";
 
 interface AfterModalProps {
-  diagnosis: string;
-  medicineName: string;
+  diagnosis: String;
+  medicineName: String;
   medicineStrength: String;
   medicineQuantity: String;
   medicineFrequency: String;

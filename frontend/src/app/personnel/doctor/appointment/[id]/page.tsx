@@ -1,4 +1,5 @@
 "use client";
+import AppointmentFormDialog from "@/components/AppointmentForm/page";
 import BackNavbar from "@/components/backNavbar/backNavbar";
 import DialogDemo from "@/components/cancelAppointment/page";
 import dayjs from "dayjs";
@@ -75,7 +76,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   };
 
   const handleNoteClick = (appointment: Appointment) => {
-    router.push(`/personnel/doctor/appointment/note/${appointment.id}`);
+    //router.push(`/personnel/doctor/appointment/note/${appointment.id}`);
   };
 
   return (
@@ -209,12 +210,10 @@ const Page = ({ params }: { params: { id: string } }) => {
                   >
                     Set Follow-up Appointment
                   </button>
-                  <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
-                    onClick={() => handleNoteClick(appointment)}
-                  >
-                    Doctor's Note
-                  </button>
+
+                  <div>
+                    <AppointmentFormDialog appointmentId={appointment.id} />;
+                  </div>
                 </div>
               )}
           </div>

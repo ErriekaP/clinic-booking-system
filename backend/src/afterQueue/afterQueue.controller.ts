@@ -1,23 +1,27 @@
 // patient.controller.ts
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  Param,
-  NotFoundException,
-} from '@nestjs/common';
+import { Controller, Post, Body, Param, Get } from '@nestjs/common';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { afterQueueService } from './afterQueue.service';
-import { AfterAppointment, AfterQueue } from '@prisma/client';
-import { CreateAfterQueueDto, CreateMedicineDto } from './afterQueue.dto';
+import { CreateAfterQueueDto, CreatePhysicalExamDto } from './afterQueue.dto';
 
 @Controller('afterQueue')
 export class afterQueueController {
   constructor(private readonly afterQueueService: afterQueueService) {}
 
+  @Get('/physicalExam/:id')
+  async getAfterQueue(@Param('id') queueID: string) {
+    const parsedId = parseInt(queueID, 10);
+
+    return this.afterQueueService.getPhysicalExam(parsedId);
+  }
+
   @Post('add')
   async createAfterQueue(@Body() createAfterQueueDto: CreateAfterQueueDto) {
     return this.afterQueueService.createAfterQueue(createAfterQueueDto);
+  }
+  @Post('pe/add')
+  async createPE(@Body() createPhysicalExamDto: CreatePhysicalExamDto) {
+    return this.afterQueueService.createPhysicalExam(createPhysicalExamDto);
   }
   @Post('update/:id')
   async updateServicesInfo(

@@ -1,10 +1,7 @@
 // patient.service.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Prisma, AfterAppointment } from '@prisma/client';
-import { SupabaseService } from 'supabase/supabase.service';
-import { CreateAfterQueueDto } from './afterQueue.dto';
-import { after } from 'node:test';
+import { CreateAfterQueueDto, CreatePhysicalExamDto } from './afterQueue.dto';
 
 @Injectable()
 export class afterQueueService {
@@ -52,8 +49,7 @@ export class afterQueueService {
   }
 
   async createAfterQueue(createAfterAppointmentDto: CreateAfterQueueDto) {
-    const { queueID, diagnosis, medications, physicalExam } =
-      createAfterAppointmentDto;
+    const { queueID, diagnosis, medications } = createAfterAppointmentDto;
 
     // Create AfterAppointment
     const afterQueue = await this.prisma.afterQueue.create({
@@ -73,36 +69,33 @@ export class afterQueueService {
       }),
     );
 
-    // Create PE for AfterAppointment
-    const createPhysicalExamPromises = physicalExam.map((physicalExam) =>
-      this.prisma.physicalExam.create({
-        data: {
-          afterQueueID: afterQueue.id,
-          ...physicalExam,
-        },
-      }),
-    );
-
-    await Promise.all([
-      ...createMedicationsPromises,
-      ...createPhysicalExamPromises,
-    ]);
-
-    // // Update the status of the associated appointment to "COMPLETE"
-    // await this.prisma.queue.update({
-    //   where: {
-    //     id: queueID,
-    //   },
-    //   data: {
-    //     status: 'COMPLETED',
-    //   },
-    // });
+    await Promise.all([...createMedicationsPromises]);
 
     return afterQueue;
   }
   catch(error: any) {
     console.error('Error creating AfterAppointment:', error);
     throw error;
+  }
+
+  async createPhysicalExam(
+    createPhysicalExamDto: CreatePhysicalExamDto,
+  ): Promise<any> {
+    try {
+      const { queueID, ...physicalExamData } = createPhysicalExamDto;
+      // Assuming this.prisma is your Prisma client instance
+      const physicalExamRecord = await this.prisma.physicalExam.create({
+        data: {
+          ...physicalExamData,
+          queueID: queueID, // Connect the PhysicalExam with the Queue using queueID
+        },
+      });
+
+      return physicalExamRecord;
+    } catch (error) {
+      console.error('Error creating Physical Exam:', error);
+      throw error;
+    }
   }
 
   async countDoctorsByService(serviceId: number): Promise<number> {
@@ -120,6 +113,47 @@ export class afterQueueService {
       return doctorsCount;
     } catch (error) {
       throw new Error(`Unable to count doctors by service: ${error.message}`);
+    }
+  }
+
+  async getPhysicalExam(patientID: number) {
+    try {
+      const queues = await this.prisma.queue.findMany({
+        where: {
+          patientID: patientID,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+
+      // Map each queue to its associated service and patient
+      const queuesWithDetails = await Promise.all(
+        queues.map(async (queue) => {
+          const physicalExam = await this.prisma.physicalExam.findUnique({
+            where: { queueID: queue.id },
+          });
+
+          // Check if physicalExam exists and its queueID matches the current queue's ID
+          if (physicalExam && physicalExam.queueID === queue.id) {
+            // Return or do something with the gathered details for each queue
+            return {
+              ...queue,
+              physicalExam,
+            };
+          } else {
+            // PhysicalExam does not exist or queueID does not match, handle accordingly
+            return {
+              ...queue,
+              physicalExam: null, // Or any other appropriate value
+            };
+          }
+        }),
+      );
+
+      return queuesWithDetails;
+    } catch (error) {
+      throw new Error(`Unable to fetch afterQueue: ${error.message}`);
     }
   }
 

@@ -3,7 +3,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, AfterAppointment, Appointments } from '@prisma/client';
 import { SupabaseService } from 'supabase/supabase.service';
-import { CreateAfterAppointmentDto } from './afterAppointment.dto';
+import {
+  CreateAfterAppointmentDto,
+  CreatePhysicalExamDto,
+} from './afterAppointment.dto';
 import { after } from 'node:test';
 
 @Injectable()
@@ -153,6 +156,76 @@ export class afterAppointmentService {
       return doctorsCount;
     } catch (error) {
       throw new Error(`Unable to count doctors by service: ${error.message}`);
+    }
+  }
+
+  async createPhysicalExam(
+    createPhysicalExamDto: CreatePhysicalExamDto,
+  ): Promise<any> {
+    try {
+      const { appointmentID, ...physicalExamData } = createPhysicalExamDto;
+      // Assuming this.prisma is your Prisma client instance
+      const physicalExamRecord = await this.prisma.physicalExam.create({
+        data: {
+          ...physicalExamData,
+          appointmentID: appointmentID, // Connect the PhysicalExam with the Queue using queueID
+        },
+      });
+
+      const updateStatus = await this.prisma.appointments.update({
+        where: {
+          id: appointmentID,
+        },
+        data: {
+          status: 'COMPLETE',
+        },
+      });
+
+      return { physicalExamRecord, updateStatus };
+    } catch (error) {
+      console.error('Error creating Physical Exam:', error);
+      throw error;
+    }
+  }
+
+  async getPhysicalExam(patientID: number) {
+    try {
+      const appointments = await this.prisma.appointments.findMany({
+        where: {
+          patientID: patientID,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+
+      // Map each queue to its associated service and patient
+      const appointmentWithDetails = await Promise.all(
+        appointments.map(async (appointment) => {
+          const physicalExam = await this.prisma.physicalExam.findUnique({
+            where: { appointmentID: appointment.id },
+          });
+
+          // Check if physicalExam exists and its queueID matches the current queue's ID
+          if (physicalExam && physicalExam.appointmentID === appointment.id) {
+            // Return or do something with the gathered details for each queue
+            return {
+              ...appointment,
+              physicalExam,
+            };
+          } else {
+            // PhysicalExam does not exist or queueID does not match, handle accordingly
+            return {
+              ...appointment,
+              physicalExam: null, // Or any other appropriate value
+            };
+          }
+        }),
+      );
+
+      return appointmentWithDetails;
+    } catch (error) {
+      throw new Error(`Unable to fetch afterQueue: ${error.message}`);
     }
   }
 
