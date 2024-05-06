@@ -414,7 +414,7 @@ export class QueueService {
         where: {
           patientID: patientID,
           status: {
-            in: ['PENDING'],
+            in: ['PENDING', 'ONGOING'],
           },
         },
       });

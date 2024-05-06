@@ -1,13 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AppointmentStatus } from '@prisma/client';
-
-//need startTime and endTime ng doctor, return list of startTime and endTime. (Array with startTime and endTime).
-//kunin ang appointments with same day
-
+import { EmailSender } from 'src/emailSender/EmailSender';
+import { PatientService } from 'src/patient/patient.service';
+import { PersonnelService } from 'src/personnel/personnel.service';
+import * as dayjs from 'dayjs';
 @Injectable()
 export class AppointmentService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly emailSender: EmailSender,
+    private patientService: PatientService,
+    private personnelService: PersonnelService,
+  ) {}
 
   async cancelAppointment(id: string) {
     try {
@@ -102,6 +107,17 @@ export class AppointmentService {
         throw new Error(`Service with ID ${id} not found.`);
       }
 
+      // Get patient information using patientID
+      const patientInfo = await this.patientService.findPatient(
+        existingAppointment.patientID.toString(),
+      );
+
+      if (!patientInfo) {
+        throw new Error(
+          `Patient with ID ${existingAppointment.patientID} not found.`,
+        );
+      }
+
       // Update the servicr record with the provided data
       const updatedService = await this.prisma.appointments.update({
         where: {
@@ -117,6 +133,40 @@ export class AppointmentService {
           status: updatedData.status ?? existingAppointment.status,
         },
       });
+
+      // Get personnel information using patientID
+      const personnelInfo =
+        await this.personnelService.getPersonnelWithServices(
+          updatedData.personnelID.toString(),
+        );
+
+      const date = dayjs(existingAppointment.startTime).format('MMMM D, YYYY');
+      const startTimeString = existingAppointment.startTime
+        .toISOString()
+        .slice(0, -1);
+      const startTime = dayjs(startTimeString).format('hh:mm A');
+
+      const endTimeString = existingAppointment.endTime
+        .toISOString()
+        .slice(0, -1);
+      const endTime = dayjs(endTimeString).format('hh:mm A');
+
+      if (updatedData.status === 'SCHEDULED') {
+        this.emailSender.sendEmail({
+          toEmail: patientInfo.email,
+          patientFirstName: patientInfo.firstName,
+          patientMiddleName: patientInfo.middleName,
+          patientLastName: patientInfo.lastName,
+          date: date,
+          startTime: startTime,
+          endTime: endTime,
+          personnelID: updatedService.personnelID,
+          doctorFirstName: personnelInfo.firstName,
+          doctorLastName: personnelInfo.lastName,
+          reasonforCancellation: updatedService.reasonforCancellation,
+          status: updatedService.status,
+        });
+      }
 
       return { success: true, data: updatedService };
     } catch (error) {

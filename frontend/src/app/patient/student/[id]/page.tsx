@@ -169,10 +169,10 @@ const StudentPage = ({ params }: { params: { id: string } }) => {
 
           {/* Display Queue Number */}
 
-          <div className="flex flex-col items-center justify-center text-white">
-            <div className="">
+          <div className="flex text-white">
+            <div className="flex flex-col items-center justify-center">
               <p className="text-lg font-bold">Your Queue Number:</p>
-              <div className="flex flex-row justify-center">
+              <div className="flex flex-col justify-center">
                 {queueData.map((queue) => (
                   <h1 className="text-5xl font-bold ml-2">{queue.queueID}</h1>
                 ))}
@@ -180,7 +180,7 @@ const StudentPage = ({ params }: { params: { id: string } }) => {
             </div>
           </div>
 
-          <div className="flex items-center justify-center mt-20 text-white">
+          <div className="flex items-center justify-center mt-10 text-white">
             <div className=" text-center ">
               <p className="text-lg font-bold">Current Queue Numbers:</p>
               {queueOngoingData.map((queue) => (

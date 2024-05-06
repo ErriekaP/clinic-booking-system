@@ -245,7 +245,6 @@ const NavBar = () => {
                 Queues
               </NavigationMenu.Link>
             </NavigationMenu.Item>
-        
           )}
 
           <NavigationMenu.Item className="NavigationMenuItem">

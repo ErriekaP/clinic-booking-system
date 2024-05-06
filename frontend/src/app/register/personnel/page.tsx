@@ -351,7 +351,6 @@ export default function Page() {
                           <Select.Group>
                             <Select.Item value="DOCTOR">Doctor</Select.Item>
                             <Select.Item value="NURSE">Nurse</Select.Item>
-                            <Select.Item value="STAFF">Staff</Select.Item>
                             {/* Add more role options as needed */}
                           </Select.Group>
                         </Select.Content>
