@@ -86,13 +86,29 @@ const NavMenu = () => {
             </NavigationMenu.Content>
           </NavigationMenu.Item>
 
-          <NavigationMenu.Item className="NavigationMenuItem">
+          {/* <NavigationMenu.Item className="NavigationMenuItem">
             <NavigationMenu.Link
               className="NavigationMenuLink"
               href="/queues/services"
             >
               Queue
             </NavigationMenu.Link>
+          </NavigationMenu.Item> */}
+             <NavigationMenu.Item className="NavigationMenuItem">
+             <NavigationMenu.Trigger className="NavigationMenuTrigger">
+             Queues <CaretDownIcon className="CaretDown" aria-hidden />
+            </NavigationMenu.Trigger>
+             <NavigationMenu.Content className="NavigationMenuContent">
+              <ul className="List two">
+                <a href="/queue/services" className="ListItemLink">
+                   <p className="ListItemHeading">Queues</p>
+                 </a>
+               <a href={`/personnel/doctor/queues/${user.id}`} className="ListItemLink">
+                 <p className="ListItemHeading">Ongoing Queues</p>
+                </a>
+             
+             </ul>
+           </NavigationMenu.Content>
           </NavigationMenu.Item>
 
           <NavigationMenu.Item className="NavigationMenuItem">
