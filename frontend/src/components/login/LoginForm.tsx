@@ -38,7 +38,6 @@ export default function LoginForm() {
       );
 
       if (response.ok) {
-        console.log("Login successfully");
         setMessage("Login successfully");
         const user = await response.json();
         console.log(user.id);
@@ -58,7 +57,6 @@ export default function LoginForm() {
           router.push("/default");
         }
       } else {
-        console.error("Failed to submit form");
         setMessage("Invalid email or password."); // Show error if login fails
       }
     } catch (error) {

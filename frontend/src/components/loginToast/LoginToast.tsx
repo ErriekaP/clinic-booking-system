@@ -26,7 +26,7 @@ const LoginToast: React.FC<LoginToastProps> = ({ message }) => {
           window.clearTimeout(timerRef.current);
           timerRef.current = window.setTimeout(() => {
             setOpen(true);
-          }, 100);
+          }, 10);
         }}
       >
         Login
