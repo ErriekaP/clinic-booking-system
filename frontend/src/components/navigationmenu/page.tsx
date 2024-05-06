@@ -64,7 +64,7 @@ const NavMenu = () => {
           <NavigationMenu.Item className="NavigationMenuItem">
             <NavigationMenu.Link
               className="NavigationMenuLink"
-              href="/services"
+              href="/services/admin"
             >
               Services
             </NavigationMenu.Link>

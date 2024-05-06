@@ -142,50 +142,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             ))}
           </div>
         </div>
-        {/* <Flex className="CardContainer">
-          <Card className="Card">
-            <a href="">
-              <Inset clip="padding-box" side="top" pb="current">
-                <img
-                  src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-                  alt="Bold typography"
-                  className="Image"
-                />
-              </Inset>
-              <Text as="p" align="center" className="Text">
-                <Strong>Schedule</Strong>
-              </Text>
-            </a>
-          </Card>
-          <Card className="Card">
-            <a href={`/personnel/doctor/appointments/${personnelData.data.id}`}>
-              <Inset clip="padding-box" side="top" pb="current">
-                <img
-                  src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-                  alt="Bold typography"
-                  className="Image"
-                />
-              </Inset>
-              <Text as="p" align="center" className="Text">
-                <Strong>Appointments</Strong>
-              </Text>
-            </a>
-          </Card>
-          <Card className="Card">
-            <a href="/">
-              <Inset clip="padding-box" side="top" pb="current">
-                <img
-                  src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-                  alt="Bold typography"
-                  className="Image"
-                />
-              </Inset>
-              <Text as="p" align="center" className="Text">
-                Services
-              </Text>
-            </a>
-          </Card>
-        </Flex> */}
+       
       </Container>
     </main>
   );

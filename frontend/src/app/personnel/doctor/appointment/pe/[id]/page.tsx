@@ -73,25 +73,25 @@ const Page = ({ params }: { params: { id: string } }) => {
     others: "",
     LOC: "",
     injuries: "",
-    skin: "",
-    head: "",
-    eyes: "",
-    ears: "",
-    neck: "",
-    throat: "",
-    chestAndLungs: "",
-    heart: "",
-    abdomen: "",
-    gut: "",
-    masculoSkeletal: "",
-    neurological: "",
-    CBC: "",
-    urinalysis: "",
-    fecalysis: "",
-    chestXray: "",
-    ECG: "",
-    HBSAG: "",
-    drugTest: "",
+    skin: "NORMAL",
+    head: "NORMAL",
+    eyes: "NORMAL",
+    ears: "NORMAL",
+    neck: "NORMAL",
+    throat: "NORMAL",
+    chestAndLungs: "NORMAL",
+    heart: "NORMAL",
+    abdomen: "NORMAL",
+    gut: "NORMAL",
+    masculoSkeletal: "NORMAL",
+    neurological: "NORMAL",
+    CBC: "NORMAL",
+    urinalysis: "NORMAL",
+    fecalysis: "NORMAL",
+    chestXray: "NORMAL",
+    ECG: "NORMAL",
+    HBSAG: "NORMAL",
+    drugTest: "NORMAL",
     isPhysicallyFit: false,
     clinicAssessment: "PENDING",
     forClearance: "",
@@ -217,16 +217,17 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleSkinCheckboxChange = () => {
     setSkinActivated(!skinActivated);
-    if (!skinActivated) {
+    if (skinActivated) {
       setFormData({ ...formData, skin: "NORMAL" });
+      
     } else {
-      setFormData({ ...formData, skin: "" });
-    }
+      setFormData({ ...formData, skin: "" });    }
   };
+  console.log(skinActivated)
 
   const handleHeadCheckboxChange = () => {
     setHeadActivated(!headActivated);
-    if (!headActivated) {
+    if (headActivated) {
       setFormData({ ...formData, head: "NORMAL" });
     } else {
       setFormData({ ...formData, head: "" });
@@ -235,7 +236,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleEyesCheckboxChange = () => {
     setEyesActivated(!eyesActivated);
-    if (!eyesActivated) {
+    if (eyesActivated) {
       setFormData({ ...formData, eyes: "NORMAL" });
     } else {
       setFormData({ ...formData, eyes: "" });
@@ -244,7 +245,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleEarsCheckboxChange = () => {
     setEarsActivated(!earsActivated);
-    if (!earsActivated) {
+    if (earsActivated) {
       setFormData({ ...formData, ears: "NORMAL" });
     } else {
       setFormData({ ...formData, ears: "" });
@@ -253,7 +254,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleNeckCheckboxChange = () => {
     setNeckActivated(!neckActivated);
-    if (!neckActivated) {
+    if (neckActivated) {
       setFormData({ ...formData, neck: "NORMAL" });
     } else {
       setFormData({ ...formData, neck: "" });
@@ -262,7 +263,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleThroatCheckboxChange = () => {
     setThroatActivated(!throatActivated);
-    if (!throatActivated) {
+    if (throatActivated) {
       setFormData({ ...formData, throat: "NORMAL" });
     } else {
       setFormData({ ...formData, throat: "" });
@@ -271,7 +272,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleChestCheckboxChange = () => {
     setChestActivated(!chestActivated);
-    if (!chestActivated) {
+    if (chestActivated) {
       setFormData({ ...formData, chestAndLungs: "NORMAL" });
     } else {
       setFormData({ ...formData, chestAndLungs: "" });
@@ -280,7 +281,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleHeartCheckboxChange = () => {
     setHeartActivated(!heartActivated);
-    if (!heartActivated) {
+    if (heartActivated) {
       setFormData({ ...formData, heart: "NORMAL" });
     } else {
       setFormData({ ...formData, heart: "" });
@@ -289,7 +290,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleAbdomenCheckboxChange = () => {
     setAbdomenActivated(!abdomenActivated);
-    if (!abdomenActivated) {
+    if (abdomenActivated) {
       setFormData({ ...formData, abdomen: "NORMAL" });
     } else {
       setFormData({ ...formData, abdomen: "" });
@@ -298,7 +299,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleGutCheckboxChange = () => {
     setGutActivated(!gutActivated);
-    if (!gutActivated) {
+    if (gutActivated) {
       setFormData({ ...formData, gut: "NORMAL" });
     } else {
       setFormData({ ...formData, gut: "" });
@@ -307,7 +308,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleMusculoCheckboxChange = () => {
     setMusculoActivated(!musculoActivated);
-    if (!musculoActivated) {
+    if (musculoActivated) {
       setFormData({ ...formData, masculoSkeletal: "NORMAL" });
     } else {
       setFormData({ ...formData, masculoSkeletal: "" });
@@ -316,7 +317,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleNeuroCheckboxChange = () => {
     setNeuroActivated(!neuroActivated);
-    if (!neuroActivated) {
+    if (neuroActivated) {
       setFormData({ ...formData, neurological: "NORMAL" });
     } else {
       setFormData({ ...formData, neurological: "" });
@@ -325,7 +326,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleCBCCheckboxChange = () => {
     setCBCActivated(!CBCActivated);
-    if (!CBCActivated) {
+    if (CBCActivated) {
       setFormData({ ...formData, CBC: "NORMAL" });
     } else {
       setFormData({ ...formData, CBC: "" });
@@ -334,7 +335,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleUrinalCheckboxChange = () => {
     setUrinalActivated(!urinalActivated);
-    if (!urinalActivated) {
+    if (urinalActivated) {
       setFormData({ ...formData, urinalysis: "NORMAL" });
     } else {
       setFormData({ ...formData, urinalysis: "" });
@@ -343,7 +344,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleFecalCheckboxChange = () => {
     setFecalActivated(!fecalActivated);
-    if (!fecalActivated) {
+    if (fecalActivated) {
       setFormData({ ...formData, fecalysis: "NORMAL" });
     } else {
       setFormData({ ...formData, fecalysis: "" });
@@ -352,7 +353,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleChestXCheckboxChange = () => {
     setChestXActivated(!chestXActivated);
-    if (!chestXActivated) {
+    if (chestXActivated) {
       setFormData({ ...formData, chestXray: "NORMAL" });
     } else {
       setFormData({ ...formData, chestXray: "" });
@@ -361,7 +362,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleECGCheckboxChange = () => {
     setECGActivated(!ECGActivated);
-    if (!ECGActivated) {
+    if (ECGActivated) {
       setFormData({ ...formData, ECG: "NORMAL" });
     } else {
       setFormData({ ...formData, ECG: "" });
@@ -370,7 +371,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleHBSAGCheckboxChange = () => {
     setHBSAGActivated(!HBSAGActivated);
-    if (!HBSAGActivated) {
+    if (HBSAGActivated) {
       setFormData({ ...formData, HBSAG: "NORMAL" });
     } else {
       setFormData({ ...formData, HBSAG: "" });
@@ -379,7 +380,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleDrugCheckboxChange = () => {
     setDrugActivated(!drugActivated);
-    if (!drugActivated) {
+    if (drugActivated) {
       setFormData({ ...formData, drugTest: "NORMAL" });
     } else {
       setFormData({ ...formData, drugTest: "" });
@@ -897,22 +898,23 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.skin === "NORMAL" ? "bg-black" : ""
+                              !skinActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.skin === "NORMAL"}
+                              checked={!skinActivated}
                               onChange={handleSkinCheckboxChange}
+                              value={!skinActivated ? formData.skin : "NORMAL"}
+
                             />
                           </div>
                           <span>Normal</span>
                         </label>
-
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !skinActivated ? "bg-black" : ""
+                              skinActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -929,14 +931,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="skin"
                         name="skin"
                         type="text"
-                        value={!skinActivated ? formData.skin : ""}
+                        value={skinActivated ? formData.skin : ""}
                         onChange={(e) =>
                           setFormData({ ...formData, skin: e.target.value })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          skinActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !skinActivated ? "cursor-not-allowed bg-gray-200" : ""
                         }`}
-                        disabled={skinActivated}
+                        disabled={!skinActivated}
                       />
 
                       {/* Head */}
@@ -945,12 +947,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.head === "NORMAL" ? "bg-black" : ""
+                              !headActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.head === "NORMAL"}
+                              checked={!headActivated}
+                              value={!headActivated ? formData.head : "NORMAL"}
+
                               onChange={handleHeadCheckboxChange}
                             />
                           </div>
@@ -960,7 +964,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !headActivated ? "bg-black" : ""
+                              headActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -977,14 +981,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="head"
                         name="head"
                         type="text"
-                        value={!headActivated ? formData.head : ""}
+                        value={headActivated ? formData.head : ""}
                         onChange={(e) =>
                           setFormData({ ...formData, head: e.target.value })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          headActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !headActivated ? "cursor-not-allowed bg-gray-200" : ""
                         }`}
-                        disabled={headActivated}
+                        disabled={!headActivated}
                       />
 
                       {/* Eyes */}
@@ -993,13 +997,15 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.eyes === "NORMAL" ? "bg-black" : ""
+                              !eyesActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.eyes === "NORMAL"}
+                              checked={!eyesActivated}
                               onChange={handleEyesCheckboxChange}
+                              value={!eyesActivated ? formData.eyes : "NORMAL"}
+
                             />
                           </div>
                           <span>Normal</span>
@@ -1008,7 +1014,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !eyesActivated ? "bg-black" : ""
+                              eyesActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -1025,14 +1031,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="eyes"
                         name="eyes"
                         type="text"
-                        value={!eyesActivated ? formData.eyes : ""}
+                        value={eyesActivated ? formData.eyes : ""}
                         onChange={(e) =>
                           setFormData({ ...formData, eyes: e.target.value })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          eyesActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !eyesActivated ? "cursor-not-allowed bg-gray-200" : ""
                         }`}
-                        disabled={eyesActivated}
+                        disabled={!eyesActivated}
                       />
 
                       {/* Ears */}
@@ -1041,13 +1047,15 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.ears === "NORMAL" ? "bg-black" : ""
+                              !earsActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.ears === "NORMAL"}
+                              checked={!earsActivated}
                               onChange={handleEarsCheckboxChange}
+                              value={!earsActivated ? formData.ears : "NORMAL"}
+
                             />
                           </div>
                           <span>Normal</span>
@@ -1056,7 +1064,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !earsActivated ? "bg-black" : ""
+                              earsActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -1073,14 +1081,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="ears"
                         name="ears"
                         type="text"
-                        value={!earsActivated ? formData.ears : ""}
+                        value={earsActivated ? formData.ears : ""}
                         onChange={(e) =>
                           setFormData({ ...formData, ears: e.target.value })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          earsActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !earsActivated ? "cursor-not-allowed bg-gray-200" : ""
                         }`}
-                        disabled={earsActivated}
+                        disabled={!earsActivated}
                       />
 
                       {/* Neck */}
@@ -1089,13 +1097,15 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.neck === "NORMAL" ? "bg-black" : ""
+                              !neckActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.neck === "NORMAL"}
+                              checked={!neckActivated}
                               onChange={handleNeckCheckboxChange}
+                              value={!neckActivated ? formData.neck : "NORMAL"}
+
                             />
                           </div>
                           <span>Normal</span>
@@ -1104,7 +1114,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !neckActivated ? "bg-black" : ""
+                              neckActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -1121,14 +1131,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="neck"
                         name="neck"
                         type="text"
-                        value={!neckActivated ? formData.neck : ""}
+                        value={neckActivated ? formData.neck : ""}
                         onChange={(e) =>
                           setFormData({ ...formData, neck: e.target.value })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          neckActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !neckActivated ? "cursor-not-allowed bg-gray-200" : ""
                         }`}
-                        disabled={neckActivated}
+                        disabled={!neckActivated}
                       />
 
                       {/* Throat */}
@@ -1137,13 +1147,15 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.throat === "NORMAL" ? "bg-black" : ""
+                              !throatActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.throat === "NORMAL"}
+                              checked={!throatActivated}
                               onChange={handleThroatCheckboxChange}
+                              value={!throatActivated ? formData.throat : "NORMAL"}
+
                             />
                           </div>
                           <span>Normal</span>
@@ -1152,7 +1164,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !throatActivated ? "bg-black" : ""
+                              throatActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -1169,16 +1181,16 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="throat"
                         name="throat"
                         type="text"
-                        value={!throatActivated ? formData.throat : ""}
+                        value={throatActivated ? formData.throat : ""}
                         onChange={(e) =>
                           setFormData({ ...formData, throat: e.target.value })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          throatActivated
+                          !throatActivated
                             ? "cursor-not-allowed bg-gray-200"
                             : ""
                         }`}
-                        disabled={throatActivated}
+                        disabled={!throatActivated}
                       />
 
                       {/* Chest & Lungs */}
@@ -1187,15 +1199,15 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.chestAndLungs === "NORMAL"
-                                ? "bg-black"
-                                : ""
+                              !chestActivated ? "bg-black": ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.chestAndLungs === "NORMAL"}
+                              checked={!chestActivated}
                               onChange={handleChestCheckboxChange}
+                              value={!chestActivated ? formData.chestAndLungs : "NORMAL"}
+
                             />
                           </div>
                           <span>Normal</span>
@@ -1204,7 +1216,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !chestActivated ? "bg-black" : ""
+                              chestActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -1221,7 +1233,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="chest"
                         name="chest"
                         type="text"
-                        value={!chestActivated ? formData.chestAndLungs : ""}
+                        value={chestActivated ? formData.chestAndLungs : ""}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -1229,9 +1241,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                           })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          chestActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !chestActivated ? "cursor-not-allowed bg-gray-200" : ""
                         }`}
-                        disabled={chestActivated}
+                        disabled={!chestActivated}
                       />
 
                       {/* Heart */}
@@ -1240,13 +1252,15 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.heart === "NORMAL" ? "bg-black" : ""
+                              !heartActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.heart === "NORMAL"}
+                              checked={!heartActivated}
                               onChange={handleHeartCheckboxChange}
+                              value={!heartActivated ? formData.heart : "NORMAL"}
+
                             />
                           </div>
                           <span>Normal</span>
@@ -1255,7 +1269,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !heartActivated ? "bg-black" : ""
+                              heartActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -1272,14 +1286,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="heart"
                         name="heart"
                         type="text"
-                        value={!heartActivated ? formData.heart : ""}
+                        value={heartActivated ? formData.heart : ""}
                         onChange={(e) =>
                           setFormData({ ...formData, heart: e.target.value })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          heartActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !heartActivated ? "cursor-not-allowed bg-gray-200" : ""
                         }`}
-                        disabled={heartActivated}
+                        disabled={!heartActivated}
                       />
 
                       {/* Abdomen */}
@@ -1288,13 +1302,15 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.abdomen === "NORMAL" ? "bg-black" : ""
+                              !abdomenActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.abdomen === "NORMAL"}
+                              checked={!abdomenActivated}
                               onChange={handleAbdomenCheckboxChange}
+                              value={!abdomenActivated ? formData.abdomen : "NORMAL"}
+
                             />
                           </div>
                           <span>Normal</span>
@@ -1303,7 +1319,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !abdomenActivated ? "bg-black" : ""
+                              abdomenActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -1320,16 +1336,16 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="abdomen"
                         name="abdomen"
                         type="text"
-                        value={!abdomenActivated ? formData.abdomen : ""}
+                        value={abdomenActivated ? formData.abdomen : ""}
                         onChange={(e) =>
                           setFormData({ ...formData, abdomen: e.target.value })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          abdomenActivated
+                          !abdomenActivated
                             ? "cursor-not-allowed bg-gray-200"
                             : ""
                         }`}
-                        disabled={abdomenActivated}
+                        disabled={!abdomenActivated}
                       />
 
                       {/* Gut */}
@@ -1338,13 +1354,15 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.gut === "NORMAL" ? "bg-black" : ""
+                              !gutActivated? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.gut === "NORMAL"}
+                              checked={!gutActivated}
                               onChange={handleGutCheckboxChange}
+                              value={!gutActivated ? formData.gut : "NORMAL"}
+
                             />
                           </div>
                           <span>Normal</span>
@@ -1353,7 +1371,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !gutActivated ? "bg-black" : ""
+                              gutActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -1370,14 +1388,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="gut"
                         name="gut"
                         type="text"
-                        value={!gutActivated ? formData.gut : ""}
+                        value={gutActivated ? formData.gut : ""}
                         onChange={(e) =>
                           setFormData({ ...formData, gut: e.target.value })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          gutActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !gutActivated ? "cursor-not-allowed bg-gray-200" : ""
                         }`}
-                        disabled={gutActivated}
+                        disabled={!gutActivated}
                       />
 
                       {/* Musculo */}
@@ -1388,15 +1406,17 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.masculoSkeletal === "NORMAL"
+                              !musculoActivated
                                 ? "bg-black"
                                 : ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.masculoSkeletal === "NORMAL"}
+                              checked={!musculoActivated}
                               onChange={handleMusculoCheckboxChange}
+                              value={!musculoActivated ? formData.masculoSkeletal : "NORMAL"}
+
                             />
                           </div>
                           <span>Normal</span>
@@ -1405,7 +1425,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !musculoActivated ? "bg-black" : ""
+                              musculoActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -1423,7 +1443,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         name="musculo"
                         type="text"
                         value={
-                          !musculoActivated ? formData.masculoSkeletal : ""
+                          musculoActivated ? formData.masculoSkeletal : ""
                         }
                         onChange={(e) =>
                           setFormData({
@@ -1432,11 +1452,11 @@ const Page = ({ params }: { params: { id: string } }) => {
                           })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          musculoActivated
+                          !musculoActivated
                             ? "cursor-not-allowed bg-gray-200"
                             : ""
                         }`}
-                        disabled={musculoActivated}
+                        disabled={!musculoActivated}
                       />
 
                       {/* Neurological */}
@@ -1445,15 +1465,17 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.neurological === "NORMAL"
+                              !neuroActivated
                                 ? "bg-black"
                                 : ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.neurological === "NORMAL"}
+                              checked={!neuroActivated}
                               onChange={handleNeuroCheckboxChange}
+                              value={!neuroActivated ? formData.neurological : "NORMAL"}
+
                             />
                           </div>
                           <span>Normal</span>
@@ -1462,7 +1484,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !neuroActivated ? "bg-black" : ""
+                              neuroActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -1479,7 +1501,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="neuro"
                         name="neuro"
                         type="text"
-                        value={!neuroActivated ? formData.neurological : ""}
+                        value={neuroActivated ? formData.neurological : ""}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -1487,9 +1509,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                           })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          neuroActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !neuroActivated ? "cursor-not-allowed bg-gray-200" : ""
                         }`}
-                        disabled={neuroActivated}
+                        disabled={!neuroActivated}
                       />
                     </div>
                     <div className="border-2 border-black border-gray-200 px-5 pb-3 rounded">
@@ -1499,13 +1521,15 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.CBC === "NORMAL" ? "bg-black" : ""
+                              !CBCActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.CBC === "NORMAL"}
+                              checked={!CBCActivated}
                               onChange={handleCBCCheckboxChange}
+                              value={!CBCActivated ? formData.CBC : "NORMAL"}
+
                             />
                           </div>
                           <span>Normal</span>
@@ -1514,7 +1538,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !CBCActivated ? "bg-black" : ""
+                              CBCActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -1531,14 +1555,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="cbc"
                         name="cbc"
                         type="text"
-                        value={!CBCActivated ? formData.CBC : ""}
+                        value={CBCActivated ? formData.CBC : ""}
                         onChange={(e) =>
                           setFormData({ ...formData, CBC: e.target.value })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          CBCActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !CBCActivated ? "cursor-not-allowed bg-gray-200" : ""
                         }`}
-                        disabled={CBCActivated}
+                        disabled={!CBCActivated}
                       />
                       {/* Urinalysis */}
                       <p className="text-sm font-bold my-2">Urinalysis:</p>
@@ -1546,13 +1570,15 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.urinalysis === "NORMAL" ? "bg-black" : ""
+                              !urinalActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.urinalysis === "NORMAL"}
+                              checked={!urinalActivated}
                               onChange={handleUrinalCheckboxChange}
+                              value={!urinalActivated ? formData.urinalysis : "NORMAL"}
+
                             />
                           </div>
                           <span>Normal</span>
@@ -1561,7 +1587,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !urinalActivated ? "bg-black" : ""
+                              urinalActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -1578,7 +1604,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="urinal"
                         name="urinal"
                         type="text"
-                        value={!urinalActivated ? formData.urinalysis : ""}
+                        value={urinalActivated ? formData.urinalysis : ""}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -1586,11 +1612,11 @@ const Page = ({ params }: { params: { id: string } }) => {
                           })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          urinalActivated
+                          !urinalActivated
                             ? "cursor-not-allowed bg-gray-200"
                             : ""
                         }`}
-                        disabled={urinalActivated}
+                        disabled={!urinalActivated}
                       />
                       {/* Fecalysis */}
                       <p className="text-sm font-bold my-2">Fecalysis:</p>
@@ -1598,13 +1624,15 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.fecalysis === "NORMAL" ? "bg-black" : ""
+                              !fecalActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.fecalysis === "NORMAL"}
+                              checked={!fecalActivated}
                               onChange={handleFecalCheckboxChange}
+                              value={!fecalActivated ? formData.fecalysis : "NORMAL"}
+
                             />
                           </div>
                           <span>Normal</span>
@@ -1613,7 +1641,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !fecalActivated ? "bg-black" : ""
+                              fecalActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -1630,7 +1658,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="fecal"
                         name="fecal"
                         type="text"
-                        value={!fecalActivated ? formData.fecalysis : ""}
+                        value={fecalActivated ? formData.fecalysis : ""}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -1638,9 +1666,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                           })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          fecalActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !fecalActivated ? "cursor-not-allowed bg-gray-200" : ""
                         }`}
-                        disabled={fecalActivated}
+                        disabled={!fecalActivated}
                       />
                       {/* Chest X-Ray */}
                       <p className="text-sm font-bold my-2">Chest X-Ray:</p>
@@ -1648,13 +1676,15 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.chestXray === "NORMAL" ? "bg-black" : ""
+                              !chestXActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.chestXray === "NORMAL"}
+                              checked={!chestActivated}
                               onChange={handleChestXCheckboxChange}
+                              value={!chestXActivated ? formData.chestXray : "NORMAL"}
+
                             />
                           </div>
                           <span>Normal</span>
@@ -1663,7 +1693,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !chestXActivated ? "bg-black" : ""
+                              chestXActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -1680,7 +1710,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="chestX"
                         name="chestX"
                         type="text"
-                        value={!chestXActivated ? formData.chestXray : ""}
+                        value={chestXActivated ? formData.chestXray : ""}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -1688,11 +1718,11 @@ const Page = ({ params }: { params: { id: string } }) => {
                           })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          chestXActivated
+                          !chestXActivated
                             ? "cursor-not-allowed bg-gray-200"
                             : ""
                         }`}
-                        disabled={chestXActivated}
+                        disabled={!chestXActivated}
                       />
                       {/* ECG */}
                       <p className="text-sm font-bold my-2">ECG:</p>
@@ -1700,13 +1730,15 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.ECG === "NORMAL" ? "bg-black" : ""
+                              !ECGActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.ECG === "NORMAL"}
+                              checked={!ECGActivated}
                               onChange={handleECGCheckboxChange}
+                              value={!ECGActivated ? formData.ECG : "NORMAL"}
+
                             />
                           </div>
                           <span>Normal</span>
@@ -1715,7 +1747,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !ECGActivated ? "bg-black" : ""
+                              ECGActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -1732,14 +1764,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="ECG"
                         name="ECG"
                         type="text"
-                        value={!ECGActivated ? formData.ECG : ""}
+                        value={ECGActivated ? formData.ECG : ""}
                         onChange={(e) =>
                           setFormData({ ...formData, ECG: e.target.value })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          ECGActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !ECGActivated ? "cursor-not-allowed bg-gray-200" : ""
                         }`}
-                        disabled={ECGActivated}
+                        disabled={!ECGActivated}
                       />
                       {/* HBSAG */}
                       <p className="text-sm font-bold my-2">HBSAG:</p>
@@ -1747,13 +1779,15 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.HBSAG === "NORMAL" ? "bg-black" : ""
+                              !HBSAGActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
-                              checked={formData.HBSAG === "NORMAL"}
+                              checked={!HBSAGActivated}
                               onChange={handleHBSAGCheckboxChange}
+                              value={!HBSAGActivated ? formData.HBSAG : "NORMAL"}
+
                             />
                           </div>
                           <span>Normal</span>
@@ -1762,7 +1796,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !HBSAGActivated ? "bg-black" : ""
+                              HBSAGActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -1779,33 +1813,18 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="HBSAG"
                         name="HBSAG"
                         type="text"
-                        value={!HBSAGActivated ? formData.HBSAG : ""}
+                        value={HBSAGActivated ? formData.HBSAG : ""}
                         onChange={(e) =>
                           setFormData({ ...formData, HBSAG: e.target.value })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          HBSAGActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !HBSAGActivated ? "cursor-not-allowed bg-gray-200" : ""
                         }`}
-                        disabled={HBSAGActivated}
+                        disabled={!HBSAGActivated}
                       />
                       {/* Drug Test */}
                       <p className="text-sm font-bold my-2">Drug Test:</p>
                       <div className="flex items-center space-x-4">
-                        <label className="flex items-center space-x-2">
-                          <div
-                            className={`h-4 w-4 border-2 border-black rounded ${
-                              formData.drugTest === "NORMAL" ? "bg-black" : ""
-                            }`}
-                          >
-                            <input
-                              type="checkbox"
-                              checked={formData.drugTest === "NORMAL"}
-                              onChange={handleDrugCheckboxChange}
-                            />
-                          </div>
-                          <span>Normal</span>
-                        </label>
-
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
@@ -1814,8 +1833,26 @@ const Page = ({ params }: { params: { id: string } }) => {
                           >
                             <input
                               type="checkbox"
+                              checked={!drugActivated}
+                              onChange={handleDrugCheckboxChange}
+                              value={!drugActivated ? formData.drugTest : "NORMAL"}
+
+                            />
+                          </div>
+                          <span>Normal</span>
+                        </label>
+
+                        <label className="flex items-center space-x-2">
+                          <div
+                            className={`h-4 w-4 border-2 border-black rounded ${
+                              drugActivated ? "bg-black" : ""
+                            }`}
+                          >
+                            <input
+                              type="checkbox"
                               checked={drugActivated}
                               onChange={handleDrugCheckboxChange}
+                              
                             />
                           </div>
                           <span>Abnormal</span>
@@ -1826,14 +1863,14 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="drug"
                         name="drug"
                         type="text"
-                        value={!drugActivated ? formData.drugTest : ""}
+                        value={drugActivated ? formData.drugTest : ""}
                         onChange={(e) =>
                           setFormData({ ...formData, drugTest: e.target.value })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          drugActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !drugActivated ? "cursor-not-allowed bg-gray-200" : ""
                         }`}
-                        disabled={drugActivated}
+                        disabled={!drugActivated}
                       />
                     </div>
                   </div>

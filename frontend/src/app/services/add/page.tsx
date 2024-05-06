@@ -67,7 +67,7 @@ export default function Page() {
                 Service Name
               </label>
               <input
-                className="shadow appearance-none border rounded w-full py-2  text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="serviceName"
                 name="serviceName"
                 type="text"
@@ -83,7 +83,7 @@ export default function Page() {
                 Description
               </label>
               <input
-                className="shadow appearance-none border rounded w-full py-2  text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="description"
                 name="description"
                 type="text"

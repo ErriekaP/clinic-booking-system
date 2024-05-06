@@ -126,17 +126,7 @@ export default function Page() {
               onChange={handleSearchChange}
             />
           </div>
-          {user &&
-            (user === "ADMIN" || user === "NURSE" || user === "STAFF") && (
-              <div className="basis-1/4">
-                <button
-                  onClick={navigateToAddService}
-                  className="   bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-3 rounded focus:outline-none"
-                >
-                  Add
-                </button>
-              </div>
-            )}
+
         </div>
         <div className="flex flex-col flex-grow">
           <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto flex-grow">
