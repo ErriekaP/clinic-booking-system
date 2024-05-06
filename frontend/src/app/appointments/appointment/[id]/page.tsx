@@ -24,7 +24,6 @@ interface Appointment {
 
 interface AfterAppointmentInfo {
   diagnosis: String;
-  // Add other properties as needed
 }
 
 interface MedicationInfo {
@@ -33,7 +32,6 @@ interface MedicationInfo {
   medicineQuantity: String;
   medicineFrequency: String;
   remarks: String;
-  // Add other properties as needed
 }
 interface ServiceInfo {
   serviceName: String;
@@ -263,7 +261,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
                           {physicalExam.map((exam: any, index: number) => (
                             <QueuePhysicalExamDialog
-                              key={index}
                               queueID={exam.physicalExam?.queueID}
                               purpose={exam.physicalExam?.purpose}
                               genSurvey={exam.physicalExam?.genSurvey}

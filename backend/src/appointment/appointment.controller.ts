@@ -54,4 +54,10 @@ export class AppointmentController {
   async getAppointment(@Param('id') id: string): Promise<Appointments> {
     return this.appointmentService.findAppointment(id);
   }
+  @Get('/afterAppointment/:id')
+  async getAfterAppointment(@Param('id') queueID: string) {
+    const parsedId = parseInt(queueID, 10);
+
+    return this.appointmentService.getAfterAppointment(parsedId);
+  }
 }

@@ -156,7 +156,16 @@ export class afterQueueService {
       throw new Error(`Unable to fetch afterQueue: ${error.message}`);
     }
   }
-
+  async getAllAfterQueues() {
+    try {
+      const service = await this.prisma.afterQueue.findMany({});
+      console.log(service);
+      console.log(this.prisma.$queryRaw`${service}`);
+      return service;
+    } catch (error) {
+      throw new Error(`Unable to fetch patients: ${error.message}`);
+    }
+  }
   getHello(): string {
     return 'Hello World!';
   }

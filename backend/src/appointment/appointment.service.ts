@@ -160,7 +160,66 @@ export class AppointmentService {
       },
     });
   }
+  async getAfterAppointment(patientID: number) {
+    try {
+      const appointments = await this.prisma.appointments.findMany({
+        where: {
+          patientID: patientID,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
 
+      // Map each queue
+      const appointmentWithDetails = await Promise.all(
+        appointments.map(async (appointment) => {
+          const afterAppointment =
+            await this.prisma.afterAppointment.findUnique({
+              where: { appointmentID: appointment.id },
+            });
+
+          let medication = null; // Declare medication variable outside the if block
+
+          if (afterAppointment !== null) {
+            medication = await this.prisma.medicine.findFirst({
+              where: { afterAppointmentID: afterAppointment.id },
+            });
+          }
+
+          const service = await this.prisma.service.findUnique({
+            where: {
+              id: appointment.serviceID,
+            },
+          });
+
+          const patient = await this.prisma.patient.findUnique({
+            where: {
+              id: appointment.patientID,
+            },
+          });
+
+          console.log(service);
+          console.log(patient);
+          console.log(medication);
+
+          // Return or do something with the gathered details for each queue
+
+          return {
+            ...appointment,
+            afterAppointment,
+            medication,
+            service,
+            patient,
+          };
+        }),
+      );
+
+      return appointmentWithDetails;
+    } catch (error) {
+      throw new Error(`Unable to fetch afterQueue: ${error.message}`);
+    }
+  }
   async createAppointment(data: {
     startTime: Date;
     endTime: Date;

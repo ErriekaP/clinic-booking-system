@@ -32,13 +32,13 @@ export class afterQueueController {
     return this.afterQueueService.updateService(serviceId, serviceData);
   }
 
-  // @Get()
-  // async findAll() {
-  //   try {
-  //     const services = await this.afterQueueService.getAllServices();
-  //     return services;
-  //   } catch (error) {
-  //     throw new Error(`Unable to fetch services: ${error.message}`);
-  //   }
-  // }
+  @Get()
+  async findAll() {
+    try {
+      const afterQueues = await this.afterQueueService.getAllAfterQueues();
+      return afterQueues;
+    } catch (error) {
+      throw new Error(`Unable to fetch afterQueues: ${error.message}`);
+    }
+  }
 }

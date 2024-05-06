@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import { CaretDownIcon } from "@radix-ui/react-icons";
 import * as Avatar from "@radix-ui/react-avatar";
@@ -8,9 +8,57 @@ import { PersonIcon } from "@radix-ui/react-icons";
 import "../../components/styles.css";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
+import { fetchUserInfo } from "@/utilities/fetch/patient";
+
+interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  patientType: "STUDENT" | "EMPLOYEE";
+  role: "ADMIN" | "DOCTOR" | "NURSE" | "STAFF";
+  email: string;
+}
+
 const NavMenu = () => {
   const supabase = createClientComponentClient();
   const router = useRouter();
+  const [userType, setUserType] = useState<string>();
+  const [user, setUser] = useState<User | undefined>();
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        // Retrieve the session from Supabase
+        const { data: session, error } = await supabase.auth.getUser();
+        if (error) {
+          throw new Error("Failed to fetch session");
+        }
+
+        console.log("sess", session);
+
+        if (session && session.user) {
+          // Fetch user info from your API using the user ID
+          const userInfo = await fetchUserInfo(session.user.id);
+
+          let newUserType;
+          if (userInfo.role != null) {
+            newUserType = userInfo.role;
+          } else {
+            newUserType = userInfo.patientType;
+          }
+
+          // Set user type and ID in state
+          setUserType(newUserType);
+          setUser(userInfo);
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+        // Handle error or show error message to the user
+      }
+    };
+
+    getUserInfo();
+  }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -94,21 +142,20 @@ const NavMenu = () => {
               Queue
             </NavigationMenu.Link>
           </NavigationMenu.Item> */}
-             <NavigationMenu.Item className="NavigationMenuItem">
-             <NavigationMenu.Trigger className="NavigationMenuTrigger">
-             Queues <CaretDownIcon className="CaretDown" aria-hidden />
+          <NavigationMenu.Item className="NavigationMenuItem">
+            <NavigationMenu.Trigger className="NavigationMenuTrigger">
+              Queues <CaretDownIcon className="CaretDown" aria-hidden />
             </NavigationMenu.Trigger>
-             <NavigationMenu.Content className="NavigationMenuContent">
+            <NavigationMenu.Content className="NavigationMenuContent">
               <ul className="List two">
-                <a href="/queue/services" className="ListItemLink">
-                   <p className="ListItemHeading">Queues</p>
-                 </a>
-               <a href={`/personnel/doctor/queues/${user.id}`} className="ListItemLink">
-                 <p className="ListItemHeading">Ongoing Queues</p>
+                <a href="/queues/services" className="ListItemLink">
+                  <p className="ListItemHeading">Queues</p>
                 </a>
-             
-             </ul>
-           </NavigationMenu.Content>
+                <a href={`/queues/afterQueues`} className="ListItemLink">
+                  <p className="ListItemHeading">All Queues</p>
+                </a>
+              </ul>
+            </NavigationMenu.Content>
           </NavigationMenu.Item>
 
           <NavigationMenu.Item className="NavigationMenuItem">
@@ -121,7 +168,9 @@ const NavMenu = () => {
           </NavigationMenu.Item>
 
           <NavigationMenu.Item className="NavigationMenuItem">
-            <p>Hi, Admin</p>
+            <p>
+              Hi, {user?.firstName} {user?.lastName}
+            </p>
           </NavigationMenu.Item>
 
           <NavigationMenu.Item className="NavigationMenuItem">

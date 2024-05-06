@@ -9,24 +9,24 @@ import { useEffect, useState } from "react";
 const Page = () => {
   const router = useRouter();
   //   const { id } = 1;
-  const [appointments, setAppointments] = useState<any[]>([]);
+  const [queues, setQueues] = useState<any[]>([]);
   const [physicalExam, setPhysicalExam] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [appointment, setAppointment] = useState<any[]>([]);
+  const [queue, setQueue] = useState<any[]>([]);
 
   useEffect(() => {
     // Fetch after queue data from an API
     const fetchAfterQueue = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/appointments`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/queue`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch after queue");
         }
         const data = await response.json();
-        setAppointments(data);
+        setQueues(data);
       } catch (error) {
         console.error("Error fetching after queue:", error);
       }
@@ -37,34 +37,34 @@ const Page = () => {
 
   useEffect(() => {
     // Fetch after queue data from an API
-    const fetchAfterAppointment = async () => {
+    const fetchAfterQueue = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/appointments/afterAppointment/${appointments[0]?.patientID}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/queue/afterQueue/${queues[0]?.patientID}`
         );
         if (!response.ok) {
-          throw new Error("Failed to fetch after appointment");
+          throw new Error("Failed to fetch after queue");
         }
         const data = await response.json();
-        setAppointment(data);
+        setQueue(data);
       } catch (error) {
-        console.error("Error fetching after appointment:", error);
+        console.error("Error fetching after queue:", error);
       }
     };
 
-    if (appointments.length > 0) {
-      fetchAfterAppointment();
+    if (queues.length > 0) {
+      fetchAfterQueue();
     }
-  }, [appointments]);
+  }, [queues]);
 
-  console.log("app", appointment);
+  console.log("queue", queue);
 
   useEffect(() => {
     // Fetch physical exam data from an API
     const fetchPhysicalExam = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/afterQueue/physicalExam/${appointments[0]?.patientID}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/afterQueue/physicalExam/${queues[0]?.patientID}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch after queue");
@@ -76,10 +76,10 @@ const Page = () => {
       }
     };
 
-    if (appointments.length > 0) {
+    if (queues.length > 0) {
       fetchPhysicalExam();
     }
-  }, [appointments]);
+  }, [queues]);
 
   console.log("physical", physicalExam);
 
@@ -97,24 +97,12 @@ const Page = () => {
     // Implement search functionality (if needed)
   };
 
-  const filteredAppointment = appointment.filter((appointment) =>
-    appointment.status.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredQueue = queue.filter((queue) =>
+    queue.status.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const filteredPhysicalExam = physicalExam.filter((pe) =>
     pe.status.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  const formatTime = (timeString: string) => {
-    const hours = parseInt(timeString.slice(11, 13), 10);
-    const minutes = timeString.slice(14, 16);
-    const period = hours < 12 ? "AM" : "PM";
-    const formattedHours = hours > 12 ? hours - 12 : hours;
-    return `${formattedHours}:${minutes} ${period}`;
-  };
-  const formatDate = (dateString: string) => {
-    const dayjsObject = dayjs(dateString);
-    const isoDateString = dayjsObject.format("MMMM D, YYYY	");
-    return isoDateString;
-  };
 
   return (
     <div>
@@ -145,29 +133,24 @@ const Page = () => {
                 <thead>
                   <tr>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase ">
-                      Appointment ID
+                      Queue ID
+                    </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                      Queue Name
+                    </th>
+
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                      Patient Name
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
                       Service
                     </th>
 
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                      Patient Name
-                    </th>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase ">
-                      Date
-                    </th>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase ">
-                      Time
-                    </th>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                      Details
-                    </th>
-                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
                       Status
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
-                      After Appointment
+                      After Queue
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
                       Physical Exam
@@ -175,53 +158,42 @@ const Page = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredAppointment.map((appointment, index) => (
+                  {filteredQueue.map((queue, index) => (
                     <tr
-                      key={appointment.id}
-                      onClick={() => handleClick(appointment)}
+                      key={queue.id}
+                      onClick={() => handleClick(queue)}
                       className="hover:bg-gray-50 cursor-pointer"
                     >
                       <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                        {appointment.id}
+                        {queue.id}
                       </td>
                       <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                        {appointment.service.serviceName}
+                        {queue.queueID}
                       </td>
 
                       <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
                         {" "}
-                        {appointment.patient.firstName}{" "}
-                        {appointment.patient.lastName}
-                      </td>
-                      <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                        {formatDate(appointment.startTime)}
-                      </td>
-                      <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                        {formatTime(appointment.startTime)} -{" "}
-                        {formatTime(appointment.endTime)}
-                      </td>
-                      <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                        {appointment.details}
+                        {queue.patient.firstName} {queue.patient.lastName}
                       </td>
 
                       <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                        {appointment.status}
+                        {queue.service.serviceName}
+                      </td>
+
+                      <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                        {queue.status}
                       </td>
 
                       <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
                         <AfterQueueDialogue
-                          diagnosis={appointment.afterAppointment?.diagnosis}
-                          medicineName={appointment.medication?.medicineName}
-                          medicineStrength={
-                            appointment.medication?.medicineStrength
-                          }
-                          medicineQuantity={
-                            appointment.medication?.medicineQuantity
-                          }
+                          diagnosis={queue.afterQueue?.diagnosis}
+                          medicineName={queue.medication?.medicineName}
+                          medicineStrength={queue.medication?.medicineStrength}
+                          medicineQuantity={queue.medication?.medicineQuantity}
                           medicineFrequency={
-                            appointment.medication?.medicineFrequency
+                            queue.medication?.medicineFrequency
                           }
-                          remarks={appointment.medication?.remarks}
+                          remarks={queue.medication?.remarks}
                         />
                       </td>
 
