@@ -1,67 +1,64 @@
-"use client";
-import { Flex, Select, Tabs, Text } from "@radix-ui/themes";
-import "../../components/styles.css";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import LoginToast from "../loginToast/LoginToast";
+'use client';
+import { Flex, Select, Tabs, Text } from '@radix-ui/themes';
+import '../../components/styles.css';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import LoginToast from '../loginToast/LoginToast';
 
 export default function LoginForm() {
   const supabase = createClientComponentClient();
   const router = useRouter();
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: ''
   });
   const [message, setMessage] = useState<string | null>(null);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    await supabase.auth.signInWithPassword({
-      email: formData.email,
-      password: formData.password,
-    });
-
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...formData,
-          }),
-        }
-      );
+      await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password
+      });
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ...formData
+        })
+      });
 
       if (response.ok) {
-        setMessage("Login successfully");
         const user = await response.json();
         console.log(user.id);
-        if (user.role === "ADMIN") {
+        setMessage('Login successfully');
+        if (user.role === 'ADMIN') {
           router.push(`/admin/${user.id}`);
-        } else if (user.role === "DOCTOR") {
+        } else if (user.role === 'DOCTOR') {
           router.push(`/personnel/doctor/${user.id}`);
-        } else if (user.role === "NURSE") {
+        } else if (user.role === 'NURSE') {
           router.push(`/personnel/nurse/${user.id}`);
-        } else if (user.role === "STAFF") {
+        } else if (user.role === 'STAFF') {
           router.push(`/personnel/staff/${user.id}`);
-        } else if (user.patientType === "STUDENT") {
+        } else if (user.patientType === 'STUDENT') {
           router.push(`/patient/student/${user.id}`);
-        } else if (user.patientType === "EMPLOYEE") {
+        } else if (user.patientType === 'EMPLOYEE') {
           router.push(`/patient/employee/${user.id}`);
         } else {
-          router.push("/default");
+          router.push('/default');
         }
       } else {
-        setMessage("Invalid email or password."); // Show error if login fails
+        setMessage('Invalid email or password.'); // Show error if login fails
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      setMessage("Invalid email or password."); // Show error if login fails
+      console.error('Error submitting form:', error);
+      setMessage('Invalid email or password.'); // Show error if login fails
     }
   };
 
@@ -70,45 +67,32 @@ export default function LoginForm() {
 
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: value
     }));
   };
 
   return (
-    <Flex className="TabsContainer">
-      <Tabs.Root className="TabsRoot" defaultValue="tab1">
+    <Flex className='TabsContainer'>
+      <Tabs.Root className='TabsRoot' defaultValue='tab1'>
         <form onSubmit={handleSubmit}>
-          <Tabs.Content className="TabsContent" value="tab1">
-            <fieldset className="Fieldset">
-              <label className="Label" htmlFor="email">
+          <Tabs.Content className='TabsContent' value='tab1'>
+            <fieldset className='Fieldset'>
+              <label className='Label' htmlFor='email'>
                 Email
               </label>
-              <input
-                className="Input"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-              />
+              <input className='Input' id='email' name='email' value={formData.email} onChange={handleInputChange} />
             </fieldset>
-            <fieldset className="Fieldset">
-              <label className="Label" htmlFor="password">
+            <fieldset className='Fieldset'>
+              <label className='Label' htmlFor='password'>
                 Password
               </label>
-              <input
-                className="Input"
-                id="password"
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-              />
+              <input className='Input' id='password' type='password' name='password' value={formData.password} onChange={handleInputChange} />
             </fieldset>
             <div
               style={{
-                display: "flex",
+                display: 'flex',
                 marginTop: 20,
-                justifyContent: "flex-end",
+                justifyContent: 'flex-end'
               }}
             >
               {/* <button className="Button brown" type="submit">
