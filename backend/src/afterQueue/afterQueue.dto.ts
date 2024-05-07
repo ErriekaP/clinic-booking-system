@@ -24,7 +24,7 @@ export class CreatePhysicalExamDto {
   pulseRate: string;
   respRate: string;
   bodyTemp: string;
-  LMP: 'REGULAR' | 'IRREGULAR';
+  LMP: 'REGULAR' | 'IRREGULAR' | 'NOTAPPLICABLE';
   menstruation: Date | null;
   hypertension: string;
   bronchialAsthma: string;

@@ -104,9 +104,8 @@ export class WorkScheduleService {
           const endTimeStr = appointment.endTime.toISOString().slice(11, 16);
 
           return (
-            startTimeStr === startTime &&
-            endTimeStr === endTime &&
-            appointment.serviceID === serviceIds[0] // Assuming serviceIds array has only one element
+            startTimeStr === startTime && endTimeStr === endTime
+            //&& appointment.serviceID === serviceIds[0] // Assuming serviceIds array has only one element
           );
         });
 

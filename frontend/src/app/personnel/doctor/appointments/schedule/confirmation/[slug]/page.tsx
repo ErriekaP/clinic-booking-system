@@ -1,9 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { fetchUserInfo } from "@/utilities/fetch/patient";
 
 export default function Page({ params }: { params: { slug: string } }) {
   const router = useRouter();
+  const supabase = createClientComponentClient();
 
   // Decode the URL-encoded string
   const decodedSlug = decodeURIComponent(params.slug);
@@ -21,38 +24,52 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const dateString = date.slice(0, 10);
 
-  //if doctors will set reserve the appointment because he is off duty
-
   // Convert the start time
   const startDateTimeString = `${dateString}T${startTime}:00.000Z`;
 
-  const [personnel, setPersonnel] = useState<any>(null);
+  const [personnel, setPersonnel] = useState<any>();
 
   useEffect(() => {
-    const fetchPersonnel = async () => {
+    const getUserInfo = async () => {
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/personnel/${doctorId}`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch personnel");
+        const { data: sessionData, error } = await supabase.auth.getSession();
+        if (error || !sessionData || !sessionData.session) {
+          // Error or no session data, redirect to login page
+          return;
         }
-        const responseData = await response.json();
-        const personnelData = responseData.data;
-
-        setPersonnel(personnelData);
+        const userInfo = await fetchUserInfo(sessionData.session.user.id);
+        setPersonnel(userInfo);
       } catch (error) {
-        console.error("Error fetching personnel:", error);
+        console.error("Error fetching user info:", error);
       }
     };
 
-    fetchPersonnel();
-  }, [doctorId]);
+    getUserInfo();
+  }, [router, supabase]);
+
+  // useEffect(() => {
+  //   const fetchPersonnel = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         `${process.env.NEXT_PUBLIC_BACKEND_URL}/personnel/${doctorId}`
+  //       );
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch personnel");
+  //       }
+  //       const responseData = await response.json();
+  //       const personnelData = responseData.data;
+
+  //       setPersonnel(personnelData);
+  //     } catch (error) {
+  //       console.error("Error fetching personnel:", error);
+  //     }
+  //   };
+
+  //   fetchPersonnel();
+  // }, [doctorId]);
 
   // Convert the end time
   const endDateTimeString = `${dateString}T${endTime}:00.000Z`;
-
-  //const endTimeDate = new Date(endDateTimeString);
 
   const handleCancel = () => {
     router.back();
@@ -60,17 +77,23 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const [formData, setFormData] = useState({
     patientID: "",
-    personnelID: parseInt(doctorId, 10),
+    personnelID: "",
     serviceID: parseInt(serviceId, 10),
     startTime: startDateTimeString,
     endTime: endDateTimeString,
     details: "",
     reasonforCancellation: "",
-    status: "SCHEDULED",
+    status: "PENDING",
   });
 
-  //console.log(startTimeDate);
-  console.log(endDateTimeString);
+  useEffect(() => {
+    if (personnel) {
+      setFormData((prevData) => ({
+        ...prevData,
+        personnelID: personnel.id,
+      }));
+    }
+  }, [personnel]);
 
   console.log(formData);
 
@@ -91,7 +114,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
       if (response.ok) {
         console.log("Form submitted successfully!");
-        router.push(`/personnel/doctor/appointments/${doctorId}`);
+        router.push(`/personnel/doctor/${personnel.id}`);
       } else {
         console.error("Form submission failed");
       }

@@ -1,8 +1,6 @@
 // patient.service.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Service, PrismaClient } from '@prisma/client';
-import { SupabaseService } from 'supabase/supabase.service';
 import { ServiceDto } from './services.dto';
 
 @Injectable()

@@ -1,7 +1,6 @@
 // patient.controller.ts
-import { Controller, Post, Body, Get, Param, Query } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param } from '@nestjs/common';
 import { PersonnelService } from './personnel.service';
-import { ClinicPersonnel } from '@prisma/client';
 
 @Controller('personnel')
 export class PersonnelController {
@@ -11,6 +10,16 @@ export class PersonnelController {
   async findAll() {
     try {
       const personnel = await this.personnelService.getAllPersonnel();
+      return personnel;
+    } catch (error) {
+      throw new Error(`Unable to fetch patients: ${error.message}`);
+    }
+  }
+
+  @Get('/doctor')
+  async findAllDoctor() {
+    try {
+      const personnel = await this.personnelService.getAllDoctor();
       return personnel;
     } catch (error) {
       throw new Error(`Unable to fetch patients: ${error.message}`);
