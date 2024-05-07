@@ -130,6 +130,9 @@ const NavMenu = () => {
                 <a href="/appointments/requests" className="ListItemLink">
                   <p className="ListItemHeading">Appointment Requests</p>
                 </a>
+                <a href="/emergency" className="ListItemLink">
+                  <p className="ListItemHeading">Add Emergency Appointment</p>
+                </a>
               </ul>
             </NavigationMenu.Content>
           </NavigationMenu.Item>
