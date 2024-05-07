@@ -105,7 +105,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   const handleSelectChange = (
     newValue: string | null,
-    fieldName: "gender" | "bloodType"
+    fieldName: "gender" | "bloodType" | "status"
   ) => {
     setSelectedItem(newValue);
     setFormData((prevState) => ({
@@ -276,6 +276,34 @@ export default function Page({ params }: { params: { id: string } }) {
                           </Select.Item>
                           <Select.Item className="SelectItem" value="OTHER">
                             Other
+                          </Select.Item>
+                        </Select.Group>
+                      </Select.Content>
+                    </Select.Root>
+                  </fieldset>
+                  <fieldset>
+                    <label className="Label" htmlFor="status">
+                      Status
+                    </label>
+                    {/* Status */}
+                    <Select.Root
+                      name="status"
+                      value={formData.status}
+                      onValueChange={(newValue) =>
+                        handleSelectChange(newValue, "status")
+                      }
+                    >
+                      <Select.Trigger className="SelectTrigger" />
+                      <Select.Content className="SelectContent">
+                        <Select.Group>
+                          <Select.Label className="SelectLabel">
+                            Status
+                          </Select.Label>
+                          <Select.Item className="SelectItem" value="ACTIVE">
+                            Active
+                          </Select.Item>
+                          <Select.Item className="SelectItem" value="INACTIVE">
+                            Inactive
                           </Select.Item>
                         </Select.Group>
                       </Select.Content>
