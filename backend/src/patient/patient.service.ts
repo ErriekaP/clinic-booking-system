@@ -187,28 +187,32 @@ export class PatientService {
   }
 
   async addPatient(patientData: any): Promise<any> {
-    try {
-      // First, create user in Supabase
-      const { email, password, role } = patientData;
-      const { user, session, error } = await this.supabaseService.signUp(
-        email,
-        password,
-      );
+    if (patientData.email.endsWith('@addu.edu.ph')) {
+      try {
+        // First, create user in Supabase
+        const { email, password, role } = patientData;
+        const { user, session, error } = await this.supabaseService.signUp(
+          email,
+          password,
+        );
 
-      if (error) {
-        throw new Error('Error creating user in Supabase: ' + error.message);
+        if (error) {
+          throw new Error('Error creating user in Supabase: ' + error.message);
+        }
+
+        // Save role and SupabaseID in Prisma
+        const prismaPatientData = {
+          ...patientData,
+          supabaseUserID: user.id, // Supabase user ID is stored in 'id' field
+        };
+        const newPatient = await this.createPatient(prismaPatientData);
+
+        return { success: true, data: newPatient };
+      } catch (error) {
+        return { success: false, error: error.message };
       }
-
-      // Save role and SupabaseID in Prisma
-      const prismaPatientData = {
-        ...patientData,
-        supabaseUserID: user.id, // Supabase user ID is stored in 'id' field
-      };
-      const newPatient = await this.createPatient(prismaPatientData);
-
-      return { success: true, data: newPatient };
-    } catch (error) {
-      return { success: false, error: error.message };
+    } else {
+      throw new Error('Error creating user in Supabase: ');
     }
   }
 

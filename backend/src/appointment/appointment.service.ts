@@ -139,6 +139,13 @@ export class AppointmentService {
         await this.personnelService.getPersonnelWithServices(
           updatedData.personnelID.toString(),
         );
+      // Get service information using patientID
+
+      const serviceInfo = await this.prisma.service.findUnique({
+        where: {
+          id: updatedData.serviceID,
+        },
+      });
 
       const date = dayjs(existingAppointment.startTime).format('MMMM D, YYYY');
       const startTimeString = existingAppointment.startTime
@@ -153,6 +160,7 @@ export class AppointmentService {
 
       if (updatedData.status === 'SCHEDULED') {
         this.emailSender.sendEmail({
+          emailType: 'AppointmentConfirmation',
           toEmail: patientInfo.email,
           patientFirstName: patientInfo.firstName,
           patientMiddleName: patientInfo.middleName,
@@ -163,6 +171,29 @@ export class AppointmentService {
           personnelID: updatedService.personnelID,
           doctorFirstName: personnelInfo.firstName,
           doctorLastName: personnelInfo.lastName,
+          serviceName: serviceInfo.serviceName,
+          reasonforCancellation: updatedService.reasonforCancellation,
+          status: updatedService.status,
+        });
+      }
+
+      if (
+        updatedData.status === 'CANCELLEDBYSTUDENT' ||
+        updatedData.status === 'CANCELLEDBYDOCTOR'
+      ) {
+        this.emailSender.sendEmail({
+          emailType: 'AppointmentCancellation',
+          toEmail: patientInfo.email,
+          patientFirstName: patientInfo.firstName,
+          patientMiddleName: patientInfo.middleName,
+          patientLastName: patientInfo.lastName,
+          date: date,
+          startTime: startTime,
+          endTime: endTime,
+          personnelID: updatedService.personnelID,
+          doctorFirstName: personnelInfo.firstName,
+          doctorLastName: personnelInfo.lastName,
+          serviceName: serviceInfo.serviceName,
           reasonforCancellation: updatedService.reasonforCancellation,
           status: updatedService.status,
         });

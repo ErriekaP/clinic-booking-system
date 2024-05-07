@@ -1,15 +1,15 @@
 // patient.service.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Queue, PrismaClient } from '@prisma/client';
-import { SupabaseService } from 'supabase/supabase.service';
 import { QueueDto } from './queue.dto';
-import { error } from 'console';
-import { ok } from 'assert';
+import { EmailSender } from 'src/emailSender/EmailSender';
 
 @Injectable()
 export class QueueService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly emailSender: EmailSender,
+  ) {}
 
   async updateService(id: number, updatedData: any): Promise<any> {
     try {
@@ -337,6 +337,57 @@ export class QueueService {
           where: { id: parsedId },
           data: { currentQueueNumber: firstPendingQueue.id },
         });
+
+        const afterDash = updatedFirstPendingQueue.queueID.split('-')[1];
+        const beforeDash = updatedFirstPendingQueue.queueID.split('-')[0];
+
+        const result = parseInt(afterDash) + 1;
+        const queueIDBefore = beforeDash + '-' + result;
+
+        console.log(queueIDBefore);
+
+        const beforeOngoingQueue = await this.prisma.queue.findFirst({
+          where: {
+            queueID: queueIDBefore,
+          },
+        });
+
+        const serviceInfo = await this.prisma.service.findUnique({
+          where: {
+            id: beforeOngoingQueue.serviceID,
+          },
+        });
+
+        // Check if patientBeforeOngoingQueue is not null
+        if (beforeOngoingQueue) {
+          const patientInfo = await this.prisma.patient.findUnique({
+            where: {
+              id: beforeOngoingQueue.patientID,
+            },
+          });
+
+          this.emailSender.sendEmail({
+            emailType: 'QueueBefore',
+            toEmail: patientInfo.email,
+            patientFirstName: patientInfo.firstName,
+            patientMiddleName: patientInfo.middleName,
+            patientLastName: patientInfo.lastName,
+            date: '',
+            startTime: '',
+            endTime: '',
+            personnelID: 0,
+            doctorFirstName: '',
+            doctorLastName: '',
+            serviceName: serviceInfo.serviceName,
+            reasonforCancellation: '',
+            status: 'PENDING',
+          });
+
+          console.log(patientInfo.email);
+          // Now you have patient information in the patientInfo variable
+        } else {
+          console.log('No patient found before the ongoing queue.');
+        }
 
         return {
           success: true,
