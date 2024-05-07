@@ -69,7 +69,7 @@ const NavMenu = () => {
 
   return (
     <div className='w-full flex justify-center'>
-      <div className='navbar bg-base-100 w-[50rem]'>
+      <div className='navbar w-[55rem] bg-[#D9DCD6] rounded'>
         <div className='navbar-start'>
           <div className='dropdown'>
             <div tabIndex={0} role='button' className='btn btn-ghost lg:hidden'>
@@ -229,22 +229,25 @@ const NavMenu = () => {
           </ul>
         </div>
         <div className='navbar-end'>
-          <div className='hover:cursor-pointer mr-4'>
-            <DropdownMenu.Root>
-              <DropdownMenu.Trigger asChild>
-                <button className='IconButton' aria-label='Customise options'>
-                  <PersonIcon />
-                </button>
-              </DropdownMenu.Trigger>
+          <div className='flex gap-4 items-center'>
+            <p className='text-sm'>{`Hi, ${user?.firstName}`}</p>
+            <div className='hover:cursor-pointer mr-4'>
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger asChild>
+                  <button className='IconButton' aria-label='Customise options'>
+                    <PersonIcon />
+                  </button>
+                </DropdownMenu.Trigger>
 
-              <DropdownMenu.Portal>
-                <DropdownMenu.Content className='DropdownMenuContent' sideOffset={5}>
-                  <DropdownMenu.Item className='DropdownMenuItem' onClick={handleLogout}>
-                    Logout
-                  </DropdownMenu.Item>
-                </DropdownMenu.Content>
-              </DropdownMenu.Portal>
-            </DropdownMenu.Root>
+                <DropdownMenu.Portal>
+                  <DropdownMenu.Content className='DropdownMenuContent' sideOffset={5}>
+                    <DropdownMenu.Item className='DropdownMenuItem' onClick={handleLogout}>
+                      Logout
+                    </DropdownMenu.Item>
+                  </DropdownMenu.Content>
+                </DropdownMenu.Portal>
+              </DropdownMenu.Root>
+            </div>
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@ import '../../components/styles.css';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import LoginToast from '../loginToast/LoginToast';
+import { toast } from 'react-toastify';
 
 export default function LoginForm() {
   const supabase = createClientComponentClient();
@@ -36,8 +36,7 @@ export default function LoginForm() {
 
       if (response.ok) {
         const user = await response.json();
-        console.log(user.id);
-        setMessage('Login successfully');
+        toast.success('Login successfully');
         if (user.role === 'ADMIN') {
           router.push(`/admin/${user.id}`);
         } else if (user.role === 'DOCTOR') {
@@ -54,11 +53,13 @@ export default function LoginForm() {
           router.push('/default');
         }
       } else {
-        setMessage('Invalid email or password.'); // Show error if login fails
+        toast.error('Invalid email or password.');
+        // setMessage('Invalid email or password.'); // Show error if login fails
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      setMessage('Invalid email or password.'); // Show error if login fails
+      toast.error('Invalid email or password.');
+      // console.error('Error submitting form:', error);
+      // setMessage('Invalid email or password.'); // Show error if login fails
     }
   };
 
@@ -95,10 +96,9 @@ export default function LoginForm() {
                 justifyContent: 'flex-end'
               }}
             >
-              {/* <button className="Button brown" type="submit">
+              <button className='Button brown' type='submit'>
                 Login
-              </button> */}
-              <LoginToast message={message} />
+              </button>
             </div>
           </Tabs.Content>
         </form>
