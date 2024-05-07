@@ -71,7 +71,7 @@ const NavBar = () => {
 
   return (
     <div className='w-full flex justify-center'>
-      <div className='navbar w-[55rem] bg-[#D9DCD6] rounded'>
+      <div className='navbar w-[55rem] max:w-[55rem] bg-[#D9DCD6] rounded'>
         <div className='navbar-start'>
           <div className='dropdown'>
             <div tabIndex={0} role='button' className='btn btn-ghost lg:hidden'>
