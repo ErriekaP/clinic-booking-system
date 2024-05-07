@@ -21,6 +21,7 @@ datasource db {
 enum LastMensPeriod {
   REGULAR
   IRREGULAR
+  NOTAPPLICABLE
 
 }
 

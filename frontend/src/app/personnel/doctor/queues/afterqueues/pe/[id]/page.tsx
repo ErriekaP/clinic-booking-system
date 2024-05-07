@@ -160,13 +160,10 @@ const Page = ({ params }: { params: { id: string } }) => {
     setFormData({ ...formData, genSurvey: updatedConditions });
   };
 
-  const handleCheckboxChange = () => {
-    const newValue = formData.LMP === "REGULAR" ? "IRREGULAR" : "REGULAR";
-    setFormData({
-      ...formData,
-      LMP: newValue,
-    });
+  const handleCheckboxChange = (value: string) => {
+    setFormData({ ...formData, LMP: value });
   };
+
   console.log(formData);
 
   const handleHypertensionCheckboxChange = () => {
@@ -222,11 +219,11 @@ const Page = ({ params }: { params: { id: string } }) => {
     setSkinActivated(!skinActivated);
     if (skinActivated) {
       setFormData({ ...formData, skin: "NORMAL" });
-      
     } else {
-      setFormData({ ...formData, skin: "" });    }
+      setFormData({ ...formData, skin: "" });
+    }
   };
-  console.log(skinActivated)
+  console.log(skinActivated);
 
   const handleHeadCheckboxChange = () => {
     setHeadActivated(!headActivated);
@@ -622,7 +619,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 type="checkbox"
                                 className=""
                                 checked={formData.LMP === "REGULAR"}
-                                onChange={() => handleCheckboxChange()}
+                                onChange={() => handleCheckboxChange("REGULAR")}
                               />
                             </div>
                             Regular
@@ -640,10 +637,33 @@ const Page = ({ params }: { params: { id: string } }) => {
                                 type="checkbox"
                                 className=""
                                 checked={formData.LMP === "IRREGULAR"}
-                                onChange={() => handleCheckboxChange()}
+                                onChange={() =>
+                                  handleCheckboxChange("IRREGULAR")
+                                }
                               />
                             </div>
                             Irregular
+                          </Flex>
+                        </Text>
+                        <Text as="label" size="2">
+                          <Flex gap="2">
+                            <div
+                              className={`h-4 w-4 border-2 border-black rounded ${
+                                formData.LMP === "NOTAPPLICABLE"
+                                  ? "bg-black"
+                                  : ""
+                              }`}
+                            >
+                              <input
+                                type="checkbox"
+                                className=""
+                                checked={formData.LMP === "NOTAPPLICABLE"}
+                                onChange={() =>
+                                  handleCheckboxChange("NOTAPPLICABLE")
+                                }
+                              />
+                            </div>
+                            Not Applicable
                           </Flex>
                         </Text>
                       </div>
@@ -909,7 +929,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                               checked={!skinActivated}
                               onChange={handleSkinCheckboxChange}
                               value={!skinActivated ? formData.skin : "NORMAL"}
-
                             />
                           </div>
                           <span>Normal</span>
@@ -957,7 +976,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                               type="checkbox"
                               checked={!headActivated}
                               value={!headActivated ? formData.head : "NORMAL"}
-
                               onChange={handleHeadCheckboxChange}
                             />
                           </div>
@@ -1008,7 +1026,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                               checked={!eyesActivated}
                               onChange={handleEyesCheckboxChange}
                               value={!eyesActivated ? formData.eyes : "NORMAL"}
-
                             />
                           </div>
                           <span>Normal</span>
@@ -1058,7 +1075,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                               checked={!earsActivated}
                               onChange={handleEarsCheckboxChange}
                               value={!earsActivated ? formData.ears : "NORMAL"}
-
                             />
                           </div>
                           <span>Normal</span>
@@ -1108,7 +1124,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                               checked={!neckActivated}
                               onChange={handleNeckCheckboxChange}
                               value={!neckActivated ? formData.neck : "NORMAL"}
-
                             />
                           </div>
                           <span>Normal</span>
@@ -1157,8 +1172,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                               type="checkbox"
                               checked={!throatActivated}
                               onChange={handleThroatCheckboxChange}
-                              value={!throatActivated ? formData.throat : "NORMAL"}
-
+                              value={
+                                !throatActivated ? formData.throat : "NORMAL"
+                              }
                             />
                           </div>
                           <span>Normal</span>
@@ -1202,15 +1218,18 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !chestActivated ? "bg-black": ""
+                              !chestActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
                               checked={!chestActivated}
                               onChange={handleChestCheckboxChange}
-                              value={!chestActivated ? formData.chestAndLungs : "NORMAL"}
-
+                              value={
+                                !chestActivated
+                                  ? formData.chestAndLungs
+                                  : "NORMAL"
+                              }
                             />
                           </div>
                           <span>Normal</span>
@@ -1244,7 +1263,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                           })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          !chestActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !chestActivated
+                            ? "cursor-not-allowed bg-gray-200"
+                            : ""
                         }`}
                         disabled={!chestActivated}
                       />
@@ -1262,8 +1283,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                               type="checkbox"
                               checked={!heartActivated}
                               onChange={handleHeartCheckboxChange}
-                              value={!heartActivated ? formData.heart : "NORMAL"}
-
+                              value={
+                                !heartActivated ? formData.heart : "NORMAL"
+                              }
                             />
                           </div>
                           <span>Normal</span>
@@ -1294,7 +1316,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                           setFormData({ ...formData, heart: e.target.value })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          !heartActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !heartActivated
+                            ? "cursor-not-allowed bg-gray-200"
+                            : ""
                         }`}
                         disabled={!heartActivated}
                       />
@@ -1312,8 +1336,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                               type="checkbox"
                               checked={!abdomenActivated}
                               onChange={handleAbdomenCheckboxChange}
-                              value={!abdomenActivated ? formData.abdomen : "NORMAL"}
-
+                              value={
+                                !abdomenActivated ? formData.abdomen : "NORMAL"
+                              }
                             />
                           </div>
                           <span>Normal</span>
@@ -1357,7 +1382,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !gutActivated? "bg-black" : ""
+                              !gutActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
@@ -1365,7 +1390,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                               checked={!gutActivated}
                               onChange={handleGutCheckboxChange}
                               value={!gutActivated ? formData.gut : "NORMAL"}
-
                             />
                           </div>
                           <span>Normal</span>
@@ -1409,17 +1433,18 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !musculoActivated
-                                ? "bg-black"
-                                : ""
+                              !musculoActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
                               checked={!musculoActivated}
                               onChange={handleMusculoCheckboxChange}
-                              value={!musculoActivated ? formData.masculoSkeletal : "NORMAL"}
-
+                              value={
+                                !musculoActivated
+                                  ? formData.masculoSkeletal
+                                  : "NORMAL"
+                              }
                             />
                           </div>
                           <span>Normal</span>
@@ -1445,9 +1470,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         id="musculo"
                         name="musculo"
                         type="text"
-                        value={
-                          musculoActivated ? formData.masculoSkeletal : ""
-                        }
+                        value={musculoActivated ? formData.masculoSkeletal : ""}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -1468,17 +1491,18 @@ const Page = ({ params }: { params: { id: string } }) => {
                         <label className="flex items-center space-x-2">
                           <div
                             className={`h-4 w-4 border-2 border-black rounded ${
-                              !neuroActivated
-                                ? "bg-black"
-                                : ""
+                              !neuroActivated ? "bg-black" : ""
                             }`}
                           >
                             <input
                               type="checkbox"
                               checked={!neuroActivated}
                               onChange={handleNeuroCheckboxChange}
-                              value={!neuroActivated ? formData.neurological : "NORMAL"}
-
+                              value={
+                                !neuroActivated
+                                  ? formData.neurological
+                                  : "NORMAL"
+                              }
                             />
                           </div>
                           <span>Normal</span>
@@ -1512,7 +1536,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                           })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          !neuroActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !neuroActivated
+                            ? "cursor-not-allowed bg-gray-200"
+                            : ""
                         }`}
                         disabled={!neuroActivated}
                       />
@@ -1532,7 +1558,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                               checked={!CBCActivated}
                               onChange={handleCBCCheckboxChange}
                               value={!CBCActivated ? formData.CBC : "NORMAL"}
-
                             />
                           </div>
                           <span>Normal</span>
@@ -1580,8 +1605,11 @@ const Page = ({ params }: { params: { id: string } }) => {
                               type="checkbox"
                               checked={!urinalActivated}
                               onChange={handleUrinalCheckboxChange}
-                              value={!urinalActivated ? formData.urinalysis : "NORMAL"}
-
+                              value={
+                                !urinalActivated
+                                  ? formData.urinalysis
+                                  : "NORMAL"
+                              }
                             />
                           </div>
                           <span>Normal</span>
@@ -1634,8 +1662,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                               type="checkbox"
                               checked={!fecalActivated}
                               onChange={handleFecalCheckboxChange}
-                              value={!fecalActivated ? formData.fecalysis : "NORMAL"}
-
+                              value={
+                                !fecalActivated ? formData.fecalysis : "NORMAL"
+                              }
                             />
                           </div>
                           <span>Normal</span>
@@ -1669,7 +1698,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                           })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          !fecalActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !fecalActivated
+                            ? "cursor-not-allowed bg-gray-200"
+                            : ""
                         }`}
                         disabled={!fecalActivated}
                       />
@@ -1686,8 +1717,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                               type="checkbox"
                               checked={!chestActivated}
                               onChange={handleChestXCheckboxChange}
-                              value={!chestXActivated ? formData.chestXray : "NORMAL"}
-
+                              value={
+                                !chestXActivated ? formData.chestXray : "NORMAL"
+                              }
                             />
                           </div>
                           <span>Normal</span>
@@ -1741,7 +1773,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                               checked={!ECGActivated}
                               onChange={handleECGCheckboxChange}
                               value={!ECGActivated ? formData.ECG : "NORMAL"}
-
                             />
                           </div>
                           <span>Normal</span>
@@ -1789,8 +1820,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                               type="checkbox"
                               checked={!HBSAGActivated}
                               onChange={handleHBSAGCheckboxChange}
-                              value={!HBSAGActivated ? formData.HBSAG : "NORMAL"}
-
+                              value={
+                                !HBSAGActivated ? formData.HBSAG : "NORMAL"
+                              }
                             />
                           </div>
                           <span>Normal</span>
@@ -1821,7 +1853,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                           setFormData({ ...formData, HBSAG: e.target.value })
                         }
                         className={`shadow appearance-none border rounded w-full py-2 pl-2 mt-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-                          !HBSAGActivated ? "cursor-not-allowed bg-gray-200" : ""
+                          !HBSAGActivated
+                            ? "cursor-not-allowed bg-gray-200"
+                            : ""
                         }`}
                         disabled={!HBSAGActivated}
                       />
@@ -1838,8 +1872,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                               type="checkbox"
                               checked={!drugActivated}
                               onChange={handleDrugCheckboxChange}
-                              value={!drugActivated ? formData.drugTest : "NORMAL"}
-
+                              value={
+                                !drugActivated ? formData.drugTest : "NORMAL"
+                              }
                             />
                           </div>
                           <span>Normal</span>
@@ -1855,7 +1890,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                               type="checkbox"
                               checked={drugActivated}
                               onChange={handleDrugCheckboxChange}
-                              
                             />
                           </div>
                           <span>Abnormal</span>

@@ -1,14 +1,5 @@
 // work-schedule.controller.ts
-import {
-  Controller,
-  Post,
-  Body,
-  Param,
-  Get,
-  Query,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Post, Body, Get, Query } from '@nestjs/common';
 import { WorkScheduleService } from './schedule.service';
 import { WorkScheduleDto } from './schedule.dto';
 import { Interval } from './schedule.dto';

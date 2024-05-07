@@ -55,52 +55,60 @@ export default function Page() {
     <div>
       <BackNavbar />
 
-      <div className="flex min-h-screen flex-col items-center justify-between p-4">
-        <form onSubmit={handleSubmit} className="w-full max-w-lg">
-          <div className="bg-white shadow-md rounded p-5">
-            <h2 className="text-xl mb-4 font-bold text-white">Add Service</h2>
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="serviceName"
-              >
-                Service Name
-              </label>
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="serviceName"
-                name="serviceName"
-                type="text"
-                value={formData.serviceName}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="mb-6">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="description"
-              >
-                Description
-              </label>
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="description"
-                name="description"
-                type="text"
-                value={formData.description}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="flex items-center justify-end">
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="submit"
-              >
-                Submit
-              </button>
-            </div>
+      <div className="flex items-center justify-center min-h-screen ">
+        <Container>
+          <div className="flex items-center justify-center">
+            <form
+              onSubmit={handleSubmit}
+              className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md"
+            >
+              <h2 className="text-2xl font-bold mb-4 text-center">
+                Add Service
+              </h2>
+              <div className="mb-4">
+                <label
+                  htmlFor="serviceName"
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                >
+                  Service Name
+                </label>
+                <input
+                  id="serviceName"
+                  name="serviceName"
+                  type="text"
+                  value={formData.serviceName}
+                  onChange={handleInputChange}
+                  className="shadow appearance-none border rounded w-full py-2 pl-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+              </div>
+              <div className="mb-6">
+                <label
+                  htmlFor="description"
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                >
+                  Description
+                </label>
+                <input
+                  id="description"
+                  name="description"
+                  type="text"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  className="shadow appearance-none border rounded w-full py-3 pl-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
+        </Container>
       </div>
     </div>
   );

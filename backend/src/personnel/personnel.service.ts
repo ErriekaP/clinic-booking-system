@@ -1,7 +1,7 @@
 // patient.service.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Appointments, Patient, PrismaClient, Queue } from '@prisma/client';
+import { Appointments } from '@prisma/client';
 import { SupabaseService } from 'supabase/supabase.service';
 
 @Injectable()
@@ -68,6 +68,18 @@ export class PersonnelService {
       const personnel = await this.prisma.clinicPersonnel.findMany();
       console.log(personnel);
       console.log(this.prisma.$queryRaw`${personnel}`);
+      return personnel;
+    } catch (error) {
+      throw new Error(`Unable to fetch patients: ${error.message}`);
+    }
+  }
+
+  async getAllDoctor() {
+    try {
+      const personnel = await this.prisma.clinicPersonnel.findMany({
+        where: { role: 'DOCTOR' },
+      });
+
       return personnel;
     } catch (error) {
       throw new Error(`Unable to fetch patients: ${error.message}`);
