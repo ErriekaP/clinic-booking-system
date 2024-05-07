@@ -1,18 +1,8 @@
 // patient.controller.ts
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  Param,
-  NotFoundException,
-  ParseIntPipe,
-} from '@nestjs/common';
+import { Controller, Post, Body, Get, Param } from '@nestjs/common';
 import { afterAppointmentService } from './afterAppointment.service';
-import { AfterAppointment, Appointments } from '@prisma/client';
 import {
   CreateAfterAppointmentDto,
-  CreateMedicineDto,
   CreatePhysicalExamDto,
 } from './afterAppointment.dto';
 

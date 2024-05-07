@@ -1,13 +1,12 @@
 // patient.service.ts
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Prisma, AfterAppointment, Appointments } from '@prisma/client';
-import { SupabaseService } from 'supabase/supabase.service';
+import { AfterAppointment } from '@prisma/client';
+
 import {
   CreateAfterAppointmentDto,
   CreatePhysicalExamDto,
 } from './afterAppointment.dto';
-import { after } from 'node:test';
 
 @Injectable()
 export class afterAppointmentService {
@@ -101,45 +100,78 @@ export class afterAppointmentService {
 
   async createAfterAppointment(
     createAfterAppointmentDto: CreateAfterAppointmentDto,
-  ) {
-    const { appointmentID, diagnosis, medications } = createAfterAppointmentDto;
-
-    // Create AfterAppointment
-    const afterAppointment = await this.prisma.afterAppointment.create({
-      data: {
-        appointmentID,
-        diagnosis,
-      },
-    });
-
-    // Create Medications for AfterAppointment
-    const createMedicationsPromises = medications.map((medication) =>
-      this.prisma.medicine.create({
+  ): Promise<any> {
+    try {
+      const { appointmentID, diagnosis, medications, ...afterAppointmentData } =
+        createAfterAppointmentDto;
+      // Assuming this.prisma is your Prisma client instance
+      const afterAppointmentRecord = await this.prisma.afterAppointment.create({
         data: {
-          afterAppointmentID: afterAppointment.id,
-          ...medication,
+          ...afterAppointmentData,
+          appointmentID,
+          diagnosis,
         },
-      }),
-    );
+      });
 
-    await Promise.all(createMedicationsPromises);
+      // Create Medications for AfterAppointment
+      const createMedicationsPromises = medications.map((medication) =>
+        this.prisma.medicine.create({
+          data: {
+            afterAppointmentID: afterAppointmentRecord.id,
+            ...medication,
+          },
+        }),
+      );
+      await Promise.all(createMedicationsPromises);
 
-    // Update the status of the associated appointment to "COMPLETE"
-    await this.prisma.appointments.update({
-      where: {
-        id: appointmentID,
-      },
-      data: {
-        status: 'COMPLETE',
-      },
-    });
-
-    return afterAppointment;
+      return { afterAppointmentRecord };
+    } catch (error) {
+      console.error('Error creating After Appointments:', error);
+      throw error;
+    }
   }
-  catch(error: any) {
-    console.error('Error creating AfterAppointment:', error);
-    throw error;
-  }
+
+  // async createAfterAppointment(
+  //   createAfterAppointmentDto: CreateAfterAppointmentDto,
+  // ) {
+  //   const { appointmentID, diagnosis, medications } = createAfterAppointmentDto;
+
+  //   // Create AfterAppointment
+  //   const afterAppointment = await this.prisma.afterAppointment.create({
+  //     data: {
+  //       appointmentID,
+  //       diagnosis,
+  //     },
+  //   });
+
+  //   // Create Medications for AfterAppointment
+  //   const createMedicationsPromises = medications.map((medication) =>
+  //     this.prisma.medicine.create({
+  //       data: {
+  //         afterAppointmentID: afterAppointment.id,
+  //         ...medication,
+  //       },
+  //     }),
+  //   );
+
+  //   await Promise.all(createMedicationsPromises);
+
+  //   // Update the status of the associated appointment to "COMPLETE"
+  //   await this.prisma.appointments.update({
+  //     where: {
+  //       id: appointmentID,
+  //     },
+  //     data: {
+  //       status: 'COMPLETE',
+  //     },
+  //   });
+
+  //   return afterAppointment;
+  // }
+  // catch(error: any) {
+  //   console.error('Error creating AfterAppointment:', error);
+  //   throw error;
+  // }
 
   async countDoctorsByService(serviceId: number): Promise<number> {
     try {

@@ -2,6 +2,22 @@
 export class CreateAfterAppointmentDto {
   appointmentID: number;
   diagnosis: string;
+  purpose: string;
+  genSurvey: GeneralSurvey[];
+  bloodPressure: string;
+  pulseRate: string;
+  respRate: string;
+  bodyTemp: string;
+  LMP: 'REGULAR' | 'IRREGULAR' | 'NOTAPPLICABLE';
+  LOC: string;
+  injuries: string;
+  menstruation: Date | null;
+  hypertension: string;
+  bronchialAsthma: string;
+  heartDisease: string;
+  chestPain: string;
+  seizureDisorder: string;
+  others: string;
   medications: CreateMedicineDto[];
 }
 
@@ -23,7 +39,7 @@ export class CreatePhysicalExamDto {
   pulseRate: string;
   respRate: string;
   bodyTemp: string;
-  LMP: 'REGULAR' | 'IRREGULAR';
+  LMP: 'REGULAR' | 'IRREGULAR' | 'NOTAPPLICABLE';
   menstruation: Date | null;
   hypertension: string;
   bronchialAsthma: string;
