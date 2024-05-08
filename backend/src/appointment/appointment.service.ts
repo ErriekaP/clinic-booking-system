@@ -60,6 +60,8 @@ export class AppointmentService {
           personnel: true,
           service: true,
           patient: true,
+          physicalExamID: true,
+          afterAppointmentID: true,
         },
       });
 

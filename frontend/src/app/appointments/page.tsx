@@ -97,9 +97,20 @@ const Page = () => {
     // Implement search functionality (if needed)
   };
 
-  const filteredAppointment = appointment.filter((appointment) =>
-    appointment.status.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredAppointment = appointments.filter(
+    (appointment) =>
+      appointment.status.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      appointment.patient.firstName
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      appointment.patient.lastName
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      appointment.service.serviceName
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
   );
+
   const filteredPhysicalExam = physicalExam.filter((pe) =>
     pe.status.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -210,60 +221,37 @@ const Page = () => {
 
                       <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
                         <AfterQueueDialogue
-                          queueID={
-                            filteredPhysicalExam[index].physicalExam?.queueID
-                          }
-                          purpose={
-                            filteredPhysicalExam[index].physicalExam?.purpose
-                          }
-                          genSurvey={
-                            filteredPhysicalExam[index].physicalExam?.genSurvey
-                          }
+                          type="appointment"
+                          appointmentID={appointment.id}
+                          purpose={appointment.afterAppointmentID?.purpose}
+                          genSurvey={appointment.afterAppointmentID?.genSurvey}
                           bloodPressure={
-                            filteredPhysicalExam[index].physicalExam
-                              ?.bloodPressure
+                            appointment.afterAppointmentID?.bloodPressure
                           }
-                          pulseRate={
-                            filteredPhysicalExam[index].physicalExam?.pulseRate
-                          }
-                          respRate={
-                            filteredPhysicalExam[index].physicalExam?.respRate
-                          }
-                          bodyTemp={
-                            filteredPhysicalExam[index].physicalExam?.bodyTemp
-                          }
-                          LMP={filteredPhysicalExam[index].physicalExam?.LMP}
+                          pulseRate={appointment.afterAppointmentID?.pulseRate}
+                          respRate={appointment.afterAppointmentID?.respRate}
+                          bodyTemp={appointment.afterAppointmentID?.bodyTemp}
+                          LMP={appointment.afterAppointmentID?.LMP}
                           menstruation={
-                            filteredPhysicalExam[index].physicalExam
-                              ?.menstruation
+                            appointment.afterAppointmentID?.menstruation
                           }
                           hypertension={
-                            filteredPhysicalExam[index].physicalExam
-                              ?.hypertension
+                            appointment.afterAppointmentID?.hypertension
                           }
                           bronchialAsthma={
-                            filteredPhysicalExam[index].physicalExam
-                              ?.bronchialAsthma
+                            appointment.afterAppointmentID?.bronchialAsthma
                           }
                           heartDisease={
-                            filteredPhysicalExam[index].physicalExam
-                              ?.heartDisease
+                            appointment.afterAppointmentID?.heartDisease
                           }
-                          chestPain={
-                            filteredPhysicalExam[index].physicalExam?.chestPain
-                          }
+                          chestPain={appointment.afterAppointmentID?.chestPain}
                           seizureDisorder={
-                            filteredPhysicalExam[index].physicalExam
-                              ?.seizureDisorder
+                            appointment.afterAppointmentID?.seizureDisorder
                           }
-                          others={
-                            filteredPhysicalExam[index].physicalExam?.others
-                          }
-                          LOC={filteredPhysicalExam[index].physicalExam?.LOC}
-                          injuries={
-                            filteredPhysicalExam[index].physicalExam?.injuries
-                          }
-                          diagnosis={appointment.afterAppointment?.diagnosis}
+                          others={appointment.afterAppointmentID?.others}
+                          LOC={appointment.afterAppointmentID?.LOC}
+                          injuries={appointment.afterAppointmentID?.injuries}
+                          diagnosis={appointment.afterAppointmentID?.diagnosis}
                           medicineName={appointment.medication?.medicineName}
                           medicineStrength={
                             appointment.medication?.medicineStrength
@@ -279,147 +267,78 @@ const Page = () => {
                       </td>
 
                       <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
-                        {index < filteredPhysicalExam.length ? (
-                          <QueuePhysicalExamDialog
-                            queueID={
-                              filteredPhysicalExam[index].physicalExam?.queueID
-                            }
-                            purpose={
-                              filteredPhysicalExam[index].physicalExam?.purpose
-                            }
-                            genSurvey={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.genSurvey
-                            }
-                            bloodPressure={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.bloodPressure
-                            }
-                            pulseRate={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.pulseRate
-                            }
-                            respRate={
-                              filteredPhysicalExam[index].physicalExam?.respRate
-                            }
-                            bodyTemp={
-                              filteredPhysicalExam[index].physicalExam?.bodyTemp
-                            }
-                            LMP={filteredPhysicalExam[index].physicalExam?.LMP}
-                            menstruation={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.menstruation
-                            }
-                            hypertension={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.hypertension
-                            }
-                            bronchialAsthma={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.bronchialAsthma
-                            }
-                            heartDisease={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.heartDisease
-                            }
-                            chestPain={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.chestPain
-                            }
-                            seizureDisorder={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.seizureDisorder
-                            }
-                            others={
-                              filteredPhysicalExam[index].physicalExam?.others
-                            }
-                            LOC={filteredPhysicalExam[index].physicalExam?.LOC}
-                            injuries={
-                              filteredPhysicalExam[index].physicalExam?.injuries
-                            }
-                            skin={
-                              filteredPhysicalExam[index].physicalExam?.skin
-                            }
-                            head={
-                              filteredPhysicalExam[index].physicalExam?.head
-                            }
-                            eyes={
-                              filteredPhysicalExam[index].physicalExam?.eyes
-                            }
-                            ears={
-                              filteredPhysicalExam[index].physicalExam?.ears
-                            }
-                            neck={
-                              filteredPhysicalExam[index].physicalExam?.neck
-                            }
-                            throat={
-                              filteredPhysicalExam[index].physicalExam?.throat
-                            }
-                            chestAndLungs={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.chestAndLungs
-                            }
-                            heart={
-                              filteredPhysicalExam[index].physicalExam?.heart
-                            }
-                            abdomen={
-                              filteredPhysicalExam[index].physicalExam?.abdomen
-                            }
-                            gut={filteredPhysicalExam[index].physicalExam?.gut}
-                            masculoSkeletal={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.masculoSkeletal
-                            }
-                            neurological={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.neurological
-                            }
-                            CBC={filteredPhysicalExam[index].physicalExam?.CBC}
-                            urinalysis={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.urinalysis
-                            }
-                            fecalysis={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.fecalysis
-                            }
-                            chestXray={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.chestXray
-                            }
-                            ECG={filteredPhysicalExam[index].physicalExam?.ECG}
-                            HBSAG={
-                              filteredPhysicalExam[index].physicalExam?.HBSAG
-                            }
-                            drugTest={
-                              filteredPhysicalExam[index].physicalExam?.drugTest
-                            }
-                            isPhysicallyFit={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.isPhysicallyFit
-                            }
-                            clinicAssessment={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.clinicAssessment
-                            }
-                            forClearance={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.forClearance
-                            }
-                            forLaboratory={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.forLaboratory
-                            }
-                            forOthers={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.forOthers
-                            }
-                            finalAssessment={
-                              filteredPhysicalExam[index].physicalExam
-                                ?.finalAssessment
-                            }
-                          />
-                        ) : null}
+                        <QueuePhysicalExamDialog
+                          queueID={appointment.physicalExamID?.queueID}
+                          purpose={appointment.physicalExamID?.purpose}
+                          genSurvey={appointment.physicalExamID?.genSurvey}
+                          bloodPressure={
+                            appointment.physicalExamID?.bloodPressure
+                          }
+                          pulseRate={appointment.physicalExamID?.pulseRate}
+                          respRate={appointment.physicalExamID?.respRate}
+                          bodyTemp={appointment.physicalExamID?.bodyTemp}
+                          LMP={appointment.physicalExamID?.LMP}
+                          menstruation={
+                            appointment.physicalExamID?.menstruation
+                          }
+                          hypertension={
+                            appointment.physicalExamID?.hypertension
+                          }
+                          bronchialAsthma={
+                            appointment.physicalExamID?.bronchialAsthma
+                          }
+                          heartDisease={
+                            appointment.physicalExamID?.heartDisease
+                          }
+                          chestPain={appointment.physicalExamID?.chestPain}
+                          seizureDisorder={
+                            appointment.physicalExamID?.seizureDisorder
+                          }
+                          others={appointment.physicalExamID?.others}
+                          LOC={appointment.physicalExamID?.LOC}
+                          injuries={appointment.physicalExamID?.injuries}
+                          skin={appointment.physicalExamID?.skin}
+                          head={appointment.physicalExamID?.head}
+                          eyes={appointment.physicalExamID?.eyes}
+                          ears={appointment.physicalExamID?.ears}
+                          neck={appointment.physicalExamID?.neck}
+                          throat={appointment.physicalExamID?.throat}
+                          chestAndLungs={
+                            appointment.physicalExamID?.chestAndLungs
+                          }
+                          heart={appointment.physicalExamID?.heart}
+                          abdomen={appointment.physicalExamID?.abdomen}
+                          gut={appointment.physicalExamID?.gut}
+                          masculoSkeletal={
+                            appointment.physicalExamID?.masculoSkeletal
+                          }
+                          neurological={
+                            appointment.physicalExamID?.neurological
+                          }
+                          CBC={appointment.physicalExamID?.CBC}
+                          urinalysis={appointment.physicalExamID?.urinalysis}
+                          fecalysis={appointment.physicalExamID?.fecalysis}
+                          chestXray={appointment.physicalExamID?.chestXray}
+                          ECG={appointment.physicalExamID?.ECG}
+                          HBSAG={appointment.physicalExamID?.HBSAG}
+                          drugTest={appointment.physicalExamID?.drugTest}
+                          isPhysicallyFit={
+                            appointment.physicalExamID?.isPhysicallyFit
+                          }
+                          clinicAssessment={
+                            appointment.physicalExamID?.clinicAssessment
+                          }
+                          forClearance={
+                            appointment.physicalExamID?.forClearance
+                          }
+                          forLaboratory={
+                            appointment.physicalExamID?.forLaboratory
+                          }
+                          forOthers={appointment.physicalExamID?.forOthers}
+                          finalAssessment={
+                            appointment.physicalExamID?.finalAssessment
+                          }
+                        />
                       </td>
                     </tr>
                   ))}

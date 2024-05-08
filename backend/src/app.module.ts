@@ -13,6 +13,7 @@ import { ScheduleModule } from './schedule/schedule.module';
 import { AfterAppointmentModule } from './afterAppointment/afterAppointment.module';
 import { QueueModule } from './queue/queue.module';
 import { AfterQueueModule } from './afterQueue/afterQueue.module';
+import { VitalSignModule } from './vital-sign/vital-sign.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AfterQueueModule } from './afterQueue/afterQueue.module';
     AfterAppointmentModule,
     QueueModule,
     AfterQueueModule,
+    VitalSignModule,
   ],
   controllers: [AppController],
   providers: [AppService],

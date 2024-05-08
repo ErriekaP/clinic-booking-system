@@ -63,6 +63,11 @@ export class QueueService {
         orderBy: {
           createdAt: 'desc', // Order by createdAt field in descending order
         },
+        include: {
+          patient: true,
+          physicalExamID: true,
+          afterQueueID: true,
+        },
       });
       // Map each queue to its associated service and patient
       const queuesWithDetails = await Promise.all(

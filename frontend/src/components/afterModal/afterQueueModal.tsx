@@ -5,7 +5,8 @@ import { generateKey } from "crypto";
 import GeneralSurvey from "../physicalExam/GeneralSurvey";
 
 interface AfterModalProps {
-  queueID: string;
+  queueID?: string;
+  appointmentID?: string;
   diagnosis: string;
   medicineName: string;
   medicineStrength: String;
@@ -28,10 +29,12 @@ interface AfterModalProps {
   others: String;
   LOC: String;
   injuries: String;
+  type?: "queue" | "appointment";
 }
 
 const AfterQueueDialogue: React.FC<AfterModalProps> = ({
   queueID,
+  appointmentID,
   diagnosis,
   medicineName,
   medicineStrength,
@@ -54,6 +57,7 @@ const AfterQueueDialogue: React.FC<AfterModalProps> = ({
   others,
   LOC,
   injuries,
+  type = "queue",
 }) => {
   return (
     <AlertDialog.Root>
