@@ -303,10 +303,26 @@ appointment Appointments? @relation(fields: [appointmentID], references: [id])
 
 model AfterAppointment{
 id Int @id @default(autoincrement())
-appointmentID Int @unique
+appointmentID Int? @unique
 diagnosis String
+purpose String
+genSurvey GeneralSurvey[]
+bloodPressure String
+pulseRate String
+respRate String
+bodyTemp String
+menstruation DateTime?
+LMP LastMensPeriod
+hypertension String
+bronchialAsthma String
+heartDisease String
+chestPain String
+seizureDisorder String
+LOC String
+injuries String
+others String
 medications Medicine[]
-appointment Appointments @relation(fields: [appointmentID], references: [id])
+appointment Appointments? @relation(fields: [appointmentID], references: [id])
 }
 
 model AfterQueue{

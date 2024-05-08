@@ -137,7 +137,7 @@ const Page = () => {
             onChange={handleSearchChange}
           />
         </div>
-        <div className="flex flex-col flex-grow w-full max-w-5xl">
+        <div className="flex flex-col flex-grow w-full max-w-7xl">
           <div className="overflow-x-auto">
             {/* Display the main appointments table */}
             <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">

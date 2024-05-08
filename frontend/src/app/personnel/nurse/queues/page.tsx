@@ -1,5 +1,7 @@
 "use client";
 import BackNavbar from "@/components/backNavbar/backNavbar";
+import FormsDialog from "@/components/formsDialog/page";
+import VitalSigns from "@/components/vitalSignsformsDialog/page";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -107,13 +109,15 @@ const Page = () => {
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
                       Status
                     </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-sm font-bold uppercase">
+                      Forms
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredQueues.map((queue) => (
                     <tr
                       key={queue.id}
-                      onClick={() => handleClick(queue)}
                       className="hover:bg-gray-50 cursor-pointer"
                     >
                       <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
@@ -139,6 +143,17 @@ const Page = () => {
                       <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
                         {queue.status}
                       </td>
+                      {queue.status === "ONGOING" ? (
+                        <>
+                          <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
+                            <VitalSigns queueId={queue.id} />
+                          </td>
+                        </>
+                      ) : (
+                        <>
+                          <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center"></td>
+                        </>
+                      )}
                     </tr>
                   ))}
                 </tbody>
