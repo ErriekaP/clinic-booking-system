@@ -96,6 +96,7 @@ export class AppointmentService {
 
   async updateAppointment(id: number, updatedData: any): Promise<any> {
     try {
+      console.log(updatedData);
       // Retrieve the service record by ID
       const existingAppointment = await this.prisma.appointments.findUnique({
         where: {
@@ -139,11 +140,11 @@ export class AppointmentService {
         await this.personnelService.getPersonnelWithServices(
           updatedData.personnelID.toString(),
         );
-      // Get service information using patientID
 
+      // Get service information using patientID
       const serviceInfo = await this.prisma.service.findUnique({
         where: {
-          id: updatedData.serviceID,
+          id: existingAppointment.serviceID,
         },
       });
 
@@ -158,6 +159,7 @@ export class AppointmentService {
         .slice(0, -1);
       const endTime = dayjs(endTimeString).format('hh:mm A');
 
+      console.log(updatedData.status);
       if (updatedData.status === 'SCHEDULED') {
         this.emailSender.sendEmail({
           emailType: 'AppointmentConfirmation',

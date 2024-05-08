@@ -175,7 +175,7 @@ export default function Page() {
             justify="center"
           >
             <Heading>
-              <Text>Info</Text>
+              <Text className="text-white">Register</Text>
             </Heading>
           </Flex>
           <Flex>

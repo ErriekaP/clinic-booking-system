@@ -29,6 +29,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   //const startTimeDate = new Date(startDateTimeString);
 
   const [personnel, setPersonnel] = useState<any>(null);
+  const [service, setService] = useState<any>(null);
 
   useEffect(() => {
     const fetchPersonnel = async () => {
@@ -50,6 +51,25 @@ export default function Page({ params }: { params: { slug: string } }) {
 
     fetchPersonnel();
   }, [doctorId]);
+  useEffect(() => {
+    const fetchService = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/services/${serviceId}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch service");
+        }
+        const responseData = await response.json();
+
+        setService(responseData);
+      } catch (error) {
+        console.error("Error fetching service:", error);
+      }
+    };
+
+    fetchService();
+  }, [serviceId]);
 
   // Convert the end time
   const endDateTimeString = `${dateString}T${endTime}:00.000Z`;
@@ -111,6 +131,10 @@ export default function Page({ params }: { params: { slug: string } }) {
           className="bg-white p-8 rounded-lg shadow-md"
         >
           <div className="flex flex-col gap-4">
+            <div className="">
+              <p className="font-bold">Service:</p>
+              <p>{service?.serviceName}</p>
+            </div>
             <div className="">
               <p className="font-bold">Date:</p>
               <p>{dateString}</p>
