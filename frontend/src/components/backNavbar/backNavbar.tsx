@@ -5,7 +5,6 @@ import * as Avatar from '@radix-ui/react-avatar';
 import * as Separator from '@radix-ui/react-separator';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { PersonIcon } from '@radix-ui/react-icons';
-import '../../components/styles.css';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import { fetchUserInfo } from '@/utilities/fetch/patient';
