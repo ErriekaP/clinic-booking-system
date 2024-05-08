@@ -256,22 +256,7 @@ model PhysicalExam{
 id Int @id @default(autoincrement())
 queueID Int? @unique
 appointmentID Int? @unique
-purpose String
-genSurvey GeneralSurvey[]
-bloodPressure String
-pulseRate String
-respRate String
-bodyTemp String
-menstruation DateTime?
-LMP LastMensPeriod
-hypertension String
-bronchialAsthma String
-heartDisease String
-chestPain String
-seizureDisorder String
-others String
-LOC String
-injuries String
+vitalSign vitalSign?
 skin String
 head String
 eyes String
@@ -324,13 +309,37 @@ others String
 medications Medicine[]
 appointment Appointments? @relation(fields: [appointmentID], references: [id])
 }
+model vitalSign{
+id Int @id @default(autoincrement())
+physicalExamID Int? @unique
+afterQueueID Int? @unique
+purpose String
+genSurvey GeneralSurvey[]
+bloodPressure String
+pulseRate String
+respRate String
+bodyTemp String
+menstruation DateTime?
+LMP LastMensPeriod
+hypertension String
+bronchialAsthma String
+heartDisease String
+chestPain String
+seizureDisorder String
+LOC String
+injuries String
+others String
+physicalExam PhysicalExam? @relation(fields: [physicalExamID], references: [id])
+afterQueue AfterQueue? @relation(fields: [afterQueueID], references: [id])
+}
 
 model AfterQueue{
 id Int @id @default(autoincrement())
-queueID Int @unique
+queueID Int? @unique
 diagnosis String
+vitalSign vitalSign?
 medications Medicine[]
-queue Queue @relation(fields: [queueID], references: [id])
+queue Queue? @relation(fields: [queueID], references: [id])
 }
 
 

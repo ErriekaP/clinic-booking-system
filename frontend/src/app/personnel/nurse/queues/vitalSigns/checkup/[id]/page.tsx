@@ -28,7 +28,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   ];
 
   const [formData, setFormData] = useState({
-    appointmentID: parseInt(params.id),
+    queueID: parseInt(params.id),
     diagnosis: "",
     medications: [
       {
@@ -61,7 +61,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/afterAppointment/add`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/afterQueue/add`,
         {
           method: "POST",
           headers: {
@@ -72,6 +72,26 @@ const Page = ({ params }: { params: { id: string } }) => {
             menstruation: formData.menstruation
               ? dayjs(formData.menstruation).toISOString()
               : null,
+            vitalSign: {
+              purpose: formData.purpose,
+              genSurvey: formData.genSurvey,
+              bloodPressure: formData.bloodPressure,
+              pulseRate: formData.pulseRate,
+              respRate: formData.respRate,
+              bodyTemp: formData.bodyTemp,
+              menstruation: formData.menstruation
+                ? dayjs(formData.menstruation).toISOString()
+                : null,
+              LMP: formData.LMP,
+              hypertension: formData.hypertension,
+              bronchialAsthma: formData.bronchialAsthma,
+              heartDisease: formData.heartDisease,
+              chestPain: formData.chestPain,
+              seizureDisorder: formData.seizureDisorder,
+              others: formData.others,
+              LOC: formData.LOC,
+              injuries: formData.injuries,
+            },
           }),
         }
       );

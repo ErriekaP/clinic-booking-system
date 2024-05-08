@@ -210,6 +210,59 @@ const Page = () => {
 
                       <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
                         <AfterQueueDialogue
+                          queueID={
+                            filteredPhysicalExam[index].physicalExam?.queueID
+                          }
+                          purpose={
+                            filteredPhysicalExam[index].physicalExam?.purpose
+                          }
+                          genSurvey={
+                            filteredPhysicalExam[index].physicalExam?.genSurvey
+                          }
+                          bloodPressure={
+                            filteredPhysicalExam[index].physicalExam
+                              ?.bloodPressure
+                          }
+                          pulseRate={
+                            filteredPhysicalExam[index].physicalExam?.pulseRate
+                          }
+                          respRate={
+                            filteredPhysicalExam[index].physicalExam?.respRate
+                          }
+                          bodyTemp={
+                            filteredPhysicalExam[index].physicalExam?.bodyTemp
+                          }
+                          LMP={filteredPhysicalExam[index].physicalExam?.LMP}
+                          menstruation={
+                            filteredPhysicalExam[index].physicalExam
+                              ?.menstruation
+                          }
+                          hypertension={
+                            filteredPhysicalExam[index].physicalExam
+                              ?.hypertension
+                          }
+                          bronchialAsthma={
+                            filteredPhysicalExam[index].physicalExam
+                              ?.bronchialAsthma
+                          }
+                          heartDisease={
+                            filteredPhysicalExam[index].physicalExam
+                              ?.heartDisease
+                          }
+                          chestPain={
+                            filteredPhysicalExam[index].physicalExam?.chestPain
+                          }
+                          seizureDisorder={
+                            filteredPhysicalExam[index].physicalExam
+                              ?.seizureDisorder
+                          }
+                          others={
+                            filteredPhysicalExam[index].physicalExam?.others
+                          }
+                          LOC={filteredPhysicalExam[index].physicalExam?.LOC}
+                          injuries={
+                            filteredPhysicalExam[index].physicalExam?.injuries
+                          }
                           diagnosis={appointment.afterAppointment?.diagnosis}
                           medicineName={appointment.medication?.medicineName}
                           medicineStrength={

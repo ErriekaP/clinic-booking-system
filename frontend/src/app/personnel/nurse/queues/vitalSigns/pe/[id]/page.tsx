@@ -28,8 +28,8 @@ const Page = ({ params }: { params: { id: string } }) => {
   ];
 
   const [formData, setFormData] = useState({
-    queueID: null,
-    appointmentID: parseInt(params.id),
+    queueID: parseInt(params.id),
+    appointmentID: null,
     purpose: "",
     genSurvey: [] as string[],
     bloodPressure: "",
@@ -77,7 +77,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/afterAppointment/pe/add`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/afterQueue/pe/add`,
         {
           method: "POST",
           headers: {

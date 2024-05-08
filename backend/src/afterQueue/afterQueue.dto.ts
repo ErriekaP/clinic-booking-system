@@ -2,8 +2,29 @@
 
 export class CreateAfterQueueDto {
   queueID: number;
+  appointmentID: number;
   diagnosis: string;
   medications: CreateMedicineDto[];
+  vitalSign: VitalSignDTO;
+}
+
+export class VitalSignDTO {
+  purpose: string;
+  genSurvey: GeneralSurvey[];
+  bloodPressure: string;
+  pulseRate: string;
+  respRate: string;
+  bodyTemp: string;
+  LMP: 'REGULAR' | 'IRREGULAR' | 'NOTAPPLICABLE';
+  menstruation: Date | null;
+  hypertension: string;
+  bronchialAsthma: string;
+  heartDisease: string;
+  chestPain: string;
+  seizureDisorder: string;
+  others: string;
+  LOC: string;
+  injuries: string;
 }
 
 export class CreateMedicineDto {
@@ -12,7 +33,6 @@ export class CreateMedicineDto {
   medicineQuantity: string;
   medicineFrequency: string;
   remarks: string;
-  afterAppointmentID: null;
 }
 
 export class CreatePhysicalExamDto {

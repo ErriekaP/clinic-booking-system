@@ -159,6 +159,23 @@ const Page = ({ params }: { params: { id: string } }) => {
 
                       <td className="px-5 py-4 border-b border-gray-200 bg-white text-sm text-center">
                         <AfterQueueDialogue
+                          queueID={queue.afterQueue?.queueID}
+                          purpose={queue.afterQueue?.purpose}
+                          genSurvey={queue.afterQueue?.genSurvey}
+                          bloodPressure={queue.afterQueue?.bloodPressure}
+                          pulseRate={queue.afterQueue?.pulseRate}
+                          respRate={queue.afterQueue?.respRate}
+                          bodyTemp={queue.afterQueue?.bodyTemp}
+                          LMP={queue.afterQueue?.LMP}
+                          menstruation={queue.afterQueue?.menstruation}
+                          hypertension={queue.afterQueue?.hypertension}
+                          bronchialAsthma={queue.afterQueue?.bronchialAsthma}
+                          heartDisease={queue.afterQueue?.heartDisease}
+                          chestPain={queue.afterQueue?.chestPain}
+                          seizureDisorder={queue.afterQueue?.seizureDisorder}
+                          others={queue.afterQueue?.others}
+                          LOC={queue.afterQueue?.LOC}
+                          injuries={queue.afterQueue?.injuries}
                           diagnosis={queue.afterQueue?.diagnosis}
                           medicineName={queue.medication?.medicineName}
                           medicineStrength={queue.medication?.medicineStrength}

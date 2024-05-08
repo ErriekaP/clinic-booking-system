@@ -154,8 +154,7 @@ const QueuePhysicalExamDialogue: React.FC<AfterModalProps> = ({
                 <p className="text-sm text-gray-500">Chest Pain:</p>
                 <p>{chestPain}</p>
               </div>
-            </div>
-            <div className="flex flex-col gap-1">
+
               <div>
                 <p className="text-sm text-gray-500">Seizure Disorder:</p>
                 <p>{seizureDisorder}</p>
@@ -173,6 +172,7 @@ const QueuePhysicalExamDialogue: React.FC<AfterModalProps> = ({
                 <p>{injuries}</p>
               </div>
             </div>
+            <div className="flex flex-col gap-1"></div>
             <div className="flex flex-col gap-1">
               <div>
                 <p className="text-sm text-gray-500">Skin:</p>
@@ -222,8 +222,7 @@ const QueuePhysicalExamDialogue: React.FC<AfterModalProps> = ({
                 <p className="text-sm text-gray-500">Neurological:</p>
                 <p>{neurological}</p>
               </div>
-            </div>
-            <div className="flex flex-col gap-1">
+
               <div>
                 <p className="text-sm text-gray-500">CBC:</p>
                 <p>{CBC}</p>
@@ -240,6 +239,7 @@ const QueuePhysicalExamDialogue: React.FC<AfterModalProps> = ({
                 <p className="text-sm text-gray-500">Chest X-ray:</p>
                 <p>{chestXray}</p>
               </div>
+
               <div>
                 <p className="text-sm text-gray-500">ECG:</p>
                 <p>{ECG}</p>
@@ -253,6 +253,7 @@ const QueuePhysicalExamDialogue: React.FC<AfterModalProps> = ({
                 <p>{drugTest}</p>
               </div>
             </div>
+
             <div className="flex flex-col gap-1">
               <div>
                 <p className="text-sm text-gray-500">Is Physically Fit:</p>

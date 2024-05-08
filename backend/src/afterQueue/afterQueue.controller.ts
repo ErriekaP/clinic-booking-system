@@ -32,6 +32,14 @@ export class afterQueueController {
     return this.afterQueueService.updateService(serviceId, serviceData);
   }
 
+  @Post('pe/update/:id')
+  async updatePhysicalExam(
+    @Param('id') id: string,
+    @Body() peData: any,
+  ): Promise<any> {
+    const peId = parseInt(id, 10);
+    return this.afterQueueService.updatePhysicalExam(peId, peData);
+  }
   @Get()
   async findAll() {
     try {

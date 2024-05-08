@@ -1,13 +1,49 @@
 // patient.service.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateAfterQueueDto, CreatePhysicalExamDto } from './afterQueue.dto';
+import {
+  CreateAfterQueueDto,
+  CreatePhysicalExamDto,
+  VitalSignDTO,
+} from './afterQueue.dto';
 
 @Injectable()
 export class afterQueueService {
   constructor(private readonly prisma: PrismaService) {}
 
   async updateService(id: number, updatedData: any): Promise<any> {
+    try {
+      // Retrieve the service record by ID
+      const existingService = await this.prisma.service.findUnique({
+        where: {
+          id: id,
+        },
+      });
+
+      if (!existingService) {
+        throw new Error(`Service with ID ${id} not found.`);
+      }
+
+      // Update the servicr record with the provided data
+      const updatedService = await this.prisma.service.update({
+        where: {
+          id: id,
+        },
+        data: {
+          // Update fields that are provided in updatedData
+          serviceName: updatedData.serviceName ?? existingService.serviceName,
+          description: updatedData.description ?? existingService.description,
+          status: updatedData.status ?? existingService.status,
+        },
+      });
+
+      return { success: true, data: updatedService };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  }
+
+  async updatePhysicalExam(id: number, updatedData: any): Promise<any> {
     try {
       // Retrieve the service record by ID
       const existingService = await this.prisma.service.findUnique({
@@ -48,14 +84,22 @@ export class afterQueueService {
     });
   }
 
-  async createAfterQueue(createAfterAppointmentDto: CreateAfterQueueDto) {
-    const { queueID, diagnosis, medications } = createAfterAppointmentDto;
-
+  async createAfterQueue(createAfterQueueDto: CreateAfterQueueDto) {
+    const { queueID, diagnosis, medications, ...afterQueueData } =
+      createAfterQueueDto;
+    console.log(afterQueueData.vitalSign);
     // Create AfterAppointment
     const afterQueue = await this.prisma.afterQueue.create({
       data: {
         queueID,
         diagnosis,
+      },
+    });
+
+    await this.prisma.vitalSign.create({
+      data: {
+        ...afterQueueData.vitalSign,
+        afterQueueID: afterQueue.id,
       },
     });
 
