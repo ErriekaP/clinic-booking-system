@@ -16,8 +16,8 @@ export class VitalSignController {
   constructor(private readonly vitalSignService: VitalSignService) {}
 
   @Get('queueId/:id')
-  findBasedOnQueueId(@Param('id') id: number) {
-    return this.vitalSignService.findBasedOnQueueId(Number(id));
+  async findBasedOnQueueId(@Param('id') id: number) {
+    return await this.vitalSignService.findBasedOnQueueId(Number(id));
   }
 
   @Post()

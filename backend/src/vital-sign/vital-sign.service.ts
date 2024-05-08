@@ -7,8 +7,8 @@ import { PrismaService } from '../prisma/prisma.service';
 export class VitalSignService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findBasedOnQueueId(id: number) {
-    const vitalSign = this.prisma.vitalSign.findFirst({
+  async findBasedOnQueueId(id: number) {
+    const vitalSign = await this.prisma.vitalSign.findFirst({
       where: {
         afterQueue: {
           is: {
@@ -17,7 +17,6 @@ export class VitalSignService {
         },
       },
     });
-
     return vitalSign;
   }
   create(createVitalSignDto: CreateVitalSignDto) {
