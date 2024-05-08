@@ -102,9 +102,12 @@ export class WorkScheduleService {
             .toISOString()
             .slice(11, 16);
           const endTimeStr = appointment.endTime.toISOString().slice(11, 16);
+          const status =
+            appointment.status === 'CANCELLEDBYSTUDENT' ||
+            appointment.status === 'CANCELLEDBYDOCTOR';
 
           return (
-            startTimeStr === startTime && endTimeStr === endTime
+            startTimeStr === startTime && endTimeStr === endTime && !status
             //&& appointment.serviceID === serviceIds[0] // Assuming serviceIds array has only one element
           );
         });
