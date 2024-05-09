@@ -28,7 +28,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   ];
 
   const [formData, setFormData] = useState({
-    queueID: parseInt(params.id),
+    appointmentID: parseInt(params.id),
     diagnosis: "",
     medications: [],
     purpose: "",
@@ -53,7 +53,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/vital-sign/queue/${formData.queueID}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/vital-sign/appointment/${formData.appointmentID}`,
         {
           method: "POST",
           headers: {

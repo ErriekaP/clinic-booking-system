@@ -4,12 +4,44 @@ import { PrismaService } from '../prisma/prisma.service';
 import {
   CreateAfterQueueDto,
   CreatePhysicalExamDto,
+  UpdateAfterQueueCheckupDto,
   VitalSignDTO,
 } from './afterQueue.dto';
 
 @Injectable()
 export class afterQueueService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async checkupUpdate(
+    id: number,
+    updateAfterQueueCheckupDto: UpdateAfterQueueCheckupDto,
+  ) {
+    const afterQueue = await this.prisma.afterQueue.findFirst({
+      where: {
+        queueID: id,
+      },
+    });
+
+    updateAfterQueueCheckupDto.medications.map(async (medication) => {
+      await this.prisma.medicine.create({
+        data: {
+          ...medication,
+          afterQueueID: afterQueue.id,
+        },
+      });
+    });
+
+    await this.prisma.afterQueue.update({
+      data: {
+        diagnosis: updateAfterQueueCheckupDto.diagnosis,
+      },
+      where: {
+        id: afterQueue.id,
+      },
+    });
+
+    return { status: 'success' };
+  }
 
   async updateService(id: number, updatedData: any): Promise<any> {
     try {
@@ -96,13 +128,6 @@ export class afterQueueService {
       },
     });
 
-    await this.prisma.vitalSign.create({
-      data: {
-        ...afterQueueData.vitalSign,
-        afterQueueID: afterQueue.id,
-      },
-    });
-
     // Create Medications for AfterAppointment
     const createMedicationsPromises = medications.map((medication) =>
       this.prisma.medicine.create({
@@ -126,7 +151,7 @@ export class afterQueueService {
     createPhysicalExamDto: CreatePhysicalExamDto,
   ): Promise<any> {
     try {
-      const { queueID, ...physicalExamData } = createPhysicalExamDto;
+      const { queueID, vitalSign, ...physicalExamData } = createPhysicalExamDto;
       // Assuming this.prisma is your Prisma client instance
       const physicalExamRecord = await this.prisma.physicalExam.create({
         data: {

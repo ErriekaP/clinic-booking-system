@@ -1,11 +1,30 @@
 "use client";
 import BackNavbar from "@/components/backNavbar/backNavbar";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Page = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
   const [showMedicineInput, setShowMedicineInput] = useState(false);
+
+  const [vitalSigns, setVitalSigns] = useState<any>({
+    Purpose: "",
+    "General Survey": "",
+    "Blood Pressure": "",
+    PulseRate: "",
+    "Respiratory Rate": "",
+    "Body Temperature": "",
+    Menstruation: "",
+    LMP: "",
+    Hypertension: "",
+    "Bronchial Asthma": "",
+    "Heart Disease": "",
+    "Chest Pain": "",
+    "Seizure Disorder": "",
+    LOC: "",
+    Injuries: "",
+    others: "",
+  });
 
   const [formData, setFormData] = useState({
     appointmentID: parseInt(params.id, 10),
@@ -17,12 +36,14 @@ const Page = ({ params }: { params: { id: string } }) => {
         medicineQuantity: "",
         medicineFrequency: "",
         remarks: "",
+        afterAppointmentID: null,
       },
     ],
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("go here");
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/afterAppointment/add`,
@@ -66,6 +87,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           medicineQuantity: "",
           medicineFrequency: "",
           remarks: "",
+          afterAppointmentID: null,
         },
       ],
     }));
@@ -87,9 +109,62 @@ const Page = ({ params }: { params: { id: string } }) => {
     }));
   };
 
+  useEffect(() => {
+    const fetchVitalSign = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/vital-sign/appointmentId/${params.id}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch vital sign");
+        }
+        const data = await response.json();
+        setVitalSigns({
+          Purpose: data.purpose,
+          "General Survey": data.genSurvey,
+          "Blood Pressure": data.bloodPressure,
+          "Pulse Rate": data.pulseRate,
+          "Respiratory Rate": data.respRate,
+          "Body Temperature": data.bodyTemp,
+          Menstruation: data.menstruation,
+          LMP: data.LMP,
+          Hypertension: data.hypertension,
+          "Bronchial Asthma": data.bronchialAsthma,
+          "Heart Disease": data.heartDisease,
+          "Chest Pain": data.chestPain,
+          "Seizure Disorder": data.seizureDisorder,
+          LOC: data.LOC,
+          Injuries: data.injuries,
+          Others: data.others,
+        });
+      } catch (error) {
+        console.error("Error fetching vital sign:", error);
+      }
+    };
+
+    fetchVitalSign();
+  }, []);
+
   return (
     <div>
       <BackNavbar />
+      <div className="w-full flex justify-center">
+        <div className="flex flex-col gap-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-4 w-[32rem]">
+          <h1 className="text-center text-xl font-bold">
+            Vital Signs Information
+          </h1>
+          <div>
+            {Object.keys(vitalSigns).map((key: any) => {
+              return (
+                <div key={key} className="flex gap-2">
+                  <p className="font-bold">{`${key}:`}</p>
+                  <p>{vitalSigns[key]}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
       <div className="flex min-h-screen flex-col items-center justify-between p-4">
         <form onSubmit={handleSubmit} className="w-full max-w-lg">
           <h2 className="text-xl mb-4 font-bold text-white text-center">

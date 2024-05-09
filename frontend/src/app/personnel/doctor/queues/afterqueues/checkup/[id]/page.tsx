@@ -45,6 +45,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("go here");
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/afterQueue/add`,
@@ -159,7 +160,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           <div>
             {Object.keys(vitalSigns).map((key: any) => {
               return (
-                <div className="flex gap-2">
+                <div key={key} className="flex gap-2">
                   <p className="font-bold">{`${key}:`}</p>
                   <p>{vitalSigns[key]}</p>
                 </div>

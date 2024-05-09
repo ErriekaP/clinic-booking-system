@@ -1,7 +1,17 @@
 // DTOs
 export class CreateAfterAppointmentDto {
+  queueID: number;
   appointmentID: number;
   diagnosis: string;
+  medications: CreateMedicineDto[];
+  vitalSign: VitalSignDTO;
+}
+
+export class UpdateAfterAppointmentCheckupDto {
+  diagnosis: string;
+  medications: CreateMedicineDto[];
+}
+export class VitalSignDTO {
   purpose: string;
   genSurvey: GeneralSurvey[];
   bloodPressure: string;
@@ -9,8 +19,6 @@ export class CreateAfterAppointmentDto {
   respRate: string;
   bodyTemp: string;
   LMP: 'REGULAR' | 'IRREGULAR' | 'NOTAPPLICABLE';
-  LOC: string;
-  injuries: string;
   menstruation: Date | null;
   hypertension: string;
   bronchialAsthma: string;
@@ -18,7 +26,8 @@ export class CreateAfterAppointmentDto {
   chestPain: string;
   seizureDisorder: string;
   others: string;
-  medications: CreateMedicineDto[];
+  LOC: string;
+  injuries: string;
 }
 
 export class CreateMedicineDto {
@@ -31,8 +40,9 @@ export class CreateMedicineDto {
 }
 
 export class CreatePhysicalExamDto {
-  queueID: number;
-  appointmentID: number;
+  queueID: null;
+  appointmentID: null;
+  vitalSign: VitalSignDTO;
   purpose: string;
   genSurvey: GeneralSurvey[];
   bloodPressure: string;

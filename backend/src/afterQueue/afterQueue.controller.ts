@@ -1,8 +1,12 @@
 // patient.controller.ts
-import { Controller, Post, Body, Param, Get } from '@nestjs/common';
+import { Controller, Post, Body, Param, Get, Put } from '@nestjs/common';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { afterQueueService } from './afterQueue.service';
-import { CreateAfterQueueDto, CreatePhysicalExamDto } from './afterQueue.dto';
+import {
+  CreateAfterQueueDto,
+  CreatePhysicalExamDto,
+  UpdateAfterQueueCheckupDto,
+} from './afterQueue.dto';
 
 @Controller('afterQueue')
 export class afterQueueController {
@@ -13,6 +17,17 @@ export class afterQueueController {
     const parsedId = parseInt(queueID, 10);
 
     return this.afterQueueService.getPhysicalExam(parsedId);
+  }
+
+  @Put('checkup/:id')
+  async checkupUpdate(
+    @Param('id') id: number,
+    @Body() updateAfterQueueCheckupDto: UpdateAfterQueueCheckupDto,
+  ) {
+    return this.afterQueueService.checkupUpdate(
+      Number(id),
+      updateAfterQueueCheckupDto,
+    );
   }
 
   @Post('add')

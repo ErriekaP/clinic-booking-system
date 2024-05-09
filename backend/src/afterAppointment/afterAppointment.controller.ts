@@ -1,9 +1,10 @@
 // patient.controller.ts
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put } from '@nestjs/common';
 import { afterAppointmentService } from './afterAppointment.service';
 import {
   CreateAfterAppointmentDto,
   CreatePhysicalExamDto,
+  UpdateAfterAppointmentCheckupDto,
 } from './afterAppointment.dto';
 
 @Controller('afterAppointment')
@@ -11,6 +12,17 @@ export class afterAppointmentController {
   constructor(
     private readonly afterAppointmentsService: afterAppointmentService,
   ) {}
+
+  @Put('checkup/:id')
+  async checkupUpdate(
+    @Param('id') id: number,
+    @Body() updateAfterAppointmentCheckupDto: UpdateAfterAppointmentCheckupDto,
+  ) {
+    return this.afterAppointmentsService.checkupUpdate(
+      Number(id),
+      updateAfterAppointmentCheckupDto,
+    );
+  }
 
   @Post('add')
   async createAfterAppointment(

@@ -1,5 +1,6 @@
 "use client";
 import BackNavbar from "@/components/backNavbar/backNavbar";
+import VitalSigns from "@/components/vitalSignsformsDialog/page";
 import { Flex, Text } from "@radix-ui/themes";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
@@ -29,7 +30,6 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const [formData, setFormData] = useState({
     queueID: parseInt(params.id),
-    appointmentID: null,
     purpose: "",
     genSurvey: [] as string[],
     bloodPressure: "",
@@ -77,17 +77,31 @@ const Page = ({ params }: { params: { id: string } }) => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/afterQueue/pe/add`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/vital-sign/queue/${formData.queueID}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            ...formData,
+            purpose: formData.purpose,
+            genSurvey: formData.genSurvey,
+            bloodPressure: formData.bloodPressure,
+            pulseRate: formData.pulseRate,
+            respRate: formData.respRate,
+            bodyTemp: formData.bodyTemp,
             menstruation: formData.menstruation
               ? dayjs(formData.menstruation).toISOString()
               : null,
+            LMP: formData.LMP,
+            hypertension: formData.hypertension,
+            bronchialAsthma: formData.bronchialAsthma,
+            heartDisease: formData.heartDisease,
+            chestPain: formData.chestPain,
+            seizureDisorder: formData.seizureDisorder,
+            others: formData.others,
+            LOC: formData.LOC,
+            injuries: formData.injuries,
           }),
         }
       );
@@ -101,7 +115,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       console.error("Error submitting form:", error);
     }
   };
-  console.log("mens", formData.menstruation);
+
   const handleInputChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({

@@ -59,7 +59,7 @@ const DialogDemo = ({ appointmentId }: { appointmentId: string }) => {
             </Dialog.Close>
           </div>
           <Dialog.Close asChild>
-            <button className="IconButton" aria-label="Close">
+            <button className="cancelAppointment-IconButton" aria-label="Close">
               <Cross2Icon />
             </button>
           </Dialog.Close>

@@ -1,5 +1,6 @@
 "use client";
 import BackNavbar from "@/components/backNavbar/backNavbar";
+import VitalSigns from "@/components/vitalSignsformsDialog/page";
 import { Flex, Text } from "@radix-ui/themes";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
@@ -28,9 +29,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   ];
 
   const [formData, setFormData] = useState({
-    queueID: parseInt(params.id),
-    diagnosis: "",
-    medications: [],
+    appointmentID: parseInt(params.id),
     purpose: "",
     genSurvey: [] as string[],
     bloodPressure: "",
@@ -47,13 +46,38 @@ const Page = ({ params }: { params: { id: string } }) => {
     others: "",
     LOC: "",
     injuries: "",
+    skin: "NORMAL",
+    head: "NORMAL",
+    eyes: "NORMAL",
+    ears: "NORMAL",
+    neck: "NORMAL",
+    throat: "NORMAL",
+    chestAndLungs: "NORMAL",
+    heart: "NORMAL",
+    abdomen: "NORMAL",
+    gut: "NORMAL",
+    masculoSkeletal: "NORMAL",
+    neurological: "NORMAL",
+    CBC: "NORMAL",
+    urinalysis: "NORMAL",
+    fecalysis: "NORMAL",
+    chestXray: "NORMAL",
+    ECG: "NORMAL",
+    HBSAG: "NORMAL",
+    drugTest: "NORMAL",
+    isPhysicallyFit: false,
+    clinicAssessment: "PENDING",
+    forClearance: "",
+    forLaboratory: "",
+    forOthers: "",
+    finalAssessment: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/vital-sign/queue/${formData.queueID}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/vital-sign/appointment/${formData.appointmentID}`,
         {
           method: "POST",
           headers: {

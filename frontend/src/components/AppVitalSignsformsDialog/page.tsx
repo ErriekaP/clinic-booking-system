@@ -4,25 +4,21 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import "./styles.css";
 import { useRouter } from "next/navigation";
 
-const AppointmentFormDialog = ({
-  appointmentId,
-}: {
-  appointmentId: string;
-}) => {
+const AppVitalSigns = ({ queueId }: { queueId: string }) => {
   const router = useRouter();
 
   const handleAfterCheckupClick = () => {
-    router.push(`/personnel/doctor/appointment/note/${appointmentId}`);
+    router.push(`/personnel/nurse/appointments/vitalSigns/checkup/${queueId}`);
   };
   const handlePhysicalExamClick = () => {
-    router.push(`/personnel/doctor/appointment/pe/${appointmentId}`);
+    router.push(`/personnel/nurse/appointments/vitalSigns/pe/${queueId}`);
   };
 
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4  rounded focus:outline-none focus:shadow-outline ">
-          Doctor's Note
+          Vital Signs
         </button>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -53,7 +49,7 @@ const AppointmentFormDialog = ({
             </Dialog.Close>
           </div>
           <Dialog.Close asChild>
-            <button className="appointmentForm-IconButton" aria-label="Close">
+            <button className="VitalSigns-IconButton" aria-label="Close">
               <Cross2Icon />
             </button>
           </Dialog.Close>
@@ -63,4 +59,4 @@ const AppointmentFormDialog = ({
   );
 };
 
-export default AppointmentFormDialog;
+export default AppVitalSigns;

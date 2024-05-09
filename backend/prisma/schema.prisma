@@ -245,6 +245,7 @@ status AppointmentStatus
 reasonforCancellation String
 afterAppointmentID AfterAppointment?
 physicalExamID PhysicalExam?
+vitalSign vitalSign?
 patient Patient? @relation(fields: [patientID], references: [id])
 personnel ClinicPersonnel? @relation(fields: [personnelID], references: [id])
 service Service @relation(fields: [serviceID], references: [id])
@@ -256,7 +257,7 @@ model PhysicalExam{
 id Int @id @default(autoincrement())
 queueID Int? @unique
 appointmentID Int? @unique
-vitalSign vitalSign?
+// vitalSign vitalSign?
 skin String
 head String
 eyes String
@@ -290,29 +291,14 @@ model AfterAppointment{
 id Int @id @default(autoincrement())
 appointmentID Int? @unique
 diagnosis String
-purpose String
-genSurvey GeneralSurvey[]
-bloodPressure String
-pulseRate String
-respRate String
-bodyTemp String
-menstruation DateTime?
-LMP LastMensPeriod
-hypertension String
-bronchialAsthma String
-heartDisease String
-chestPain String
-seizureDisorder String
-LOC String
-injuries String
-others String
 medications Medicine[]
 appointment Appointments? @relation(fields: [appointmentID], references: [id])
 }
 model vitalSign{
 id Int @id @default(autoincrement())
-physicalExamID Int? @unique
-afterQueueID Int? @unique
+// physicalExamID Int? @unique
+queueID Int? @unique
+appointmentID Int? @unique
 purpose String
 genSurvey GeneralSurvey[]
 bloodPressure String
@@ -329,15 +315,15 @@ seizureDisorder String
 LOC String
 injuries String
 others String
-physicalExam PhysicalExam? @relation(fields: [physicalExamID], references: [id])
-afterQueue AfterQueue? @relation(fields: [afterQueueID], references: [id])
+// physicalExam PhysicalExam? @relation(fields: [physicalExamID], references: [id])
+queue Queue? @relation(fields: [queueID], references: [id])
+appointment Appointments? @relation(fields: [appointmentID], references: [id])
 }
 
 model AfterQueue{
 id Int @id @default(autoincrement())
 queueID Int? @unique
 diagnosis String
-vitalSign vitalSign?
 medications Medicine[]
 queue Queue? @relation(fields: [queueID], references: [id])
 }
@@ -364,6 +350,7 @@ queueID String
 serviceID Int
 queueCount Int
 status QueueStatus
+vitalSign vitalSign?
 afterQueueID AfterQueue?
 physicalExamID PhysicalExam?
 patient Patient @relation(fields: [patientID], references: [id])

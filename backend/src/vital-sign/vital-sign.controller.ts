@@ -16,8 +16,40 @@ export class VitalSignController {
   constructor(private readonly vitalSignService: VitalSignService) {}
 
   @Get('queueId/:id')
-  async findBasedOnQueueId(@Param('id') id: number) {
+  async findVitalSignsByQueueId(@Param('id') id: number) {
     return await this.vitalSignService.findBasedOnQueueId(Number(id));
+  }
+
+  // @Get('queueId/:id')
+  // async findBasedOnQueueId(@Param('id') id: number) {
+  //   return await this.vitalSignService.findBasedOnQueueId(Number(id));
+  // }
+
+  @Get('appointmentId/:id')
+  async findVitalSignsByAppointmentId(@Param('id') id: number) {
+    return await this.vitalSignService.findBasedOnAppointmentId(Number(id));
+  }
+
+  @Post('queue/:id')
+  async createVitalSignBasedOnQueueId(
+    @Param('id') id: number,
+    @Body() createVitalSignDto: CreateVitalSignDto,
+  ) {
+    return await this.vitalSignService.createVitalSignBasedOnQueueId(
+      Number(id),
+      createVitalSignDto,
+    );
+  }
+
+  @Post('appointment/:id')
+  async createVitalSignBasedOnAppointmentId(
+    @Param('id') id: number,
+    @Body() createVitalSignDto: CreateVitalSignDto,
+  ) {
+    return await this.vitalSignService.createVitalSignBasedOnAppointmentId(
+      Number(id),
+      createVitalSignDto,
+    );
   }
 
   @Post()

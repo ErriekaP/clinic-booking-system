@@ -1,7 +1,7 @@
-@import "@radix-ui/colors/black-alpha.css";
-@import "@radix-ui/colors/green.css";
-@import "@radix-ui/colors/mauve.css";
-@import "@radix-ui/colors/violet.css";
+@import '@radix-ui/colors/black-alpha.css';
+@import '@radix-ui/colors/green.css';
+@import '@radix-ui/colors/mauve.css';
+@import '@radix-ui/colors/violet.css';
 
 /* reset */
 button,
@@ -20,8 +20,7 @@ input {
 .DialogContent {
   background-color: white;
   border-radius: 6px;
-  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
-    hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -78,6 +77,7 @@ input {
 }
 .Button.green:hover {
   background-color: var(--green-5);
+  color: var(--green-11);
 }
 .Button.green:focus {
   box-shadow: 0 0 0 2px var(--green-7);
@@ -90,12 +90,13 @@ input {
 }
 .Button.blue:hover {
   background-color: var(--blue-5);
+  color: var(--blue-11);
 }
 .Button.blue:focus {
   box-shadow: 0 0 0 2px var(--blue-7);
 }
 
-.cancelAppointment-IconButton {
+.VitalSigns-IconButton {
   font-family: inherit;
   border-radius: 100%;
   height: 25px;
@@ -108,10 +109,10 @@ input {
   top: 10px;
   right: 10px;
 }
-.cancelAppointment-IconButton:hover {
+.VitalSigns-IconButton:hover {
   background-color: var(--violet-4);
 }
-.cancelAppointment-IconButton:focus {
+.VitalSigns-IconButton:focus {
   box-shadow: 0 0 0 2px var(--violet-7);
 }
 
