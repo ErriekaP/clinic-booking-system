@@ -40,4 +40,21 @@ export class MyGateway implements OnModuleInit {
       console.error('Error fetching ongoing queues:', error);
     }
   }
+
+  async EmittingOngoingQueues(patientID: number) {
+    try {
+      const ongoingQueues = await this.prisma.queue.findMany({
+        where: {
+          patientID: patientID,
+          status: {
+            in: ['PENDING', 'ONGOING'],
+          },
+        },
+      });
+
+      this.server.emit('justEmitting', ongoingQueues);
+    } catch (error) {
+      console.error('Error fetching ongoing queues:', error);
+    }
+  }
 }

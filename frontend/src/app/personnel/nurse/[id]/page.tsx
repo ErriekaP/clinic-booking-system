@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Card,
   Container,
@@ -12,6 +12,7 @@ import {
 import Navbar from "@/components/navbar/page";
 import "./styles.css";
 import dayjs from "dayjs";
+import { WebSocketContext } from "@/contexts/webSocketContext";
 
 interface Queue {
   id: number;
@@ -21,6 +22,7 @@ interface Queue {
 const Page = ({ params }: { params: { id: string } }) => {
   const [personnelData, setPersonnelData] = useState<any>(null);
   const [queueOngoingData, setQueueOngoingData] = useState<Queue[]>([]);
+  const socket = useContext(WebSocketContext);
 
   useEffect(() => {
     const getPatientData = async (id: string) => {
@@ -41,24 +43,49 @@ const Page = ({ params }: { params: { id: string } }) => {
     getPatientData(params.id);
   }, [params.id]);
 
-  useEffect(() => {
-    const getQueueData = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/queue/allOngoing`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch queue data");
-        }
-        const data = await response.json();
-        setQueueOngoingData(data);
-      } catch (error) {
-        console.error("Error fetching queue data:", error);
+  const getQueueData = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/queue/allOngoing`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch queue data");
       }
+      const data = await response.json();
+      setQueueOngoingData(data);
+    } catch (error) {
+      console.error("Error fetching queue data:", error);
+    }
+  };
+
+  useEffect(() => {
+    const handleConnect = () => {
+      console.log("Connected!");
+      getQueueData();
     };
 
-    getQueueData();
-  }, []);
+    // Check if the socket is already connected
+    if (socket.connected) {
+      // If already connected, manually call the connect handler
+      handleConnect();
+    } else {
+      // If not connected, listen for the connect event
+      socket.on("connect", handleConnect);
+    }
+
+    socket.on("justEmitting", (data) => {
+      console.log("justEmitting event received!");
+      console.log(data);
+      setQueueOngoingData(data);
+    });
+
+    // Clean up event listeners
+    return () => {
+      console.log("Unregistering Events...");
+      socket.off("connect", handleConnect);
+      socket.off("justEmitting");
+    };
+  }, [socket]);
 
   if (!personnelData) {
     return null;

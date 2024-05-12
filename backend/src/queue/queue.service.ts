@@ -298,6 +298,9 @@ export class QueueService {
         where: { id: parsedId },
         data: { status: 'COMPLETED' },
       });
+      //gateway
+      await this.myGateway.justEmitting();
+
       return {
         success: true,
         data: { updatedQueue },

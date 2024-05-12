@@ -22,12 +22,15 @@ export default function Page({ params }: { params: { id: string } }) {
   const [selectedPersonnel, setSelectedPersonnel] = useState("");
   const [selectedService, setSelectedService] = useState("");
 
+  // // Get the current date and time in the Philippines timezone
+  const currentDateTime = dayjs().format("YYYY-MM-DD[T]HH:mm:ss[Z]");
+
   const [formData, setFormData] = useState({
     personnelID: 0,
     patientID: parseInt(id),
     serviceID: 0,
-    startTime: dayjs().toISOString().slice(0, -5) + "Z",
-    endTime: dayjs().toISOString().slice(0, -5) + "Z",
+    startTime: currentDateTime,
+    endTime: currentDateTime,
     status: "EMERGENCY",
     reasonforCancellation: "",
     details: "",
