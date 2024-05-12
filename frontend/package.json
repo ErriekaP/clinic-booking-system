@@ -37,6 +37,7 @@
     "react-calendly": "^4.3.0",
     "react-dom": "^18",
     "react-toastify": "^10.0.5",
+    "socket.io-client": "^4.7.5",
     "styled-components": "^6.1.8"
   },
   "devDependencies": {

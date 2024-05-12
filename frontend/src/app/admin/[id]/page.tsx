@@ -1,34 +1,63 @@
 "use client";
 import "./styles.css";
 import NavMenu from "@/components/navigationmenu/page";
+import { WebSocketContext } from "@/contexts/webSocketContext";
 
 import { Card, Container, Flex, Inset, Strong, Text } from "@radix-ui/themes";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 interface Queue {
   id: number;
   queueID: number;
 }
 const AdminPage = () => {
   const [queueOngoingData, setQueueOngoingData] = useState<Queue[]>([]);
+  //Websocket
+  const socket = useContext(WebSocketContext);
+
+  const getQueueData = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/queue/allOngoing`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch queue data");
+      }
+      const data = await response.json();
+      setQueueOngoingData(data);
+    } catch (error) {
+      console.error("Error fetching queue data:", error);
+    }
+  };
 
   useEffect(() => {
-    const getQueueData = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/queue/allOngoing`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch queue data");
-        }
-        const data = await response.json();
-        setQueueOngoingData(data);
-      } catch (error) {
-        console.error("Error fetching queue data:", error);
-      }
+    const handleConnect = () => {
+      console.log("Connected!");
+      getQueueData();
     };
 
-    getQueueData();
-  }, []);
+    // Check if the socket is already connected
+    if (socket.connected) {
+      // If already connected, manually call the connect handler
+      handleConnect();
+    } else {
+      // If not connected, listen for the connect event
+      socket.on("connect", handleConnect);
+    }
+
+    socket.on("justEmitting", (data) => {
+      console.log("justEmitting event received!");
+      console.log(data);
+      setQueueOngoingData(data);
+    });
+
+    // Clean up event listeners
+    return () => {
+      console.log("Unregistering Events...");
+      socket.off("connect", handleConnect);
+      socket.off("justEmitting");
+    };
+  }, [socket]);
+
   return (
     <div>
       <NavMenu />

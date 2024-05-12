@@ -3,12 +3,14 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { QueueDto } from './queue.dto';
 import { EmailSender } from 'src/emailSender/EmailSender';
+import { MyGateway } from 'src/gateway/gateway';
 
 @Injectable()
 export class QueueService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly emailSender: EmailSender,
+    private readonly myGateway: MyGateway,
   ) {}
 
   async updateService(id: number, updatedData: any): Promise<any> {
@@ -177,6 +179,7 @@ export class QueueService {
       );
 
       console.log(ongoingQueuesWithDetails);
+
       return ongoingQueuesWithDetails;
     } catch (error) {
       throw new Error(`Unable to fetch ongoing queues: ${error.message}`);
@@ -393,6 +396,8 @@ export class QueueService {
         } else {
           console.log('No patient found before the ongoing queue.');
         }
+        //gateway
+        await this.myGateway.justEmitting();
 
         return {
           success: true,

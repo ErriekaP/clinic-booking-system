@@ -14,6 +14,7 @@ import { AfterAppointmentModule } from './afterAppointment/afterAppointment.modu
 import { QueueModule } from './queue/queue.module';
 import { AfterQueueModule } from './afterQueue/afterQueue.module';
 import { VitalSignModule } from './vital-sign/vital-sign.module';
+import { GatewayModule } from './gateway/gateway.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { VitalSignModule } from './vital-sign/vital-sign.module';
     QueueModule,
     AfterQueueModule,
     VitalSignModule,
+    GatewayModule,
   ],
   controllers: [AppController],
   providers: [AppService],
