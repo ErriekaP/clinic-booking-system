@@ -61,11 +61,18 @@ const StudentPage = ({ params }: { params: { id: string } }) => {
       setQueueOngoingData(data);
     });
 
+    socket.on("emittingOngoingQueues", (data) => {
+      console.log("justEmitting event received!");
+      console.log(data);
+      setQueueData(data);
+    });
+
     // Clean up event listeners
     return () => {
       console.log("Unregistering Events...");
       socket.off("connect", handleConnect);
       socket.off("justEmitting");
+      socket.off("emittingOngoingQueues");
     };
   }, [socket]);
 

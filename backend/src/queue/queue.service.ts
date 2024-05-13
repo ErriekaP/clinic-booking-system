@@ -298,8 +298,17 @@ export class QueueService {
         where: { id: parsedId },
         data: { status: 'COMPLETED' },
       });
+
+      // Find the patient associated with the completed queue
+      const queue = await this.prisma.queue.findUnique({
+        where: { id: parsedId },
+        include: { patient: true }, // Include the patient relation
+      });
+
       //gateway
+
       await this.myGateway.justEmitting();
+      await this.myGateway.emittingOngoingQueues(queue.patient.id);
 
       return {
         success: true,
@@ -395,6 +404,7 @@ export class QueueService {
           });
 
           console.log(patientInfo.email);
+
           // Now you have patient information in the patientInfo variable
         } else {
           console.log('No patient found before the ongoing queue.');
